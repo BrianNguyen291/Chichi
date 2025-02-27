@@ -14,7 +14,6 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "越學越通 - 專業越南語教學",
   description: "專業越南語教學，線上線下課程，量身打造學習計畫",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -23,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-TW">
+    <html lang="zh-TW" className="scroll-smooth scroll-pt-20">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -66,7 +65,7 @@ export default function RootLayout({
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="transition-colors hover:opacity-80"
+                      className="relative py-2 transition-colors hover:text-[#b17f4a] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-[#b17f4a] after:transition-all hover:after:w-full"
                       style={{ color: colors.darkOlive }}
                     >
                       {link.label}
@@ -87,7 +86,5 @@ export default function RootLayout({
     </html>
   )
 }
-
-
 
 import './globals.css'

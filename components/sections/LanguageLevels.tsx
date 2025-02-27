@@ -5,21 +5,21 @@ import { colors } from '@/lib/colors'
 const levels = [
   {
     level: 'A1-A2',
-    title: '初級越南語',
-    description: '掌握基本生活會話和簡單詞彙',
-    image: '/level-basic.png'
+    title: 'Beginner',
+    description: 'Start your Vietnamese journey',
+    image: '/images/57f31c9320e1de5769cbf4669ff6fbbd.jpg'
   },
   {
     level: 'B1-B2',
-    title: '中級越南語',
-    description: '加強聽說讀寫，培養實用溝通能力',
-    image: '/level-intermediate.png'
+    title: 'Intermediate',
+    description: 'Enhance your communication skills',
+    image: '/images/d0c3616a88054c9141e871e80e992bd9.jpg'
   },
   {
     level: 'C1-C2',
-    title: '高級越南語',
-    description: '深入商務、學術用語，接近母語者水平',
-    image: '/level-advanced.png'
+    title: 'Advanced',
+    description: 'Master complex Vietnamese concepts',
+    image: '/images/f92a926edc6969013d29f39ed1d17d40.jpg'
   }
 ]
 
@@ -46,13 +46,15 @@ export const LanguageLevels = () => {
                     {level.level}
                   </span>
                 </div>
-                <div className="relative h-40 w-full">
+                <div className="relative h-48 w-full overflow-hidden rounded-lg">
                   <Image
                     src={level.image}
-                    alt={`${level.level} Level Illustration`}
+                    alt={`${level.title} Level`}
                     fill
-                    className="object-contain"
+                    className="object-cover hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, 33vw"
                   />
+                  <div className="absolute inset-0 bg-black bg-opacity-20 hover:bg-opacity-0 transition-opacity" />
                 </div>
                 <h3 
                   className="text-xl font-semibold text-center"
@@ -67,7 +69,7 @@ export const LanguageLevels = () => {
                   {level.description}
                 </p>
                 <button
-                  className="w-full py-2 px-4 rounded-lg mt-4 transition-colors"
+                  className="w-full py-2 px-4 rounded-lg mt-4 transition-colors hover:opacity-90"
                   style={{ 
                     backgroundColor: colors.secondary,
                     color: colors.lightCream
