@@ -1,0 +1,40 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About Us",
+    "courses": "Courses",
+    "contact": "Contact",
+    "blog": "Blog",
+    "language": "Language"
+  },
+  "nav": {
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "contact_form": {
+    "title": "Contact Us",
+    "name": "Full Name",
+    "email": "Email",
+    "message": "Message",
+    "submit": "Submit",
+    "success": "Message sent successfully!",
+    "error": "An error occurred. Please try again."
+  },
+  "course_card": {
+    "learn_more": "Learn More",
+    "enroll": "Enroll Now"
+  },
+  "blog": {
+    "featured": "Featured Posts",
+    "latest": "Latest Posts",
+    "read_more": "Read More",
+    "min_read": "min read",
+    "related_posts": "Related Posts"
+  },
+  "404": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "button": "Go Home"
+  }
+} 

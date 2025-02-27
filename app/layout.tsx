@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="zh-TW" className="scroll-smooth scroll-pt-20">
+    <html lang="zh-TW" className="scroll-smooth">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -65,10 +65,11 @@ export default function RootLayout({
                     <Link
                       key={link.href}
                       href={link.href}
-                      className="relative py-2 transition-colors hover:text-[#b17f4a] after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-[#b17f4a] after:transition-all hover:after:w-full"
+                      className="relative py-2 transition-colors hover:text-[#b17f4a] group"
                       style={{ color: colors.darkOlive }}
                     >
                       {link.label}
+                      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
                     </Link>
                   ))}
                 </nav>

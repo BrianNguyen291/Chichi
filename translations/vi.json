@@ -1,0 +1,40 @@
+{
+  "common": {
+    "home": "Trang Chủ",
+    "about": "Về Chúng Tôi",
+    "courses": "Khóa Học",
+    "contact": "Liên Hệ",
+    "blog": "Blog",
+    "language": "Ngôn Ngữ"
+  },
+  "nav": {
+    "menu": "Menu",
+    "close": "Đóng"
+  },
+  "contact_form": {
+    "title": "Liên Hệ Với Chúng Tôi",
+    "name": "Họ và Tên",
+    "email": "Email",
+    "message": "Tin Nhắn",
+    "submit": "Gửi",
+    "success": "Tin nhắn đã được gửi thành công!",
+    "error": "Có lỗi xảy ra. Vui lòng thử lại."
+  },
+  "course_card": {
+    "learn_more": "Tìm Hiểu Thêm",
+    "enroll": "Đăng Ký"
+  },
+  "blog": {
+    "featured": "Bài Viết Nổi Bật",
+    "latest": "Bài Viết Mới Nhất",
+    "read_more": "Đọc Thêm",
+    "min_read": "phút đọc",
+    "related_posts": "Bài Viết Liên Quan"
+  },
+  "404": {
+    "title": "404",
+    "heading": "Không Tìm Thấy Trang",
+    "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.",
+    "button": "Về Trang Chủ"
+  }
+} 

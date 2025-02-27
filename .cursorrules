@@ -1,0 +1,471 @@
+# Scratchpad
+
+## Current Task: Integrated Blog Implementation
+
+### Revised Approach (2024-02-27):
+[X] Next.js Frontend Setup
+[ ] Ghost Headless CMS Integration:
+    - Set up Ghost as headless CMS
+    - Integrate with Next.js frontend
+    - Implement multilingual blog
+    - Set up content workflow
+
+### Integration Architecture:
+1. Ghost Backend:
+   - Content management
+   - Author management
+   - Media handling
+   - SEO settings
+   - Analytics
+
+2. Next.js Frontend:
+   - Custom blog pages
+   - Language switching
+   - Consistent design
+   - SEO optimization
+   - Performance optimization
+
+### Next Steps:
+1. [ ] Set up Ghost Headless CMS:
+   ```bash
+   # Install Ghost in headless mode
+   ghost install --no-start
+   ghost config url https://cms.your-domain.com
+   ghost config admin.url https://cms.your-domain.com/ghost
+   ghost config api.key YOUR_CONTENT_API_KEY
+   ```
+
+2. [ ] Install Ghost SDK in Next.js:
+   ```bash
+   npm install @tryghost/content-api
+   ```
+
+3. [ ] Create Ghost integration utilities:
+   ```typescript
+   // lib/ghost.ts
+   import GhostContentAPI from '@tryghost/content-api';
+
+   const api = new GhostContentAPI({
+     url: process.env.GHOST_API_URL,
+     key: process.env.GHOST_CONTENT_API_KEY,
+     version: 'v5.0'
+   });
+
+   export async function getPosts(locale: string) {
+     return await api.posts
+       .browse({
+         limit: 'all',
+         filter: `tag:${locale}`,
+         include: ['tags', 'authors']
+       });
+   }
+   ```
+
+4. [ ] Create blog pages structure:
+   ```
+   app/
+   ├── [locale]/
+   │   └── blog/
+   │       ├── page.tsx         # Blog index
+   │       ├── [slug]/
+   │       │   └── page.tsx     # Individual post
+   │       └── tags/
+   │           └── [tag]/
+   │               └── page.tsx  # Tag archive
+   ```
+
+### Required Environment Variables:
+```env
+GHOST_API_URL=https://cms.your-domain.com
+GHOST_CONTENT_API_KEY=your_content_api_key
+GHOST_ADMIN_API_KEY=your_admin_api_key
+```
+
+### Content Structure:
+1. Blog Posts:
+   - Use tags for language versions
+   - Consistent URL structure
+   - SEO metadata per language
+   - Related posts
+
+2. Categories/Tags:
+   - Language-specific taxonomies
+   - URL structure: /[locale]/blog/category/[slug]
+   - Translated category names
+
+3. Authors:
+   - Multilingual author bios
+   - Author pages with filtered posts
+   - Social media links
+
+### Features to Implement:
+1. [ ] Blog Components:
+   - Post list with pagination
+   - Post detail view
+   - Category/tag navigation
+   - Author cards
+   - Related posts
+   - Social sharing
+
+2. [ ] Multilingual Support:
+   - Language switcher in blog
+   - URL structure with locale
+   - SEO meta tags
+   - RSS feeds per language
+
+3. [ ] Integration Features:
+   - Newsletter signup
+   - Social media sharing
+   - Comments system
+   - Analytics tracking
+
+4. [ ] Performance:
+   - Image optimization
+   - Static generation
+   - Incremental builds
+   - Content caching
+
+### Ghost Blog Requirements:
+1. Core Features:
+   - Blog posts and pages
+   - Newsletter system
+   - Member management
+   - SEO optimization
+   - Analytics integration
+   - Media management
+
+2. Additional Requirements:
+   - Multilingual content (Vietnamese, English, Traditional Chinese, Simplified Chinese)
+   - Custom theme for branding
+   - Social media integration
+   - Email newsletter setup
+   - Google Analytics integration
+
+### Next Steps:
+1. [ ] Choose Hosting Method:
+   - Option A: Ghost(Pro) - Managed hosting by Ghost
+   - Option B: Self-hosted on Digital Ocean/Similar
+   
+2. [ ] Initial Setup:
+   - Install Ghost
+   - Configure domain and SSL
+   - Set up email service
+   - Configure basic settings
+
+3. [ ] Theme Development:
+   - Create custom theme based on Casper (default theme)
+   - Add language switcher
+   - Implement responsive design
+   - Add custom branding
+
+4. [ ] Content Structure:
+   - Set up tags for categorization
+   - Create content structure
+   - Configure URL structure
+   - Set up navigation
+
+5. [ ] Multilingual Setup:
+   - Configure language tags
+   - Set up content translation workflow
+   - Implement language switcher
+   - Configure SEO for each language
+
+6. [ ] Integration & Features:
+   - Set up newsletter system
+   - Configure Google Analytics
+   - Set up social media sharing
+   - Configure member signup
+
+7. [ ] Performance & Security:
+   - Configure CDN
+   - Set up backups
+   - Optimize images
+   - Configure caching
+
+### Ghost Setup Instructions:
+
+1. Installation (Self-hosted):
+   ```bash
+   # Install Ghost-CLI
+   npm install ghost-cli@latest -g
+
+   # Create directory and install Ghost
+   mkdir ghost-blog
+   cd ghost-blog
+   ghost install
+   ```
+
+2. Configuration:
+   ```bash
+   # Configure Ghost
+   ghost config url https://your-domain.com
+   ghost config mail.transport mailgun
+   ghost config mail.options.auth.user your-mailgun-username
+   ghost config mail.options.auth.pass your-mailgun-password
+   ```
+
+3. Theme Development Structure:
+   ```
+   .
+   ├── assets/
+   │   ├── css/
+   │   ├── js/
+   │   └── images/
+   ├── locales/
+   │   ├── vi.json
+   │   ├── en.json
+   │   ├── zh-Hant.json
+   │   └── zh-Hans.json
+   ├── partials/
+   │   ├── header.hbs
+   │   ├── footer.hbs
+   │   └── language-switcher.hbs
+   ├── default.hbs
+   ├── index.hbs
+   ├── post.hbs
+   ├── page.hbs
+   └── package.json
+   ```
+
+4. Required Services:
+   - Email service (Mailgun/SendGrid)
+   - CDN (Cloudflare recommended)
+   - Analytics (Google Analytics)
+   - Backup solution
+
+### Multilingual Content Strategy:
+1. Content Organization:
+   - Use tags for language identification
+   - Create parallel posts for each language
+   - Implement language switcher in theme
+   - Set up language-specific URLs
+
+2. SEO Structure:
+   - Implement hreflang tags
+   - Create language-specific meta tags
+   - Configure language-specific sitemaps
+   - Set up Google Search Console for each language
+
+3. Newsletter Strategy:
+   - Separate newsletters per language
+   - Language-specific email templates
+   - Segmented subscriber lists
+   - Automated language detection
+
+### Monitoring & Analytics:
+1. Key Metrics:
+   - Page views per language
+   - Member signups
+   - Newsletter subscriptions
+   - Content engagement
+   - Performance metrics
+
+2. Tools:
+   - Ghost Analytics
+   - Google Analytics
+   - Search Console
+   - Performance monitoring
+
+### WordPress Blog Requirements:
+1. Required Plugins:
+   - WPML (for Vietnamese, English, Traditional Chinese, Simplified Chinese)
+   - Yoast SEO (for multilingual SEO)
+   - WP Super Cache (for performance)
+   - Google Analytics for WordPress
+   - Wordfence Security (security)
+   - BackupBuddy (backups)
+
+2. Content Structure:
+   - Blog posts
+   - Categories
+   - Tags
+   - Media library
+   - Author profiles
+
+3. Features:
+   - Multi-language content
+   - SEO optimization
+   - Social media sharing
+   - Comments management
+   - Media management
+   - Analytics tracking
+
+### Next Steps:
+1. [ ] Install WordPress on hosting
+2. [ ] Install and configure required plugins
+3. [ ] Set up multilingual support
+4. [ ] Configure SEO settings
+5. [ ] Create content categories and structure
+6. [ ] Set up user roles and permissions
+7. [ ] Configure backup and security
+
+### WordPress Setup Instructions:
+1. Installation:
+   - Download WordPress
+   - Create MySQL database
+   - Run installation wizard
+   - Configure basic settings
+
+2. Plugin Setup:
+   - Install WPML
+   - Configure language pairs
+   - Set up SEO plugins
+   - Configure caching
+   - Set up security measures
+
+3. Content Organization:
+   - Create main categories
+   - Set up tags structure
+   - Configure media library
+   - Set up author profiles
+
+4. Security & Performance:
+   - Configure Wordfence
+   - Set up caching
+   - Configure backups
+   - Optimize media
+
+### Progress Update (2024-02-27):
+[X] Set up WordPress integration foundation:
+    - Created WordPress API utilities
+    - Defined TypeScript types for data models
+    - Configured WordPress settings
+    - Updated Next.js configuration for WordPress and i18n
+
+### Required WordPress Setup:
+1. Install and configure WordPress with following plugins:
+   - WPGraphQL
+   - Advanced Custom Fields (ACF)
+   - ACF to REST API
+   - WP REST API Menus
+   - JWT Authentication
+   - WPML (for multilingual support)
+
+2. Create custom post types:
+   - Courses
+   - Lessons
+   - Teachers
+   - Testimonials
+   - Careers
+
+3. Configure CORS and authentication settings
+
+### Requirements Analysis
+
+#### User Features:
+[X] Main landing page
+[ ] Subpages:
+    - Teacher team introduction
+    - Course information
+    - Career opportunities
+    - Legal information
+    - Client testimonials
+[ ] Gmail account registration
+[ ] Student email list management
+[ ] Multi-language support (Vietnamese, English, Traditional Chinese, Simplified Chinese)
+[ ] User-friendly interface
+
+#### Admin Features (Client):
+[ ] WordPress CMS Integration:
+    - Course management
+    - Lesson management
+    - Exercise management
+    - Post management
+[ ] Content Management Features:
+    - Image support
+    - Content editing
+    - Hashtags
+    - Embedded links (YouTube, Meta, TikTok)
+[ ] Google Drive integration for document management
+[ ] Analytics:
+    - Post view statistics
+    - Document download tracking
+    - Weekly/Monthly/Yearly reports
+[ ] Google Forms integration
+
+#### Developer Requirements:
+[ ] SEO Optimization:
+    - Vietnamese keywords
+    - Chinese keywords
+[ ] Performance monitoring:
+    - Server load monitoring
+    - Website storage usage
+[ ] Infrastructure:
+    - Support for 10,000 visits/month
+    - Content storage under 5GB
+[ ] System maintainability
+[ ] Blog/News section with WordPress CMS
+
+### Implementation Priority:
+
+1. Foundation Setup:
+   [ ] Next.js + WordPress Headless CMS Architecture
+   [ ] Database Design
+   [ ] Authentication System
+   [ ] Multi-language Support Framework
+
+2. Core Features:
+   [ ] Landing Page and Basic Pages
+   [ ] WordPress CMS Integration
+   [ ] Content Management System
+   [ ] User Registration/Management
+
+3. Integration Features:
+   [ ] Google Services Integration
+   [ ] Analytics Implementation
+   [ ] Document Management System
+
+4. Enhancement:
+   [ ] SEO Implementation
+   [ ] Performance Optimization
+   [ ] Monitoring Setup
+
+### Technical Stack:
+
+1. Frontend:
+   - Next.js
+   - Tailwind CSS
+   - i18n for translations
+   - WordPress REST API integration
+
+2. Backend:
+   - WordPress as Headless CMS
+   - Custom Next.js API routes
+   - MySQL (WordPress database)
+
+3. Infrastructure:
+   - Vercel/Similar for Next.js hosting
+   - WordPress hosting
+   - Google Cloud Storage for media
+
+4. Monitoring:
+   - Google Analytics
+   - Server monitoring tools
+   - WordPress analytics
+
+## Current Task: Project Improvement Plan
+
+### Priority Areas for Improvement:
+[ ] Authentication & Authorization
+[ ] Backend & API Structure
+[ ] Database Integration
+[ ] State Management
+[ ] Testing Infrastructure
+[ ] Performance Optimization
+[ ] Security Measures
+[ ] Monitoring & Logging
+[ ] Development Experience
+[ ] Project Structure
+[ ] Internationalization
+[ ] Environment & Configuration
+[ ] CI/CD Pipeline
+[ ] Documentation
+[ ] Accessibility
+[ ] Error Handling
+
+### Next Steps:
+1. Prioritize improvements based on user feedback
+2. Create detailed implementation plan for chosen areas
+3. Implement improvements incrementally
+4. Test and validate changes
+5. Document new features and changes 

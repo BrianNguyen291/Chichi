@@ -2,6 +2,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { colors } from '@/lib/colors'
 
+interface PartnersAndFooterProps {
+  locale: string;
+}
+
 const partners = [
   { name: 'Eva Air', logo: '/images/EvaAir.png' },
   { name: 'Cathay Pacific', logo: '/images/Cathay.jpg' },
@@ -27,13 +31,42 @@ const contactInfo = [
   { icon: '/images/Wechat.png', text: 'WeChat: chichi_vn' },
 ];
 
-export const PartnersAndFooter = () => {
+const translations = {
+  vi: {
+    partnersTitle: 'Đối Tác',
+    followUs: 'Theo Dõi Chúng Tôi',
+    contactUs: 'Liên Hệ',
+    copyright: '© 2024 Chi Chi Vietnamese. Đã đăng ký bản quyền.'
+  },
+  en: {
+    partnersTitle: 'Partners',
+    followUs: 'Follow Us',
+    contactUs: 'Contact Us',
+    copyright: '© 2024 Chi Chi Vietnamese. All rights reserved.'
+  },
+  'zh-Hant': {
+    partnersTitle: '合作夥伴',
+    followUs: '關注我們',
+    contactUs: '聯絡方式',
+    copyright: '© 2024 芝芝越語. 版權所有.'
+  },
+  'zh-Hans': {
+    partnersTitle: '合作伙伴',
+    followUs: '关注我们',
+    contactUs: '联系方式',
+    copyright: '© 2024 芝芝越语. 版权所有.'
+  }
+}
+
+export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
+  const t = translations[locale as keyof typeof translations] || translations.en
+
   return (
     <>
       <section id="contact" className="w-full py-16" style={{ backgroundColor: colors.primary }}>
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12" style={{ color: colors.darkOlive }}>
-            合作夥伴
+            {t.partnersTitle}
           </h2>
           <div className="flex flex-wrap justify-center gap-8">
             {partners.map((partner, index) => (
@@ -61,7 +94,7 @@ export const PartnersAndFooter = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div>
               <h3 className="text-2xl font-bold mb-6" style={{ color: colors.lightCream }}>
-                關注我們
+                {t.followUs}
               </h3>
               <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
                 {socialLinks.map((social, index) => (
@@ -86,7 +119,7 @@ export const PartnersAndFooter = () => {
             </div>
             <div>
               <h3 className="text-2xl font-bold mb-6" style={{ color: colors.lightCream }}>
-                聯絡方式
+                {t.contactUs}
               </h3>
               <div className="space-y-4">
                 {contactInfo.map((contact, index) => (
@@ -121,7 +154,7 @@ export const PartnersAndFooter = () => {
               borderColor: colors.primary 
             }}
           >
-            © 2024 越學越通. All rights reserved.
+            {t.copyright}
           </div>
         </div>
       </footer>

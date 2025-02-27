@@ -1,7 +1,37 @@
 import Image from 'next/image'
 import { colors } from '@/lib/colors'
+import { useTranslations } from '@/lib/i18n'
 
-export const HeroSection = () => {
+interface HeroSectionProps {
+  locale: string;
+}
+
+const translations = {
+  vi: {
+    title: 'CHICHI VIETNAMESE',
+    subtitle: 'Học tiếng Việt dễ dàng',
+    logo: 'Chi Chi\nViệt ngữ',
+  },
+  en: {
+    title: 'CHICHI VIETNAMESE',
+    subtitle: 'Learn Vietnamese Easily',
+    logo: 'Chi Chi\nVietnamese',
+  },
+  'zh-Hant': {
+    title: 'CHICHI VIETNAMESE',
+    subtitle: '越學越通',
+    logo: '芝芝\n越語',
+  },
+  'zh-Hans': {
+    title: 'CHICHI VIETNAMESE',
+    subtitle: '越学越通',
+    logo: '芝芝\n越语',
+  }
+}
+
+export const HeroSection = ({ locale }: HeroSectionProps) => {
+  const t = translations[locale as keyof typeof translations] || translations.en
+
   return (
     <section className="relative w-full min-h-[600px] bg-[#f5f2eb] overflow-hidden">
       {/* Left Side Content */}
@@ -12,16 +42,16 @@ export const HeroSection = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
                 <div className="w-20 h-20 border-2 border-[#b17f4a] flex items-center justify-center">
-                  <div className="text-[#b17f4a] font-bold text-xl text-center">
-                    芝芝<br/>越語
+                  <div className="text-[#b17f4a] font-bold text-xl text-center whitespace-pre-line">
+                    {t.logo}
                   </div>
                 </div>
                 <h1 className="text-2xl font-bold text-[#b17f4a]">
-                  CHICHI VIETNAMESE
+                  {t.title}
                 </h1>
               </div>
               <h2 className="text-6xl font-bold text-[#b17f4a]">
-                越學越通
+                {t.subtitle}
               </h2>
             </div>
 
