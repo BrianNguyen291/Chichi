@@ -1,0 +1,3 @@
+[Cursor] Merge remote changes with local Vietnamese website implementation
+
+Merging existing repository content with our new Vietnamese-themed website implementation. 
