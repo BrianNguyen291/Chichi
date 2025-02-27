@@ -15,7 +15,7 @@ export interface Post {
   title: string;
   html: string;
   excerpt: string;
-  feature_image: string;
+  feature_image: string | null;
   featured: boolean;
   published_at: string;
   tags: Tag[];
@@ -41,30 +41,30 @@ export interface Author {
 }
 
 // Helper function to transform PostOrPage to Post
-function transformPost(post: PostOrPage): Post {
+function transformPost(post: any): Post {
   return {
     id: post.id || '',
     slug: post.slug || '',
     title: post.title || '',
     html: post.html || '',
     excerpt: post.excerpt || '',
-    feature_image: post.feature_image || '',
-    featured: post.featured || false,
+    feature_image: post.feature_image || null,
+    featured: Boolean(post.featured),
     published_at: post.published_at || new Date().toISOString(),
-    tags: (post.tags || []).map(tag => ({
+    tags: (post.tags || []).map((tag: any) => ({
       id: tag.id || '',
       name: tag.name || '',
       slug: tag.slug || '',
-      description: tag.description
+      description: tag.description || null
     })),
-    authors: (post.authors || []).map(author => ({
+    authors: (post.authors || []).map((author: any) => ({
       id: author.id || '',
       name: author.name || '',
       slug: author.slug || '',
-      profile_image: author.profile_image,
-      bio: author.bio,
-      website: author.website,
-      location: author.location
+      profile_image: author.profile_image || null,
+      bio: author.bio || null,
+      website: author.website || null,
+      location: author.location || null
     })),
     reading_time: post.reading_time || 0
   };
@@ -73,15 +73,24 @@ function transformPost(post: PostOrPage): Post {
 // Fetch all posts for a specific language
 export async function getPosts(locale: string, limit: number = 10, page: number = 1): Promise<Post[]> {
   try {
+    console.log(`Fetching posts for locale: ${locale}`);
     const posts = await api.posts.browse({
       limit,
       page,
       filter: `tag:${locale}`,
       include: ['tags', 'authors']
     });
+    console.log(`Found ${posts.length} posts for locale: ${locale}`);
     return posts.map(transformPost);
   } catch (err) {
-    console.error(err);
+    console.error('Error fetching posts:', err);
+    console.error('API Configuration:', {
+      url: process.env.GHOST_API_URL,
+      hasKey: !!process.env.GHOST_CONTENT_API_KEY,
+      locale,
+      limit,
+      page
+    });
     return [];
   }
 }
@@ -89,10 +98,15 @@ export async function getPosts(locale: string, limit: number = 10, page: number 
 // Fetch a single post by slug
 export async function getPost(slug: string, locale: string): Promise<Post | null> {
   try {
-    const post = await api.posts.read({ slug });
-    return post ? transformPost(post) : null;
+    console.log(`Fetching post with slug: ${slug} for locale: ${locale}`);
+    const post = await api.posts.read({ 
+      slug,
+      include: ['tags', 'authors']
+    });
+    console.log(`Found post: ${post.title}`);
+    return transformPost(post);
   } catch (err) {
-    console.error(err);
+    console.error(`Error fetching post with slug ${slug}:`, err);
     return null;
   }
 }
@@ -154,14 +168,22 @@ export async function getAuthors(): Promise<Author[]> {
 // Fetch featured posts
 export async function getFeaturedPosts(locale: string, limit: number = 3): Promise<Post[]> {
   try {
+    console.log(`Fetching featured posts for locale: ${locale}`);
     const posts = await api.posts.browse({
       limit,
       filter: `featured:true+tag:${locale}`,
       include: ['tags', 'authors']
     });
+    console.log(`Found ${posts.length} featured posts for locale: ${locale}`);
     return posts.map(transformPost);
   } catch (err) {
-    console.error(err);
+    console.error('Error fetching featured posts:', err);
+    console.error('API Configuration:', {
+      url: process.env.GHOST_API_URL,
+      hasKey: !!process.env.GHOST_CONTENT_API_KEY,
+      locale,
+      limit
+    });
     return [];
   }
 }

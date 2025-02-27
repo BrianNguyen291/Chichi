@@ -1,13 +1,16 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
 import { vi, enUS, zhTW, zhCN } from 'date-fns/locale';
 import type { Post } from '@/lib/ghost';
 import { useTranslations } from '@/lib/i18n';
+import type { Locale } from '@/lib/i18n';
 
 interface BlogCardProps {
   post: Post;
-  locale: string;
+  locale: Locale;
 }
 
 const dateLocales = {
@@ -18,8 +21,8 @@ const dateLocales = {
 };
 
 export default function BlogCard({ post, locale }: BlogCardProps) {
-  const dateLocale = dateLocales[locale as keyof typeof dateLocales] || enUS;
-  const { translate } = useTranslations(locale as any);
+  const dateLocale = dateLocales[locale] || enUS;
+  const { translate } = useTranslations(locale);
 
   return (
     <article className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
