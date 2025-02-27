@@ -61,6 +61,7 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 src="/images/3c89a5ce595299e003408648c5f9f1e0.jpg"
                 alt="ChiChi Teacher"
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
               />
               <div className="absolute inset-0 flex items-center justify-center">
@@ -80,6 +81,8 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 src="/images/HaNoi VietNam.png"
                 alt="Hanoi Illustration"
                 fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain"
               />
             </div>
@@ -90,6 +93,7 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 alt="Decorative Banner"
                 width={400}
                 height={100}
+                style={{ width: 'auto', height: 'auto' }}
                 className="object-contain"
               />
             </div>

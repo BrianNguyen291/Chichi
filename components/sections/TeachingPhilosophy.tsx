@@ -80,6 +80,7 @@ export const TeachingPhilosophy = ({ locale }: TeachingPhilosophyProps) => {
                 src="/images/ac570c48637f2fbf770b7a0a738276a4.jpg"
                 alt={t.title}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
@@ -89,6 +90,7 @@ export const TeachingPhilosophy = ({ locale }: TeachingPhilosophyProps) => {
                   src="/images/b3776b3385d6b1ef3fee2d227a4330c0.jpg"
                   alt={t.subtitle}
                   fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover"
                 />
               </div>
@@ -97,6 +99,7 @@ export const TeachingPhilosophy = ({ locale }: TeachingPhilosophyProps) => {
                   src="/images/bc6f93456d5ab596f16d370666fc2505.jpg"
                   alt={t.subtitle}
                   fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover"
                 />
               </div>

@@ -78,6 +78,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
                 src="/images/3c89a5ce595299e003408648c5f9f1e0.jpg"
                 alt={t.teacherName}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             </div>
@@ -121,6 +122,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
                   src="/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg"
                   alt="Vietnamese Popular Words Series 2"
                   fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover"
                 />
               </div>
@@ -129,6 +131,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
                   src="/images/e21eb12c580c4af99dae01b7ce9b1130.jpg"
                   alt="Vietnamese Popular Words Series 1"
                   fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover"
                 />
               </div>
