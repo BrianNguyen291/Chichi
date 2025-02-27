@@ -29,7 +29,9 @@
     "latest": "最新文章",
     "read_more": "閱讀更多",
     "min_read": "分鐘閱讀",
-    "related_posts": "相關文章"
+    "related_posts": "相關文章",
+    "no_posts": "暫無文章",
+    "error_loading": "載入文章時出錯，請稍後再試"
   },
   "404": {
     "title": "404",

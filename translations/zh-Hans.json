@@ -29,7 +29,9 @@
     "latest": "最新文章",
     "read_more": "阅读更多",
     "min_read": "分钟阅读",
-    "related_posts": "相关文章"
+    "related_posts": "相关文章",
+    "no_posts": "暂无文章",
+    "error_loading": "加载文章时出错，请稍后再试"
   },
   "404": {
     "title": "404",

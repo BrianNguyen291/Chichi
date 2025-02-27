@@ -29,7 +29,9 @@
     "latest": "Bài Viết Mới Nhất",
     "read_more": "Đọc Thêm",
     "min_read": "phút đọc",
-    "related_posts": "Bài Viết Liên Quan"
+    "related_posts": "Bài Viết Liên Quan",
+    "no_posts": "Chưa có bài viết nào",
+    "error_loading": "Có lỗi khi tải bài viết, vui lòng thử lại sau"
   },
   "404": {
     "title": "404",
