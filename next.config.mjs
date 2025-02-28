@@ -1,3 +1,5 @@
+import withPWA from 'next-pwa'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -13,6 +15,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    minimumCacheTTL: 60,
   },
   experimental: {
     webpackBuildWorker: true,
@@ -20,6 +23,87 @@ const nextConfig = {
     parallelServerCompiles: true,
   }
 }
+
+const withPWAConfig = withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+  publicExcludes: ['!images/**/*'],
+  buildExcludes: [/chunks\/images\/.*$/],
+  runtimeCaching: [
+    {
+      urlPattern: ({ url }) => {
+        const isSameOrigin = self.origin === url.origin;
+        return isSameOrigin && url.pathname === '/';
+      },
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'start-url',
+        expiration: {
+          maxEntries: 1,
+          maxAgeSeconds: 60 * 60 * 24, // 24 hours
+        },
+      },
+    },
+    {
+      urlPattern: /^https:\/\/.*\.(png|jpg|jpeg|webp|svg|gif|ico|webmanifest)/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'image-cache',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /\/_next\/image\?url=.+/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'next-image-cache',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /\/_next\/static\/.*/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'static-cache',
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /\.(?:js|css)$/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'static-resources',
+        expiration: {
+          maxEntries: 200,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /^https?.*/,
+      handler: 'NetworkFirst',
+      options: {
+        cacheName: 'general-cache',
+        networkTimeoutSeconds: 10,
+        expiration: {
+          maxEntries: 32,
+          maxAgeSeconds: 60 * 60 * 24, // 24 hours
+        },
+      },
+    },
+  ],
+})
 
 let userConfig = undefined
 try {
@@ -50,4 +134,4 @@ function mergeConfig(nextConfig, userConfig) {
   }
 }
 
-export default nextConfig
+export default withPWAConfig(nextConfig)

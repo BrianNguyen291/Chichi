@@ -42,11 +42,10 @@ export default function RootLayout({
                 <Link href="/" className="flex items-center space-x-2">
                   <Image
                     src="/logo.png"
-                    alt="Logo"
-                    width={40}
-                    height={40}
-                    className="rounded-full"
-                    style={{ backgroundColor: colors.primary }}
+                    alt="Chi Chi Logo"
+                    width={48}
+                    height={48}
+                    style={{ width: 'auto', height: 'auto' }}
                   />
                   <span 
                     className="font-medium text-lg"
