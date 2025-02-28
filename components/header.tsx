@@ -28,7 +28,7 @@ export function Header({ locale }: HeaderProps) {
           <Link href={`/${locale}`} className="flex items-center">
             <div className="relative w-10 h-10 sm:w-12 sm:h-12">
               <Image
-                src="/logo.png"
+                src="/Logo.png"
                 alt="Chi Chi Logo"
                 fill
                 className="object-contain"
