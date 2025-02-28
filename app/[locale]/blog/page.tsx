@@ -130,7 +130,7 @@ const translations: TranslationType = {
 
 export default async function BlogPage({ params, searchParams }: BlogPageProps) {
   const currentPage = Number(searchParams.page) || 1;
-  const category = searchParams.category;
+  const categoryId = searchParams.category ? Number(searchParams.category) : undefined;
   const search = searchParams.search;
   const postsPerPage = WP_CONFIG.postsPerPage;
   const isChineseLocale = params.locale === 'zh-Hant' || params.locale === 'zh-Hans';
@@ -140,24 +140,22 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   const [allPosts, categories] = await Promise.all([
     fetchPosts({
       page: currentPage,
-      per_page: postsPerPage * 2, // Fetch more posts for popular section
-      categories: category ? [category] : undefined,
+      per_page: postsPerPage * 2,
+      categories: categoryId ? [categoryId] : undefined,
       search,
+      language: params.locale,
     }),
     fetchCategories(),
   ]);
 
   // Split posts into regular and popular
-  const popularPosts = allPosts.filter(post => post.featured).slice(0, 3);
-  const regularPosts = allPosts.filter(post => !post.featured);
+  const popularPosts = allPosts.filter(post => post.featured || post.sticky).slice(0, 3);
+  const regularPosts = allPosts.filter(post => !post.featured && !post.sticky);
   const totalPages = Math.ceil(regularPosts.length / postsPerPage);
 
-  const t = (key: keyof typeof translations): string => {
+  const t = (key: keyof Omit<TranslationType, 'pageInfo'>): string => {
     const translation = translations[key];
-    if (typeof translation === 'object' && !('pageInfo' in translation)) {
-      return translation[params.locale] || translation['en'];
-    }
-    return '';
+    return translation[params.locale] || translation['en'];
   };
 
   return (
@@ -185,7 +183,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
             href={`/${params.locale}/blog`}
             className={clsx(
               "px-6 py-2 rounded-full border transition-colors",
-              !category ? 'bg-[#C4A86D] border-[#C4A86D] text-white' : 'border-gray-200 text-gray-700 hover:bg-gray-50',
+              !categoryId ? 'bg-[#C4A86D] border-[#C4A86D] text-white' : 'border-gray-200 text-gray-700 hover:bg-gray-50',
               (isChineseLocale || isVietnameseLocale) && "chinese-font"
             )}
           >
@@ -197,7 +195,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
               href={`/${params.locale}/blog?category=${cat.id}`}
               className={clsx(
                 "px-6 py-2 rounded-full border transition-colors",
-                category === cat.id ? 'bg-[#C4A86D] border-[#C4A86D] text-white' : 'border-gray-200 text-gray-700 hover:bg-gray-50',
+                categoryId === cat.id ? 'bg-[#C4A86D] border-[#C4A86D] text-white' : 'border-gray-200 text-gray-700 hover:bg-gray-50',
                 (isChineseLocale || isVietnameseLocale) && "chinese-font"
               )}
             >
@@ -241,6 +239,22 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                           alt={post.title.rendered}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
+                        {/* Display categories */}
+                        {post.categoryNames && post.categoryNames.length > 0 && (
+                          <div className="absolute bottom-4 left-4 flex flex-wrap gap-2">
+                            {post.categoryNames.map((categoryName, index) => (
+                              <span
+                                key={index}
+                                className={clsx(
+                                  "px-3 py-1 text-sm bg-white/90 text-[#C4A86D] rounded-full",
+                                  (isChineseLocale || isVietnameseLocale) && "chinese-font"
+                                )}
+                              >
+                                {categoryName}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="p-6">
                         <time className="text-sm text-gray-500" dateTime={post.date}>
@@ -282,7 +296,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <a
                     key={page}
-                    href={`/${params.locale}/blog?page=${page}${category ? `&category=${category}` : ''}${search ? `&search=${search}` : ''}`}
+                    href={`/${params.locale}/blog?page=${page}${categoryId ? `&category=${categoryId}` : ''}${search ? `&search=${search}` : ''}`}
                     className={clsx(
                       "px-4 py-2 rounded-full text-sm transition-colors",
                       currentPage === page

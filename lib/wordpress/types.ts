@@ -110,10 +110,23 @@ export interface WPPost {
   slug: string;
   featured_media: string;
   categories: number[];
+  categoryNames: string[];
   tags: number[];
   author: number;
   status: string;
-  featured?: boolean;
+  featured: boolean;
+  sticky?: boolean;
+  _embedded?: {
+    'wp:featuredmedia'?: Array<{
+      source_url: string;
+    }>;
+    'wp:term'?: Array<Array<{
+      id: number;
+      name: string;
+      slug: string;
+      taxonomy: string;
+    }>>;
+  };
 }
 
 export interface WPCategory {
@@ -122,6 +135,7 @@ export interface WPCategory {
   slug: string;
   description: string;
   count: number;
+  parent?: number;
 }
 
 export interface WPTag {

@@ -1,18 +1,19 @@
 export const WP_CONFIG = {
   // WordPress.com API Configuration
-  siteId: 'annenails1.wordpress.com',
-  apiBase: 'https://public-api.wordpress.com/rest/v1.1/sites',
+  siteId: "annenails1.wordpress.com",
+  apiBase: "https://public-api.wordpress.com/rest/v1.1/sites",
+  apiUrl: "https://public-api.wordpress.com/wp/v2/sites/annenails1.wordpress.com",
   
   // Site Configuration
-  siteName: 'Anne Nails',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  siteName: "Chi Chi Education",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   
   // Content Settings
-  postsPerPage: 6,
+  postsPerPage: 9,
   excerptLength: 150,
+  defaultImage: "/images/placeholder.jpg",
   
   // Image Settings
-  defaultImage: 'https://placehold.co/600x400?text=No+Image+Available',
   imageSizes: {
     thumbnail: {
       width: 150,
@@ -30,25 +31,21 @@ export const WP_CONFIG = {
   
   // Languages
   languages: {
-    vi: {
-      name: 'Tiếng Việt',
-      locale: 'vi',
-      dateFormat: 'dd/MM/yyyy',
-    },
-    en: {
+    'en': {
       name: 'English',
-      locale: 'en',
-      dateFormat: 'MM/dd/yyyy',
+      locale: 'en_US',
+    },
+    'vi': {
+      name: 'Tiếng Việt',
+      locale: 'vi_VN',
     },
     'zh-Hant': {
       name: '繁體中文',
-      locale: 'zh-Hant',
-      dateFormat: 'yyyy/MM/dd',
+      locale: 'zh_TW',
     },
     'zh-Hans': {
       name: '简体中文',
-      locale: 'zh-Hans',
-      dateFormat: 'yyyy/MM/dd',
+      locale: 'zh_CN',
     },
   } as const,
   
@@ -57,8 +54,7 @@ export const WP_CONFIG = {
   
   // Cache Settings
   cache: {
-    duration: 5 * 60 * 1000, // 5 minutes
-    staleWhileRevalidate: 60 * 60 * 1000, // 1 hour
+    duration: 60 * 1000, // 1 minute
   },
   
   // Social Media
@@ -73,8 +69,18 @@ export const WP_CONFIG = {
     googleAnalytics: process.env.NEXT_PUBLIC_GA_ID,
     facebookPixel: process.env.NEXT_PUBLIC_FB_PIXEL_ID,
   },
+  
+  // API Endpoints
+  endpoints: {
+    posts: "/posts",
+    categories: "/categories",
+    tags: "/tags",
+    media: "/media",
+    users: "/users",
+  },
 } as const;
 
 // Type helpers
 export type Language = keyof typeof WP_CONFIG.languages;
-export type ImageSize = keyof typeof WP_CONFIG.imageSizes; 
+export type ImageSize = keyof typeof WP_CONFIG.imageSizes;
+export type Endpoint = keyof typeof WP_CONFIG.endpoints; 
