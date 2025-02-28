@@ -33,24 +33,24 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
 
   return (
-    <section className="relative w-full min-h-[600px] bg-[#f5f2eb] overflow-hidden">
+    <section className="relative w-full min-h-[600px] bg-[#f5f2eb]">
       {/* Left Side Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-8">
+          <div className="space-y-8 max-w-full">
             {/* Logo and Title */}
             <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-20 h-20 border-2 border-[#b17f4a] flex items-center justify-center">
+              <div className="flex items-center space-x-4 flex-wrap">
+                <div className="w-20 h-20 border-2 border-[#b17f4a] flex items-center justify-center shrink-0">
                   <div className="text-[#b17f4a] font-bold text-xl text-center whitespace-pre-line">
                     {t.logo}
                   </div>
                 </div>
-                <h1 className="text-2xl font-bold text-[#b17f4a]">
+                <h1 className="text-2xl font-bold text-[#b17f4a] break-words">
                   {t.title}
                 </h1>
               </div>
-              <h2 className="text-6xl font-bold text-[#b17f4a]">
+              <h2 className="text-4xl md:text-6xl font-bold text-[#b17f4a] break-words">
                 {t.subtitle}
               </h2>
             </div>

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import '../globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Header } from '@/components/header'
+import { ScrollToTop } from '@/components/ScrollToTop'
 import type { Locale } from '@/lib/i18n'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -29,9 +30,10 @@ export default function RootLayout({ children, params: { locale } }: RootLayoutP
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex min-h-screen flex-col">
+          <div className="flex min-h-screen flex-col overflow-x-hidden">
             <Header locale={locale as Locale} />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 pb-16 md:pb-0">{children}</main>
+            <ScrollToTop />
           </div>
         </ThemeProvider>
       </body>

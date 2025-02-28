@@ -2,62 +2,58 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
-import { Menu } from "lucide-react"
+import { usePathname } from 'next/navigation'
 import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
+import { Home, BookOpen, Newspaper, Phone } from 'lucide-react'
 
 interface MobileNavProps {
   locale: Locale
 }
 
 export function MobileNav({ locale }: MobileNavProps) {
-  const [open, setOpen] = React.useState(false)
+  const pathname = usePathname()
   const { translate } = useTranslations(locale)
 
+  const navItems = [
+    { href: `/${locale}`, label: 'home', icon: Home },
+    { href: `/${locale}/courses`, label: 'courses', icon: BookOpen },
+    { href: `/${locale}/blog`, label: 'blog', icon: Newspaper },
+    { href: `/${locale}/contact`, label: 'contact', icon: Phone },
+  ]
+
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button 
-          variant="ghost" 
-          className="md:hidden hover:bg-transparent"
-          style={{ color: colors.darkOlive }}
-        >
-          <Menu className="h-6 w-6" />
-          <span className="sr-only">{translate('openMenu', 'common')}</span>
-        </Button>
-      </SheetTrigger>
-      <SheetContent 
-        side="left" 
-        className="w-[300px] sm:w-[400px]"
-        style={{ backgroundColor: colors.lightCream }}
-      >
-        <nav className="flex flex-col gap-6 mt-8">
-          {[
-            { href: `/${locale}/about`, label: 'about' },
-            { href: `/${locale}/courses`, label: 'courses' },
-            { href: `/${locale}/blog`, label: 'blog' },
-            { href: `/${locale}/contact`, label: 'contact' },
-          ].map((item) => (
-            <Link 
-              key={item.href} 
-              href={item.href} 
-              className="block px-4 py-3 text-lg rounded-lg transition-all hover:bg-white hover:shadow-md relative overflow-hidden group"
-              style={{ color: colors.darkOlive }}
-              onClick={() => setOpen(false)}
+    <nav 
+      className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t"
+      style={{ 
+        backgroundColor: colors.lightCream,
+        borderColor: colors.secondary 
+      }}
+    >
+      <div className="grid grid-cols-4 h-16">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const isActive = pathname === item.href
+          
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
+                isActive ? 'text-[#b17f4a]' : ''
+              }`}
+              style={{ color: isActive ? colors.primary : colors.darkOlive }}
             >
-              <span className="relative z-10">{translate(item.label, 'common')}</span>
-              <span 
-                className="absolute inset-0 bg-white transform translate-x-full transition-transform group-hover:translate-x-0"
-                style={{ backgroundColor: colors.primary }}
-              />
+              <Icon className="h-5 w-5" />
+              <span className="text-xs font-medium">
+                {translate(item.label, 'common')}
+              </span>
             </Link>
-          ))}
-        </nav>
-      </SheetContent>
-    </Sheet>
+          )
+        })}
+      </div>
+    </nav>
   )
 }
 

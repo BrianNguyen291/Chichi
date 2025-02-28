@@ -68,11 +68,11 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
           <h2 className="text-3xl font-bold text-center mb-12" style={{ color: colors.darkOlive }}>
             {t.partnersTitle}
           </h2>
-          <div className="flex flex-wrap justify-center gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {partners.map((partner, index) => (
               <div 
                 key={index} 
-                className="w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
+                className="w-full max-w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
               >
                 <div className="relative w-full h-full">
                   <Image
@@ -80,7 +80,7 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
                     alt={partner.name}
                     fill
                     className="object-contain"
-                    sizes="200px"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </div>
               </div>

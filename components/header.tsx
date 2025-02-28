@@ -23,18 +23,20 @@ export function Header({ locale }: HeaderProps) {
         borderColor: colors.secondary 
       }}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link href={`/${locale}`} className="flex items-center space-x-2">
-            <Image
-              src="/logo.png"
-              alt="Chi Chi Logo"
-              width={48}
-              height={48}
-              style={{ width: 'auto', height: 'auto' }}
-            />
+      <div className="container mx-auto px-2 sm:px-4">
+        <div className="flex items-center justify-between h-14 sm:h-16">
+          <Link href={`/${locale}`} className="flex items-center">
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12">
+              <Image
+                src="/logo.png"
+                alt="Chi Chi Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             <span 
-              className="font-medium text-lg"
+              className="ml-2 font-medium text-sm sm:text-base whitespace-nowrap"
               style={{ color: colors.darkOlive }}
             >
               {translate('brand', 'common')}
@@ -76,7 +78,7 @@ export function Header({ locale }: HeaderProps) {
             </Link>
           </nav>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <LanguageSwitcher locale={locale} />
             <MobileNav locale={locale} />
           </div>
