@@ -136,20 +136,56 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
   const isChineseLocale = params.locale === 'zh-Hant' || params.locale === 'zh-Hans';
   const isVietnameseLocale = params.locale === 'vi';
 
+  console.log('Blog page params:', { currentPage, category, search, locale: params.locale });
+
   // Fetch posts and categories
   const [allPosts, categories] = await Promise.all([
     fetchPosts({
       page: currentPage,
-      per_page: postsPerPage * 2, // Fetch more posts for popular section
-      categories: category ? [category] : undefined,
+      per_page: postsPerPage * 2,
+      categories: category,  // Pass category directly, fetchPosts will handle conversion
       search,
+      lang: params.locale
     }),
     fetchCategories(),
   ]);
 
-  // Split posts into regular and popular
-  const popularPosts = allPosts.filter(post => post.featured).slice(0, 3);
-  const regularPosts = allPosts.filter(post => !post.featured);
+  // Log detailed category information
+  console.log('Available categories:', categories.map(c => ({
+    id: c.id,
+    name: c.name,
+    slug: c.slug,
+    count: c.count
+  })));
+
+  // Check if the requested category exists
+  const requestedCategory = category ? categories.find(c => c.id === category) : null;
+  console.log('Requested category:', requestedCategory);
+
+  // Log all posts with their categories
+  console.log('All posts with categories:', allPosts.map(post => ({
+    id: post.id,
+    title: post.title.rendered,
+    categories: post.categories,
+    categoryNames: post.categoryNames
+  })));
+
+  // No need to filter posts here as the WordPress API already filters by category
+  const filteredPosts = allPosts;
+
+  console.log('Posts count:', filteredPosts.length);
+  if (filteredPosts.length > 0) {
+    console.log('Sample post:', {
+      id: filteredPosts[0].id,
+      title: filteredPosts[0].title.rendered,
+      categories: filteredPosts[0].categories,
+      categoryNames: filteredPosts[0].categoryNames
+    });
+  }
+
+  // Split posts into regular and popular (featured)
+  const popularPosts = filteredPosts.filter(post => post.featured).slice(0, 3);
+  const regularPosts = filteredPosts.filter(post => !post.featured);
   const totalPages = Math.ceil(regularPosts.length / postsPerPage);
 
   const t = (key: keyof typeof translations): string => {
@@ -191,19 +227,28 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
           >
             {t('allCategories')}
           </a>
-          {categories.map((cat) => (
-            <a
-              key={cat.id}
-              href={`/${params.locale}/blog?category=${cat.id}`}
-              className={clsx(
-                "px-6 py-2 rounded-full border transition-colors",
-                category === cat.id ? 'bg-[#C4A86D] border-[#C4A86D] text-white' : 'border-gray-200 text-gray-700 hover:bg-gray-50',
-                (isChineseLocale || isVietnameseLocale) && "chinese-font"
-              )}
-            >
-              {cat.name}
-            </a>
-          ))}
+          {categories.map((cat) => {
+            // Convert both to numbers for comparison
+            const categoryId = parseInt(cat.id, 10);
+            const currentCategory = category ? parseInt(category, 10) : null;
+            const isActive = currentCategory === categoryId;
+            
+            console.log(`Category link debug - Name: ${cat.name}, ID: ${categoryId}, Current: ${currentCategory}, Active: ${isActive}, URL: /${params.locale}/blog?category=${categoryId}`);
+            
+            return (
+              <a
+                key={cat.id}
+                href={`/${params.locale}/blog?category=${categoryId}`}
+                className={clsx(
+                  "px-6 py-2 rounded-full border transition-colors",
+                  isActive ? 'bg-[#C4A86D] border-[#C4A86D] text-white' : 'border-gray-200 text-gray-700 hover:bg-gray-50',
+                  (isChineseLocale || isVietnameseLocale) && "chinese-font"
+                )}
+              >
+                {cat.name}
+              </a>
+            );
+          })}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
