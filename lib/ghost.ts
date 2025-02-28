@@ -73,20 +73,37 @@ function transformPost(post: any): Post {
 // Fetch all posts for a specific language
 export async function getPosts(locale: string, limit: number = 10, page: number = 1): Promise<Post[]> {
   try {
-    console.log(`Fetching posts for locale: ${locale}`);
+    console.log('Ghost API Configuration:', {
+      url: process.env.GHOST_API_URL,
+      hasKey: !!process.env.GHOST_CONTENT_API_KEY,
+      keyLength: process.env.GHOST_CONTENT_API_KEY?.length,
+      locale,
+      limit,
+      page
+    });
+
+    console.log(`Attempting to fetch posts for locale: ${locale}`);
     const posts = await api.posts.browse({
       limit,
       page,
       filter: `tag:${locale}`,
       include: ['tags', 'authors']
     });
-    console.log(`Found ${posts.length} posts for locale: ${locale}`);
+    console.log(`Successfully fetched ${posts.length} posts for locale: ${locale}`);
+    console.log('Post titles:', posts.map(p => p.title));
     return posts.map(transformPost);
   } catch (err) {
     console.error('Error fetching posts:', err);
+    console.error('Full error details:', {
+      message: err.message,
+      status: err.status,
+      code: err.code,
+      context: err.context
+    });
     console.error('API Configuration:', {
       url: process.env.GHOST_API_URL,
       hasKey: !!process.env.GHOST_CONTENT_API_KEY,
+      keyLength: process.env.GHOST_CONTENT_API_KEY?.length,
       locale,
       limit,
       page
