@@ -125,7 +125,18 @@ export async function fetchPosts(params: {
       return [];
     }
 
-    let posts = data.posts.map(post => {
+    let posts = data.posts.map((post: {
+      ID: number;
+      date: string;
+      title: string;
+      content: string;
+      excerpt: string;
+      slug: string;
+      featured_image?: string;
+      featured_media?: { source_url: string };
+      categories: Record<string, { ID: number; name: string }>;
+      sticky?: boolean;
+    }) => {
       // Handle categories from WordPress.com API response
       const postCategories = post.categories || {};
       let categoryIds: string[] = [];
@@ -133,7 +144,7 @@ export async function fetchPosts(params: {
 
       // Process categories from WordPress.com API
       if (typeof postCategories === 'object') {
-        Object.values(postCategories).forEach((category: any) => {
+        Object.values(postCategories).forEach((category) => {
           if (category && typeof category === 'object') {
             categoryIds.push(category.ID?.toString() || '');
             categoryNames.push(category.name || '');
@@ -164,14 +175,19 @@ export async function fetchPosts(params: {
     // Filter posts by category if specified
     if (params.categories) {
       const categoryInput = Array.isArray(params.categories) 
-        ? params.categories[0] 
-        : params.categories;
+        ? params.categories[0].toString()
+        : params.categories.toString();
       
       console.log('Filtering posts by category:', categoryInput);
       
-      posts = posts.filter(post => 
-        post.categories.includes(categoryInput.toString())
-      );
+      posts = posts.filter((post) => {
+        const postHasCategory = post.categories.some(catId => 
+          catId === categoryInput || 
+          post.categoryNames.some(name => name.toLowerCase() === categoryInput.toLowerCase())
+        );
+        console.log(`Post ${post.id} (${post.title.rendered}) has category ${categoryInput}:`, postHasCategory);
+        return postHasCategory;
+      });
       
       console.log('Posts after category filtering:', posts.length);
     }
@@ -351,16 +367,34 @@ export async function fetchCategory(identifier: string | number): Promise<Catego
 
 // Single post API
 export async function fetchPost(slug: string): Promise<Post | null> {
-  const cacheKey = `post:${slug}`;
-  const cached = getCached<Post>(cacheKey);
-  if (cached) return cached;
-
   try {
-    const data = await fetchAPI<{ posts: any[] }>(`/posts?slug=${slug}`);
+    // Get all posts to ensure we can find the exact match
+    const data = await fetchAPI<{ posts: any[] }>('/posts');
     
-    if (!data.posts.length) return null;
+    // Find the exact post that matches our slug
+    const post = data.posts.find(p => {
+      const postSlug = p.slug;
+      const decodedInputSlug = decodeURIComponent(slug);
+      const decodedPostSlug = decodeURIComponent(postSlug);
+      
+      // Log for debugging
+      console.log('Comparing slugs:', {
+        postSlug,
+        decodedPostSlug,
+        inputSlug: slug,
+        decodedInputSlug
+      });
+      
+      // Try all possible combinations of encoded/decoded slugs
+      return postSlug === slug || // Direct match
+             postSlug === decodedInputSlug || // Match with decoded input
+             decodedPostSlug === decodedInputSlug; // Match both decoded
+    });
     
-    const post = data.posts[0];
+    if (!post) {
+      console.log('No post found for slug:', slug);
+      return null;
+    }
     
     // Extract categories and category names
     const categories = Object.keys(post.categories || {}).map(key => post.categories[key].ID.toString());
@@ -372,14 +406,13 @@ export async function fetchPost(slug: string): Promise<Post | null> {
       content: { rendered: post.content },
       excerpt: { rendered: post.excerpt },
       date: post.date,
-      slug: post.slug,
+      slug: post.slug, // Keep the original slug from WordPress
       featured_media: post.featured_image || WP_CONFIG.defaultImage,
       categories,
       categoryNames,
       featured: post.sticky || false
     };
 
-    setCache(cacheKey, formattedPost);
     return formattedPost;
   } catch (error) {
     console.error('Error fetching post:', error);

@@ -94,14 +94,13 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export async function generateStaticParams() {
   const posts = await fetchPosts();
   return posts.map((post) => ({
-    slug: encodeURIComponent(post.slug),
+    slug: post.slug, // Use original slug
   }));
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  // Decode the URL-encoded slug
-  const decodedSlug = decodeURIComponent(params.slug);
-  const post = await fetchPost(decodedSlug);
+  // Use the slug directly without decoding
+  const post = await fetchPost(params.slug);
   const isChineseLocale = params.locale === 'zh-Hant' || params.locale === 'zh-Hans';
   const isVietnameseLocale = params.locale === 'vi';
 
