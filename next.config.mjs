@@ -35,18 +35,13 @@ const withPWAConfig = withPWA({
     {
       urlPattern: ({ url }) => {
         const isSameOrigin = self.origin === url.origin;
-        if (!isSameOrigin) return false;
-        return url.pathname.startsWith('/') || 
-               url.pathname.startsWith('/vi/') || 
-               url.pathname.startsWith('/en/') || 
-               url.pathname.startsWith('/zh-Hant/') || 
-               url.pathname.startsWith('/zh-Hans/');
+        return isSameOrigin && url.pathname === '/';
       },
       handler: 'NetworkFirst',
       options: {
-        cacheName: 'pages-cache',
+        cacheName: 'start-url',
         expiration: {
-          maxEntries: 32,
+          maxEntries: 1,
           maxAgeSeconds: 60 * 60 * 24, // 24 hours
         },
       },
@@ -60,12 +55,6 @@ const withPWAConfig = withPWA({
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
         },
-        cacheableResponse: {
-          statuses: [0, 200],
-        },
-        matchOptions: {
-          ignoreSearch: true,
-        },
       },
     },
     {
@@ -76,12 +65,6 @@ const withPWAConfig = withPWA({
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-        },
-        cacheableResponse: {
-          statuses: [0, 200],
-        },
-        matchOptions: {
-          ignoreSearch: true,
         },
       },
     },
