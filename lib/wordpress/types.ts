@@ -93,4 +93,50 @@ export interface WPError {
   data?: any;
 }
 
-export type ImageSize = 'thumbnail' | 'medium' | 'large' | 'full'; 
+export type ImageSize = 'thumbnail' | 'medium' | 'large' | 'full';
+
+export interface WPPost {
+  id: number;
+  date: string;
+  title: {
+    rendered: string;
+  };
+  excerpt: {
+    rendered: string;
+  };
+  content: {
+    rendered: string;
+  };
+  slug: string;
+  featured_media: string;
+  categories: number[];
+  tags: number[];
+  author: number;
+  status: string;
+  featured?: boolean;
+}
+
+export interface WPCategory {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  count: number;
+}
+
+export interface WPTag {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  count: number;
+}
+
+export interface WPAuthor {
+  id: number;
+  name: string;
+  avatar_urls: {
+    [key: string]: string;
+  };
+  description: string;
+} 
