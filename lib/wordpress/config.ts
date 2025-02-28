@@ -1,7 +1,7 @@
 export const WP_CONFIG = {
-  // WordPress.com API Configuration
+  // WordPress API Configuration
   siteId: 'annenails1.wordpress.com',
-  apiBase: 'https://public-api.wordpress.com/rest/v1.1/sites',
+  apiBase: 'https://public-api.wordpress.com/rest/v1.1/sites/annenails1.wordpress.com',
   
   // Site Configuration
   siteName: 'Anne Nails',

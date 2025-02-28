@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import { useTranslations } from '@/lib/i18n'
 
 interface NotFoundProps {
-  params: {
-    locale: string;
+  params?: {
+    locale?: string;
   };
 }
 
@@ -33,7 +34,9 @@ const translations = {
   }
 }
 
-export default function NotFound({ params: { locale } }: NotFoundProps) {
+export default function NotFound({ params }: NotFoundProps) {
+  // Default to 'en' if locale is not provided
+  const locale = params?.locale || 'en'
   const t = translations[locale as keyof typeof translations] || translations.en
 
   return (

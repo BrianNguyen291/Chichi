@@ -1,7 +1,7 @@
 import { Post, Category, Tag, Media } from './types';
 import { WP_CONFIG } from './config';
 
-const API_BASE = `https://public-api.wordpress.com/rest/v1.1/sites/${WP_CONFIG.siteId}`;
+const API_BASE = WP_CONFIG.apiBase;
 
 // Cache configuration
 const CACHE_DURATION = WP_CONFIG.cache.duration;
@@ -95,36 +95,11 @@ export async function fetchPosts(params: {
   if (cached) return cached;
 
   const searchParams = new URLSearchParams();
-  searchParams.append('fields', 'ID,title,content,excerpt,date,slug,featured_image,categories,sticky');
+  // Use minimal fields to improve performance
+  searchParams.append('fields', 'ID,date,title,content,excerpt,slug,featured_image,categories');
   searchParams.append('number', (params.per_page || WP_CONFIG.postsPerPage).toString());
   
   if (params.page) searchParams.append('page', params.page.toString());
-  if (params.categories) {
-    console.log('Category filter debug:');
-    console.log('Raw input:', params.categories);
-    console.log('Type:', typeof params.categories);
-    
-    const categoryId = Array.isArray(params.categories) 
-      ? params.categories[0] 
-      : params.categories;
-    
-    console.log('Processing category ID:', categoryId);
-    
-    if (typeof categoryId === 'string') {
-      if (!categoryId.includes('-')) {
-        const numericId = parseInt(categoryId, 10);
-        if (!isNaN(numericId)) {
-          searchParams.append('category', numericId.toString());
-          console.log('Added numeric category ID:', numericId);
-        }
-      } else {
-        console.log('Slug-based category filtering not supported');
-      }
-    } else if (typeof categoryId === 'number') {
-      searchParams.append('category', categoryId.toString());
-      console.log('Added numeric category ID:', categoryId);
-    }
-  }
   if (params.search) searchParams.append('search', params.search);
   if (params.lang) searchParams.append('lang', params.lang);
 
@@ -132,45 +107,45 @@ export async function fetchPosts(params: {
     const requestUrl = `${API_BASE}/posts?${searchParams}`;
     console.log('Fetching posts from URL:', requestUrl);
     
-    const data = await fetchAPI<{ posts: any[] }>(`/posts?${searchParams}`);
+    const response = await fetch(requestUrl, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('API Response:', data);
     
     if (!data.posts || data.posts.length === 0) {
       console.log('No posts found for params:', params);
-      console.log('API Response:', data);
       return [];
     }
 
-    console.log('Found posts:', data.posts.length);
-    if (data.posts.length > 0) {
-      console.log('Sample post data:', {
-        id: data.posts[0].ID,
-        title: data.posts[0].title,
-        categories: data.posts[0].categories,
-        language: data.posts[0].lang
-      });
-    }
-
-    const posts = data.posts.map(post => {
+    let posts = data.posts.map(post => {
       // Handle categories from WordPress.com API response
       const postCategories = post.categories || {};
-      console.log('Raw post categories for post', post.ID, ':', postCategories);
-      
       let categoryIds: string[] = [];
       let categoryNames: string[] = [];
-      
-      // Handle WordPress.com API category format
-      if (typeof postCategories === 'object' && !Array.isArray(postCategories)) {
-        Object.entries(postCategories).forEach(([_, category]: [string, any]) => {
-          if (category && typeof category === 'object' && 'ID' in category) {
-            categoryIds.push(category.ID.toString());
-            if ('name' in category) {
-              categoryNames.push(category.name);
-            }
+
+      // Process categories from WordPress.com API
+      if (typeof postCategories === 'object') {
+        Object.values(postCategories).forEach((category: any) => {
+          if (category && typeof category === 'object') {
+            categoryIds.push(category.ID?.toString() || '');
+            categoryNames.push(category.name || '');
           }
         });
       }
-      
-      console.log('Processed categories for post', post.ID, ':', { categoryIds, categoryNames });
+
+      // Ensure we have the featured image
+      const featuredImage = post.featured_image || 
+                          (post.featured_media && typeof post.featured_media === 'object' ? 
+                           post.featured_media.source_url : null) || 
+                          WP_CONFIG.defaultImage;
 
       return {
         id: post.ID,
@@ -179,12 +154,27 @@ export async function fetchPosts(params: {
         excerpt: { rendered: post.excerpt },
         date: post.date,
         slug: post.slug,
-        featured_media: post.featured_image || WP_CONFIG.defaultImage,
+        featured_media: featuredImage,
         categories: categoryIds,
-        categoryNames: categoryNames,
+        categoryNames,
         featured: post.sticky || false
       };
     });
+
+    // Filter posts by category if specified
+    if (params.categories) {
+      const categoryInput = Array.isArray(params.categories) 
+        ? params.categories[0] 
+        : params.categories;
+      
+      console.log('Filtering posts by category:', categoryInput);
+      
+      posts = posts.filter(post => 
+        post.categories.includes(categoryInput.toString())
+      );
+      
+      console.log('Posts after category filtering:', posts.length);
+    }
 
     setCache(cacheKey, posts);
     return posts;
@@ -211,7 +201,7 @@ interface CategoryHierarchical extends CategoryBase {
   children?: CategoryHierarchical[];
 }
 
-// Categories API with enhanced functionality
+// Categories API
 export async function fetchCategories(params: {
   page?: number;
   per_page?: number;
@@ -236,19 +226,35 @@ export async function fetchCategories(params: {
     const requestUrl = `${API_BASE}/categories?${searchParams}`;
     console.log('Fetching categories from URL:', requestUrl);
     
-    const data = await fetchAPI<{ categories: any[] }>(`/categories?${searchParams}`);
-    console.log('Raw categories response:', data);
+    const response = await fetch(requestUrl, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log('Categories API Response:', data);
     
-    const categories = data.categories
-      .map(category => ({
-        id: category.ID.toString(),
-        name: category.name,
-        slug: category.slug,
-        count: category.post_count,
-        description: category.description,
-        parent: category.parent ? category.parent.toString() : undefined,
-        meta: category.meta || {}
-      }));
+    if (!data.categories) {
+      console.log('No categories found');
+      return [];
+    }
+
+    const categories = data.categories.map(category => ({
+      id: category.ID.toString(),
+      name: category.name,
+      slug: category.slug,
+      count: category.post_count || 0,
+      description: category.description || '',
+      parent: category.parent ? category.parent.toString() : undefined,
+      meta: {
+        links: category.meta?.links || {},
+      }
+    }));
 
     console.log('Processed categories:', categories);
     setCache(cacheKey, categories);
