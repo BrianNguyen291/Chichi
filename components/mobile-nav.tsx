@@ -6,9 +6,16 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Menu } from "lucide-react"
 import { colors } from '@/lib/colors'
+import { useTranslations } from '@/lib/i18n'
+import type { Locale } from '@/lib/i18n'
 
-export function MobileNav() {
+interface MobileNavProps {
+  locale: Locale
+}
+
+export function MobileNav({ locale }: MobileNavProps) {
   const [open, setOpen] = React.useState(false)
+  const { translate } = useTranslations(locale)
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -19,7 +26,7 @@ export function MobileNav() {
           style={{ color: colors.darkOlive }}
         >
           <Menu className="h-6 w-6" />
-          <span className="sr-only">開啟選單</span>
+          <span className="sr-only">{translate('openMenu', 'common')}</span>
         </Button>
       </SheetTrigger>
       <SheetContent 
@@ -29,9 +36,10 @@ export function MobileNav() {
       >
         <nav className="flex flex-col gap-6 mt-8">
           {[
-            { href: "#about", label: "關於我們" },
-            { href: "#courses", label: "課程介紹" },
-            { href: "#contact", label: "聯絡我們" },
+            { href: `/${locale}/about`, label: 'about' },
+            { href: `/${locale}/courses`, label: 'courses' },
+            { href: `/${locale}/blog`, label: 'blog' },
+            { href: `/${locale}/contact`, label: 'contact' },
           ].map((item) => (
             <Link 
               key={item.href} 
@@ -40,7 +48,7 @@ export function MobileNav() {
               style={{ color: colors.darkOlive }}
               onClick={() => setOpen(false)}
             >
-              <span className="relative z-10">{item.label}</span>
+              <span className="relative z-10">{translate(item.label, 'common')}</span>
               <span 
                 className="absolute inset-0 bg-white transform translate-x-full transition-transform group-hover:translate-x-0"
                 style={{ backgroundColor: colors.primary }}

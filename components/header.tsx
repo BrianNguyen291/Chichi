@@ -1,9 +1,12 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
+import { MobileNav } from '@/components/mobile-nav'
+import { colors } from '@/lib/colors'
 
 interface HeaderProps {
   locale: Locale
@@ -13,27 +16,70 @@ export function Header({ locale }: HeaderProps) {
   const { translate } = useTranslations(locale)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="flex flex-1 items-center space-x-6">
-          <Link href={`/${locale}`} className="font-bold">
-            Chi Chi
+    <header 
+      className="sticky top-0 z-50 w-full border-b"
+      style={{ 
+        backgroundColor: colors.lightCream,
+        borderColor: colors.secondary 
+      }}
+    >
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link href={`/${locale}`} className="flex items-center space-x-2">
+            <Image
+              src="/logo.png"
+              alt="Chi Chi Logo"
+              width={48}
+              height={48}
+              style={{ width: 'auto', height: 'auto' }}
+            />
+            <span 
+              className="font-medium text-lg"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('brand', 'common')}
+            </span>
           </Link>
-          <Link href={`/${locale}/about`} className="text-foreground/60 transition-colors hover:text-foreground">
-            {translate('about', 'common')}
-          </Link>
-          <Link href={`/${locale}/courses`} className="text-foreground/60 transition-colors hover:text-foreground">
-            {translate('courses', 'common')}
-          </Link>
-          <Link href={`/${locale}/blog`} className="text-foreground/60 transition-colors hover:text-foreground">
-            {translate('blog', 'common')}
-          </Link>
-          <Link href={`/${locale}/contact`} className="text-foreground/60 transition-colors hover:text-foreground">
-            {translate('contact', 'common')}
-          </Link>
-        </div>
-        <div className="flex items-center space-x-4">
-          <LanguageSwitcher locale={locale} />
+
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link 
+              href={`/${locale}/about`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('about', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+            <Link 
+              href={`/${locale}/courses`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('courses', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+            <Link 
+              href={`/${locale}/blog`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('blog', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+            <Link 
+              href={`/${locale}/contact`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('contact', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+          </nav>
+
+          <div className="flex items-center space-x-4">
+            <LanguageSwitcher locale={locale} />
+            <MobileNav locale={locale} />
+          </div>
         </div>
       </div>
     </header>
