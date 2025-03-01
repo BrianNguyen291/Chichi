@@ -40,5 +40,13 @@
     "heading": "Không Tìm Thấy Trang",
     "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.",
     "button": "Về Trang Chủ"
+  },
+  "testimonials": {
+    "title": "Học Viên Nói Gì Về Chúng Tôi",
+    "subtitle": "Hãy lắng nghe chia sẻ từ các học viên về hành trình học tập tại CCVN. Những câu chuyện thành công của họ truyền cảm hứng cho chúng tôi tiếp tục cung cấp chất lượng giáo dục ngôn ngữ tốt nhất.",
+    "cta": {
+      "text": "Bạn đã sẵn sàng bắt đầu hành trình học ngôn ngữ của mình chưa?",
+      "button": "Tham Gia Ngay"
+    }
   }
 } 
