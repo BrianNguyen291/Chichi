@@ -12,11 +12,6 @@ const partners = [
   { name: 'First Bank', logo: '/images/First Bank.png' },
   { name: 'CTBC Bank', logo: '/images/CTBC.png' },
   { name: 'Amazon', logo: '/images/Amazon.png' },
-  { name: 'Eva Air', logo: '/images/EvaAir.png' },
-  { name: 'Cathay Pacific', logo: '/images/Cathay.jpg' },
-  { name: 'First Bank', logo: '/images/First Bank.png' },
-  { name: 'CTBC Bank', logo: '/images/CTBC.png' },
-  { name: 'Amazon', logo: '/images/Amazon.png' },
 ];
 
 const socialLinks = [
@@ -73,12 +68,30 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
           <h2 className="text-3xl font-bold text-center mb-12" style={{ color: colors.darkOlive }}>
             {t.partnersTitle}
           </h2>
-          <div className="relative w-full">
-            <div className="flex animate-scroll">
+          <div className="relative w-full overflow-hidden">
+            <div className="flex space-x-8 animate-scroll">
+              {/* First set of logos */}
               {partners.map((partner, index) => (
                 <div 
-                  key={index} 
-                  className="flex-none w-[200px] h-[100px] mx-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
+                  key={`first-${index}`} 
+                  className="flex-none w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={partner.logo}
+                      alt={partner.name}
+                      fill
+                      className="object-contain"
+                      sizes="200px"
+                    />
+                  </div>
+                </div>
+              ))}
+              {/* Duplicate set for seamless loop */}
+              {partners.map((partner, index) => (
+                <div 
+                  key={`second-${index}`} 
+                  className="flex-none w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
                 >
                   <div className="relative w-full h-full">
                     <Image

@@ -10,12 +10,15 @@
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(calc(-200px * 5)); /* Width of 5 logos */
     }
   }
 
   .animate-scroll {
-    animation: scroll 30s linear infinite;
+    animation: scroll 20s linear infinite;
+    &:hover {
+      animation-play-state: paused;
+    }
   }
 }
 
