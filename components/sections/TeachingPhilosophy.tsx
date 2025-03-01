@@ -50,6 +50,7 @@ const translations = {
 
 export const TeachingPhilosophy = ({ locale }: TeachingPhilosophyProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
+  const isEnglish = locale === 'en'
 
   return (
     <section id="about" className="py-16 bg-white">
@@ -58,15 +59,15 @@ export const TeachingPhilosophy = ({ locale }: TeachingPhilosophyProps) => {
           {/* Left side - Text Content */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h2 className="text-3xl font-bold text-[#b17f4a]">
+              <h2 className={`text-3xl font-bold text-[#b17f4a] ${isEnglish ? 'font-en' : 'font-zh'}`}>
                 {t.title}
               </h2>
-              <h3 className="text-2xl font-semibold text-[#b17f4a] border-b-2 border-[#b17f4a] pb-2 inline-block">
+              <h3 className={`text-2xl font-medium text-[#b17f4a] border-b-2 border-[#b17f4a] pb-2 inline-block ${isEnglish ? 'font-en' : 'font-zh'}`}>
                 {t.subtitle}
               </h3>
             </div>
 
-            <div className="space-y-6 text-gray-700">
+            <div className={`space-y-6 text-gray-700 font-base ${isEnglish ? 'font-en' : 'font-zh'}`}>
               {t.description.map((paragraph, index) => (
                 <p key={index}>{paragraph}</p>
               ))}

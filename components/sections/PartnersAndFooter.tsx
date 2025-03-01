@@ -12,6 +12,11 @@ const partners = [
   { name: 'First Bank', logo: '/images/First Bank.png' },
   { name: 'CTBC Bank', logo: '/images/CTBC.png' },
   { name: 'Amazon', logo: '/images/Amazon.png' },
+  { name: 'Eva Air', logo: '/images/EvaAir.png' },
+  { name: 'Cathay Pacific', logo: '/images/Cathay.jpg' },
+  { name: 'First Bank', logo: '/images/First Bank.png' },
+  { name: 'CTBC Bank', logo: '/images/CTBC.png' },
+  { name: 'Amazon', logo: '/images/Amazon.png' },
 ];
 
 const socialLinks = [
@@ -63,28 +68,30 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
 
   return (
     <>
-      <section id="contact" className="w-full py-16" style={{ backgroundColor: colors.primary }}>
+      <section id="contact" className="w-full py-16 overflow-hidden" style={{ backgroundColor: colors.primary }}>
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12" style={{ color: colors.darkOlive }}>
             {t.partnersTitle}
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-            {partners.map((partner, index) => (
-              <div 
-                key={index} 
-                className="w-full max-w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
-              >
-                <div className="relative w-full h-full">
-                  <Image
-                    src={partner.logo}
-                    alt={partner.name}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
+          <div className="relative w-full">
+            <div className="flex animate-scroll">
+              {partners.map((partner, index) => (
+                <div 
+                  key={index} 
+                  className="flex-none w-[200px] h-[100px] mx-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center p-6"
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={partner.logo}
+                      alt={partner.name}
+                      fill
+                      className="object-contain"
+                      sizes="200px"
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

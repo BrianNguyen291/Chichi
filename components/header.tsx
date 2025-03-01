@@ -36,14 +36,14 @@ export function Header({ locale }: HeaderProps) {
               />
             </div>
             <span 
-              className="ml-2 font-medium text-sm sm:text-base whitespace-nowrap"
+              className="ml-2 text-sm sm:text-base whitespace-nowrap font-bold"
               style={{ color: colors.darkOlive }}
             >
               {translate('brand', 'common')}
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8 font-medium">
             <Link 
               href={`/${locale}/about`} 
               className="relative py-2 transition-colors hover:text-[#b17f4a] group"

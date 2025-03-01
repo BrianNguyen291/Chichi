@@ -1,9 +1,60 @@
+/* Import Douyin Sans fonts */
+@import url('https://chinese-fonts-cdn.deno.dev/packages/dymh/dist/DouyinSans/result.css');
+@import url('https://chinese-fonts-cdn.deno.dev/packages/dymh/dist/DouyinSansBold/result.css');
+@import url('https://chinese-fonts-cdn.deno.dev/packages/dymh/dist/DouyinSansMedium/result.css');
+
+/* Import Inter font for English text */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Define font classes */
+.font-base {
+  font-family: 'Inter', 'Douyin Sans', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+}
+
+.font-bold {
+  font-family: 'Inter', 'Douyin Sans', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+}
+
+.font-medium {
+  font-family: 'Inter', 'Douyin Sans', Arial, Helvetica, sans-serif;
+  font-weight: 500;
+}
+
+/* Language-specific font classes */
+.font-en {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+.font-zh {
+  font-family: 'Douyin Sans', Arial, Helvetica, sans-serif;
+}
+
+/* Default body font */
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', 'Douyin Sans', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Text styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', 'Douyin Sans', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+}
+
+/* Language-specific text */
+:lang(en) {
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+:lang(zh-Hans), :lang(zh-Hant) {
+  font-family: 'Douyin Sans', Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {

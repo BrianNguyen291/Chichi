@@ -33,7 +33,7 @@ export function MobileNav({ locale }: MobileNavProps) {
           borderColor: colors.secondary 
         }}
       >
-        <div className="grid grid-cols-4 h-16">
+        <div className="grid grid-cols-4 h-16 font-medium">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
@@ -48,7 +48,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                 style={{ color: isActive ? colors.primary : colors.darkOlive }}
               >
                 <Icon className="h-5 w-5" />
-                <span className="text-xs font-medium">
+                <span className="text-xs">
                   {translate(item.label, 'common')}
                 </span>
               </Link>
