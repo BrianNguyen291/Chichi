@@ -5,6 +5,7 @@ import { TeachingPhilosophy } from '@/components/sections/TeachingPhilosophy'
 import { LearningEnvironment } from '@/components/sections/LearningEnvironment'
 import { LanguageLevels } from '@/components/sections/LanguageLevels'
 import { PartnersAndFooter } from '@/components/sections/PartnersAndFooter'
+import { CTAPopup } from '@/components/CTAPopup'
 import { useTranslations } from '@/lib/i18n'
 
 interface HomePageProps {
@@ -16,6 +17,7 @@ interface HomePageProps {
 export default function HomePage({ params: { locale } }: HomePageProps) {
   return (
     <div className="flex flex-col min-h-screen">
+      <CTAPopup locale={locale} />
       <HeroSection locale={locale} />
       <TeacherTeam locale={locale} />
       <CourseFeatures locale={locale} />
