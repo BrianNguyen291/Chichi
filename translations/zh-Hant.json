@@ -3,11 +3,15 @@
     "home": "首頁",
     "about": "關於我們",
     "courses": "課程",
-    "contact": "聯絡我們",
+    "library": "圖書館",
+    "vietnameseExam": "越南語考試",
+    "activities": "活動",
+    "contact": "聯繫我們",
     "blog": "部落格",
     "language": "語言",
-    "brand": "越學越通",
-    "openMenu": "開啟選單"
+    "brand": "Chi Chi 越南語",
+    "openMenu": "打開菜單",
+    "menu": "菜單"
   },
   "nav": {
     "menu": "選單",

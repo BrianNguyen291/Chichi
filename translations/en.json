@@ -3,11 +3,15 @@
     "home": "Home",
     "about": "About Us",
     "courses": "Courses",
+    "library": "Library",
+    "vietnameseExam": "Vietnamese Exam",
+    "activities": "Activities",
     "contact": "Contact",
     "blog": "Blog",
     "language": "Language",
     "brand": "Chi Chi Vietnamese",
-    "openMenu": "Open Menu"
+    "openMenu": "Open Menu",
+    "menu": "Menu"
   },
   "nav": {
     "menu": "Menu",

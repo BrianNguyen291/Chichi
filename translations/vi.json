@@ -1,13 +1,17 @@
 {
   "common": {
-    "home": "Trang Chủ",
-    "about": "Về Chúng Tôi",
-    "courses": "Khóa Học",
-    "contact": "Liên Hệ",
+    "home": "Trang chủ",
+    "about": "Về chúng tôi",
+    "courses": "Khóa học",
+    "library": "Thư viện",
+    "vietnameseExam": "Thi tiếng Việt",
+    "activities": "Hoạt động",
+    "contact": "Liên hệ",
     "blog": "Blog",
-    "language": "Ngôn Ngữ",
-    "brand": "Chi Chi Việt Ngữ",
-    "openMenu": "Mở Menu"
+    "language": "Ngôn ngữ",
+    "brand": "Chi Chi Tiếng Việt",
+    "openMenu": "Mở menu",
+    "menu": "Menu"
   },
   "nav": {
     "menu": "Menu",

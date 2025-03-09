@@ -43,7 +43,7 @@ export function Header({ locale }: HeaderProps) {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-8 font-medium">
+          <nav className="hidden md:flex items-center space-x-6 font-medium">
             <Link 
               href={`/${locale}/about`} 
               className="relative py-2 transition-colors hover:text-[#b17f4a] group"
@@ -58,6 +58,30 @@ export function Header({ locale }: HeaderProps) {
               style={{ color: colors.darkOlive }}
             >
               {translate('courses', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+            <Link 
+              href={`/${locale}/library`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('library', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+            <Link 
+              href={`/${locale}/vietnamese-exam`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('vietnameseExam', 'common')}
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+            </Link>
+            <Link 
+              href={`/${locale}/activities`} 
+              className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+              style={{ color: colors.darkOlive }}
+            >
+              {translate('activities', 'common')}
               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
             </Link>
             <Link 
