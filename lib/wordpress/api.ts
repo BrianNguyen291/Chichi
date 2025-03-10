@@ -1,7 +1,9 @@
 import { Post, Category, Tag, Media } from './types';
 import { WP_CONFIG } from './config';
+import { Locale } from '@/lib/i18n'
 
 const API_BASE = WP_CONFIG.apiBase;
+const WP_API_URL = process.env.NEXT_PUBLIC_WORDPRESS_API_URL
 
 // Cache configuration
 const CACHE_DURATION = WP_CONFIG.cache.duration;
@@ -494,4 +496,102 @@ export async function deletePost(id: number): Promise<void> {
     }
   );
   await handleResponse<void>(response);
+}
+
+interface WPCategory {
+  id: number
+  name: string
+  slug: string
+  description: string
+  parent: number
+  count: number
+}
+
+interface WPPost {
+  id: number
+  title: {
+    rendered: string
+  }
+  content: {
+    rendered: string
+  }
+  excerpt: {
+    rendered: string
+  }
+  slug: string
+  date: string
+  modified: string
+  featured_media: number
+  categories: number[]
+  tags: number[]
+}
+
+// Fetch all categories
+export async function getCategories(): Promise<WPCategory[]> {
+  const res = await fetch(`${WP_API_URL}/wp-json/wp/v2/categories?per_page=100`)
+  const categories = await res.json()
+  return categories
+}
+
+// Fetch posts by category
+export async function getPostsByCategory(categoryId: number, page = 1, perPage = 10): Promise<WPPost[]> {
+  const res = await fetch(
+    `${WP_API_URL}/wp-json/wp/v2/posts?categories=${categoryId}&page=${page}&per_page=${perPage}`
+  )
+  const posts = await res.json()
+  return posts
+}
+
+// Fetch single post by slug
+export async function getPostBySlug(slug: string): Promise<WPPost | null> {
+  const res = await fetch(`${WP_API_URL}/wp-json/wp/v2/posts?slug=${slug}`)
+  const posts = await res.json()
+  return posts[0] || null
+}
+
+// Get category tree (organized with parent/child relationships)
+export function getCategoryTree(categories: WPCategory[]): WPCategory[] {
+  const categoryMap = new Map<number, WPCategory & { children?: WPCategory[] }>()
+  const roots: WPCategory[] = []
+
+  // First pass: create map of categories
+  categories.forEach(category => {
+    categoryMap.set(category.id, { ...category, children: [] })
+  })
+
+  // Second pass: organize into tree structure
+  categories.forEach(category => {
+    const node = categoryMap.get(category.id)
+    if (node) {
+      if (category.parent === 0) {
+        roots.push(node)
+      } else {
+        const parent = categoryMap.get(category.parent)
+        if (parent && parent.children) {
+          parent.children.push(node)
+        }
+      }
+    }
+  })
+
+  return roots
+}
+
+// Get navigation menu structure based on categories
+export async function getNavigationCategories(): Promise<{
+  mainCategories: WPCategory[]
+  subCategories: Record<number, WPCategory[]>
+}> {
+  const categories = await getCategories()
+  const mainCategories = categories.filter(cat => cat.parent === 0)
+  const subCategories: Record<number, WPCategory[]> = {}
+  
+  mainCategories.forEach(mainCat => {
+    subCategories[mainCat.id] = categories.filter(cat => cat.parent === mainCat.id)
+  })
+
+  return {
+    mainCategories,
+    subCategories
+  }
 } 

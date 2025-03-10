@@ -6,36 +6,80 @@ import { usePathname } from 'next/navigation'
 import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
-import { Home, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone, Menu, X } from 'lucide-react'
-import Image from "next/image"
+import { Home, Menu, X, ChevronRight } from 'lucide-react'
+import { getCategories, organizeCategories } from "@/lib/wordpress-api"
+
+interface NavMenuItem {
+  label: string
+  href: string
+  icon?: React.ElementType
+  children?: NavMenuItem[]
+}
 
 interface MobileNavProps {
   locale: Locale
 }
 
+// Static menu items that are not from WordPress
+const staticNavItems: NavMenuItem[] = [
+  { 
+    href: '/', 
+    label: 'Home', 
+    icon: Home 
+  },
+  { 
+    href: '/about', 
+    label: 'About Us', 
+    icon: Home 
+  },
+  { 
+    href: '/contact', 
+    label: 'Contact', 
+    icon: Home 
+  },
+]
+
 export function MobileNav({ locale }: MobileNavProps) {
   const pathname = usePathname()
   const { translate } = useTranslations(locale)
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const [activeSubmenu, setActiveSubmenu] = React.useState<string | null>(null)
+  const [navItems, setNavItems] = React.useState<NavMenuItem[]>(staticNavItems)
 
-  const navItems = [
-    { href: `/${locale}`, label: 'home', icon: Home },
-    { href: `/${locale}/about`, label: 'about', icon: Home },
-    { href: `/${locale}/courses`, label: 'courses', icon: BookOpen },
-    { href: `/${locale}/library`, label: 'library', icon: Library },
-    { href: `/${locale}/vietnamese-exam`, label: 'vietnameseExam', icon: GraduationCap },
-    { href: `/${locale}/activities`, label: 'activities', icon: Activity },
-    { href: `/${locale}/blog`, label: 'blog', icon: Newspaper },
-    { href: `/${locale}/contact`, label: 'contact', icon: Phone },
-  ]
+  React.useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const categories = await getCategories(locale)
+        const { mainCategories, subCategories } = organizeCategories(categories)
 
-  // Main items for bottom navigation
-  const mainNavItems = [
-    { href: `/${locale}`, label: 'home', icon: Home },
-    { href: `/${locale}/courses`, label: 'courses', icon: BookOpen },
-    { href: `/${locale}/blog`, label: 'blog', icon: Newspaper },
-    { href: `/${locale}/contact`, label: 'contact', icon: Phone },
-  ]
+        // Convert WordPress categories to menu items
+        const wpMenuItems = mainCategories.map(cat => ({
+          label: cat.name,
+          href: `/category/${cat.slug}`,
+          ...(subCategories[cat.id] && {
+            children: subCategories[cat.id].map(subCat => ({
+              label: subCat.name,
+              href: `/category/${subCat.slug}`,
+            })),
+          }),
+        }))
+
+        // Combine static and WordPress menu items
+        setNavItems([...staticNavItems, ...wpMenuItems])
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    }
+
+    fetchCategories()
+  }, [locale])
+
+  // Main items for bottom navigation - use first 4 items
+  const mainNavItems = navItems.slice(0, 4)
+
+  const handleSubmenuClick = (label: string) => {
+    setActiveSubmenu(activeSubmenu === label ? null : label)
+  }
 
   return (
     <>
@@ -54,26 +98,70 @@ export function MobileNav({ locale }: MobileNavProps) {
               <X className="h-6 w-6" />
             </button>
           </div>
-          <div className="flex flex-col items-center justify-center flex-1 space-y-6 p-4">
-            {navItems.map((item) => {
-              const Icon = item.icon
-              const isActive = pathname === item.href
-              
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className={`flex items-center space-x-2 text-lg font-medium transition-colors ${
-                    isActive ? 'text-[#b17f4a]' : ''
-                  }`}
-                  style={{ color: isActive ? colors.primary : colors.darkOlive }}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{translate(item.label, 'common')}</span>
-                </Link>
-              )
-            })}
+          <div className="flex-1 overflow-y-auto">
+            <div className="flex flex-col space-y-2 p-4">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                const isActive = pathname === item.href
+                const isSubmenuOpen = activeSubmenu === item.label
+                
+                return (
+                  <div key={item.label}>
+                    <div className="flex items-center justify-between">
+                      {item.href ? (
+                        <Link
+                          href={`/${locale}${item.href}`}
+                          onClick={() => !item.children && setIsMenuOpen(false)}
+                          className={`flex items-center space-x-2 text-lg font-medium transition-colors p-2 rounded-md w-full ${
+                            isActive ? 'text-[#b17f4a] bg-white/50' : ''
+                          }`}
+                          style={{ color: isActive ? colors.primary : colors.darkOlive }}
+                        >
+                          {Icon && <Icon className="h-5 w-5" />}
+                          <span>{item.label}</span>
+                        </Link>
+                      ) : (
+                        <span
+                          className="flex items-center space-x-2 text-lg font-medium p-2"
+                          style={{ color: colors.darkOlive }}
+                        >
+                          {Icon && <Icon className="h-5 w-5" />}
+                          <span>{item.label}</span>
+                        </span>
+                      )}
+                      {item.children && (
+                        <button
+                          onClick={() => handleSubmenuClick(item.label)}
+                          className="p-2"
+                          style={{ color: colors.darkOlive }}
+                        >
+                          <ChevronRight
+                            className={`h-5 w-5 transition-transform ${
+                              isSubmenuOpen ? 'rotate-90' : ''
+                            }`}
+                          />
+                        </button>
+                      )}
+                    </div>
+                    {item.children && isSubmenuOpen && (
+                      <div className="ml-6 mt-2 space-y-2">
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.label}
+                            href={`/${locale}${child.href}`}
+                            onClick={() => setIsMenuOpen(false)}
+                            className="block p-2 text-base transition-colors rounded-md"
+                            style={{ color: colors.darkOlive }}
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       )}
@@ -94,15 +182,15 @@ export function MobileNav({ locale }: MobileNavProps) {
             return (
               <Link
                 key={item.href}
-                href={item.href}
+                href={`/${locale}${item.href}`}
                 className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
                   isActive ? 'text-[#b17f4a]' : ''
                 }`}
                 style={{ color: isActive ? colors.primary : colors.darkOlive }}
               >
-                <Icon className="h-5 w-5" />
+                {Icon && <Icon className="h-5 w-5" />}
                 <span className="text-xs">
-                  {translate(item.label, 'common')}
+                  {item.label}
                 </span>
               </Link>
             )

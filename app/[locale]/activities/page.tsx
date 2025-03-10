@@ -3,6 +3,9 @@ import { getTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
 import { colors } from '@/lib/colors'
 import Image from 'next/image'
+import Link from 'next/link'
+import { getActivities, getStrapiMedia, getStrapiImageAlt } from '@/lib/strapi'
+import { StrapiData, StrapiActivity } from '@/lib/strapi/types'
 
 export async function generateMetadata({
   params: { locale },
@@ -23,58 +26,34 @@ export default async function ActivitiesPage({
   params: { locale: Locale }
 }) {
   const t = getTranslations(locale)
-
-  // Sample activities data - would come from CMS in production
-  const activities = [
-    {
-      id: 1,
-      title: 'Vietnamese Cultural Festival',
-      date: '2023-10-15',
-      description: 'Annual cultural festival celebrating Vietnamese traditions, food, music, and art.',
-      image: '/placeholder.jpg',
-      category: 'Cultural Event'
-    },
-    {
-      id: 2,
-      title: 'Language Exchange Meetup',
-      date: '2023-11-05',
-      description: 'Monthly language exchange event for students to practice Vietnamese with native speakers.',
-      image: '/placeholder.jpg',
-      category: 'Language Practice'
-    },
-    {
-      id: 3,
-      title: 'Vietnamese Cooking Workshop',
-      date: '2023-11-20',
-      description: 'Learn to cook traditional Vietnamese dishes while practicing language skills.',
-      image: '/placeholder.jpg',
-      category: 'Workshop'
-    },
-    {
-      id: 4,
-      title: 'Field Trip to Vietnamese Museum',
-      date: '2023-12-10',
-      description: 'Educational visit to a museum showcasing Vietnamese history and culture.',
-      image: '/placeholder.jpg',
-      category: 'Field Trip'
-    },
-    {
-      id: 5,
-      title: 'Vietnamese New Year Celebration',
-      date: '2024-01-25',
-      description: 'Tết celebration with traditional customs, performances, and food.',
-      image: '/placeholder.jpg',
-      category: 'Cultural Event'
-    },
-    {
-      id: 6,
-      title: 'Vietnamese Film Screening',
-      date: '2024-02-15',
-      description: 'Screening of award-winning Vietnamese films with discussion in Vietnamese.',
-      image: '/placeholder.jpg',
-      category: 'Cultural Event'
+  
+  // Fetch activities
+  let activities: StrapiData<StrapiActivity>[] = []
+  let featuredActivity: StrapiData<StrapiActivity> | null = null
+  
+  try {
+    // Fetch featured activity
+    const featuredActivityData = await getActivities(locale, 1, 1, {
+      featured: {
+        $eq: true
+      }
+    })
+    
+    if (featuredActivityData.data.length > 0) {
+      featuredActivity = featuredActivityData.data[0]
     }
-  ]
+    
+    // Fetch other activities
+    const activitiesData = await getActivities(locale, 1, 6, {
+      featured: {
+        $ne: true
+      }
+    })
+    
+    activities = activitiesData.data
+  } catch (error) {
+    console.error('Error fetching activities:', error)
+  }
 
   // Format date function
   const formatDate = (dateString: string) => {
@@ -97,57 +76,56 @@ export default async function ActivitiesPage({
       </section>
 
       {/* Featured Activity */}
-      <section className="mb-16">
-        <div 
-          className="relative rounded-lg overflow-hidden"
-          style={{ backgroundColor: colors.lightCream }}
-        >
-          <div className="md:flex">
-            <div className="md:w-1/2 relative h-64 md:h-auto">
-              <div className="absolute inset-0 bg-black/20 z-10 flex items-center justify-center md:hidden">
-                <h2 className="text-white text-2xl font-bold px-4 text-center">
-                  Upcoming: Vietnamese Cultural Festival
-                </h2>
+      {featuredActivity && (
+        <section className="mb-16">
+          <div 
+            className="relative rounded-lg overflow-hidden"
+            style={{ backgroundColor: colors.lightCream }}
+          >
+            <div className="md:flex">
+              <div className="md:w-1/2 relative h-64 md:h-auto">
+                <div className="absolute inset-0 bg-black/20 z-10 flex items-center justify-center md:hidden">
+                  <h2 className="text-white text-2xl font-bold px-4 text-center">
+                    {featuredActivity.attributes.title}
+                  </h2>
+                </div>
+                <Image
+                  src={getStrapiMedia(featuredActivity.attributes.image)}
+                  alt={getStrapiImageAlt(featuredActivity.attributes.image)}
+                  className="object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
               </div>
-              <Image
-                src="/placeholder.jpg"
-                alt="Vietnamese Cultural Festival"
-                className="object-cover"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-            <div className="md:w-1/2 p-6 md:p-8">
-              <div className="mb-2">
-                <span 
-                  className="inline-block px-3 py-1 text-sm rounded-full"
-                  style={{ backgroundColor: colors.secondary, color: colors.darkOlive }}
+              <div className="md:w-1/2 p-6 md:p-8">
+                <div className="mb-2">
+                  <span 
+                    className="inline-block px-3 py-1 text-sm rounded-full"
+                    style={{ backgroundColor: colors.secondary, color: colors.darkOlive }}
+                  >
+                    Featured Event
+                  </span>
+                </div>
+                <h2 
+                  className="text-2xl md:text-3xl font-bold mb-3 hidden md:block"
+                  style={{ color: colors.darkOlive }}
                 >
-                  Featured Event
-                </span>
+                  {featuredActivity.attributes.title}
+                </h2>
+                <p className="text-sm mb-4">{formatDate(featuredActivity.attributes.date)}</p>
+                <p className="mb-6">{featuredActivity.attributes.description}</p>
+                <Link 
+                  href={`/${locale}/activities/${featuredActivity.attributes.slug}`}
+                  className="px-6 py-2 rounded-md text-white"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  Learn More
+                </Link>
               </div>
-              <h2 
-                className="text-2xl md:text-3xl font-bold mb-3 hidden md:block"
-                style={{ color: colors.darkOlive }}
-              >
-                Upcoming: Vietnamese Cultural Festival
-              </h2>
-              <p className="text-sm mb-4">October 15, 2023</p>
-              <p className="mb-6">
-                Join us for our annual Vietnamese Cultural Festival! Experience traditional Vietnamese 
-                culture through food, music, dance, and art. This event is open to students, families, 
-                and the community.
-              </p>
-              <button 
-                className="px-6 py-2 rounded-md text-white"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Learn More
-              </button>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Activities Grid */}
       <section className="mb-16">
@@ -158,44 +136,61 @@ export default async function ActivitiesPage({
           Recent & Upcoming Activities
         </h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {activities.map((activity) => (
-            <div 
-              key={activity.id} 
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="relative h-48">
-                <Image
-                  src={activity.image}
-                  alt={activity.title}
-                  className="object-cover"
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div 
-                  className="absolute top-0 right-0 m-2 px-2 py-1 text-xs rounded"
-                  style={{ backgroundColor: colors.secondary, color: colors.darkOlive }}
-                >
-                  {activity.category}
+          {activities.length > 0 ? (
+            activities.map((activity) => (
+              <div 
+                key={activity.id} 
+                className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={getStrapiMedia(activity.attributes.image)}
+                    alt={getStrapiImageAlt(activity.attributes.image)}
+                    className="object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div 
+                    className="absolute top-0 right-0 m-2 px-2 py-1 text-xs rounded"
+                    style={{ backgroundColor: colors.secondary, color: colors.darkOlive }}
+                  >
+                    {activity.attributes.category.split('_').map(word => 
+                      word.charAt(0).toUpperCase() + word.slice(1)
+                    ).join(' ')}
+                  </div>
+                </div>
+                <div className="p-4">
+                  <h3 
+                    className="font-bold text-lg mb-2"
+                    style={{ color: colors.darkOlive }}
+                  >
+                    {activity.attributes.title}
+                  </h3>
+                  <p className="text-sm mb-3">{formatDate(activity.attributes.date)}</p>
+                  <p className="text-sm mb-4 line-clamp-3">{activity.attributes.description}</p>
+                  <Link 
+                    href={`/${locale}/activities/${activity.attributes.slug}`}
+                    className="text-white px-4 py-2 rounded-md text-sm"
+                    style={{ backgroundColor: colors.primary }}
+                  >
+                    View Details
+                  </Link>
                 </div>
               </div>
-              <div className="p-4">
-                <h3 
-                  className="font-bold text-lg mb-2"
-                  style={{ color: colors.darkOlive }}
-                >
-                  {activity.title}
-                </h3>
-                <p className="text-sm mb-3">{formatDate(activity.date)}</p>
-                <p className="text-sm mb-4 line-clamp-3">{activity.description}</p>
-                <button 
-                  className="text-white px-4 py-2 rounded-md text-sm"
-                  style={{ backgroundColor: colors.primary }}
-                >
-                  View Details
-                </button>
-              </div>
+            ))
+          ) : (
+            <div className="col-span-3 text-center py-12">
+              <p>No activities available yet. Check back soon!</p>
             </div>
-          ))}
+          )}
+        </div>
+        <div className="mt-8 text-center">
+          <Link 
+            href={`/${locale}/activities/all`}
+            className="text-[#b17f4a] hover:underline"
+          >
+            View all activities
+          </Link>
         </div>
       </section>
 
@@ -212,12 +207,13 @@ export default async function ActivitiesPage({
             View our upcoming activities and events. Click on an event to see more details and register.
           </p>
           <div className="flex justify-center">
-            <button 
+            <Link 
+              href={`/${locale}/activities/calendar`}
               className="px-6 py-3 rounded-md text-white"
               style={{ backgroundColor: colors.primary }}
             >
               View Full Calendar
-            </button>
+            </Link>
           </div>
         </div>
       </section>

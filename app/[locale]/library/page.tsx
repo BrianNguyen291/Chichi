@@ -1,7 +1,11 @@
 import { Metadata } from 'next'
-import { getTranslations, useTranslations } from '@/lib/i18n'
+import { getTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
 import { colors } from '@/lib/colors'
+import Image from 'next/image'
+import Link from 'next/link'
+import { getLibraryResources, getStrapiMedia, getStrapiImageAlt, getStrapiFile } from '@/lib/strapi'
+import { StrapiData, StrapiLibraryResource } from '@/lib/strapi/types'
 
 export async function generateMetadata({
   params: { locale },
@@ -22,6 +26,39 @@ export default async function LibraryPage({
   params: { locale: Locale }
 }) {
   const t = getTranslations(locale)
+  
+  // Fetch library resources
+  let practiceMaterials: StrapiData<StrapiLibraryResource>[] = []
+  let vocabularyResources: StrapiData<StrapiLibraryResource>[] = []
+  let grammarResources: StrapiData<StrapiLibraryResource>[] = []
+  
+  try {
+    // Fetch practice materials
+    const practiceMaterialsData = await getLibraryResources(locale, 1, 3, {
+      type: {
+        $eq: 'practice_material'
+      }
+    })
+    practiceMaterials = practiceMaterialsData.data
+    
+    // Fetch vocabulary resources
+    const vocabularyResourcesData = await getLibraryResources(locale, 1, 3, {
+      type: {
+        $eq: 'vocabulary'
+      }
+    })
+    vocabularyResources = vocabularyResourcesData.data
+    
+    // Fetch grammar resources
+    const grammarResourcesData = await getLibraryResources(locale, 1, 3, {
+      type: {
+        $eq: 'grammar'
+      }
+    })
+    grammarResources = grammarResourcesData.data
+  } catch (error) {
+    console.error('Error fetching library resources:', error)
+  }
 
   return (
     <main className="container mx-auto px-4 py-8">
@@ -50,37 +87,40 @@ export default async function LibraryPage({
             Download practice materials to enhance your Vietnamese language skills. Our collection includes exercises for all proficiency levels.
           </p>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* This would be populated from CMS */}
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Beginner Practice Set</h3>
-              <p className="text-sm mb-3">Basic vocabulary and grammar exercises for beginners</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Download PDF
-              </button>
-            </div>
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Intermediate Practice Set</h3>
-              <p className="text-sm mb-3">Comprehensive exercises for intermediate learners</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Download PDF
-              </button>
-            </div>
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Advanced Practice Set</h3>
-              <p className="text-sm mb-3">Complex exercises for advanced Vietnamese learners</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Download PDF
-              </button>
-            </div>
+            {practiceMaterials.length > 0 ? (
+              practiceMaterials.map((resource) => (
+                <div 
+                  key={resource.id} 
+                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-semibold mb-2">{resource.attributes.title}</h3>
+                  <p className="text-sm mb-3">{resource.attributes.description}</p>
+                  {resource.attributes.file.data && (
+                    <a 
+                      href={getStrapiFile(resource.attributes.file)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-white px-4 py-2 rounded-md inline-block"
+                      style={{ backgroundColor: colors.primary }}
+                    >
+                      Download PDF
+                    </a>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-8">
+                <p>No practice materials available yet. Check back soon!</p>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 text-center">
+            <Link 
+              href={`/${locale}/library/practice-materials`}
+              className="text-[#b17f4a] hover:underline"
+            >
+              View all practice materials
+            </Link>
           </div>
         </div>
       </section>
@@ -98,37 +138,36 @@ export default async function LibraryPage({
             Explore our comprehensive vocabulary lists organized by topics and difficulty levels.
           </p>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* This would be populated from CMS */}
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Daily Conversations</h3>
-              <p className="text-sm mb-3">Essential vocabulary for everyday conversations</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                View Details
-              </button>
-            </div>
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Business Vietnamese</h3>
-              <p className="text-sm mb-3">Professional vocabulary for business contexts</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                View Details
-              </button>
-            </div>
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Academic Terms</h3>
-              <p className="text-sm mb-3">Academic and educational vocabulary</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                View Details
-              </button>
-            </div>
+            {vocabularyResources.length > 0 ? (
+              vocabularyResources.map((resource) => (
+                <div 
+                  key={resource.id} 
+                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-semibold mb-2">{resource.attributes.title}</h3>
+                  <p className="text-sm mb-3">{resource.attributes.description}</p>
+                  <Link 
+                    href={`/${locale}/library/vocabulary/${resource.attributes.slug}`}
+                    className="text-white px-4 py-2 rounded-md inline-block"
+                    style={{ backgroundColor: colors.primary }}
+                  >
+                    View Details
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-8">
+                <p>No vocabulary collections available yet. Check back soon!</p>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 text-center">
+            <Link 
+              href={`/${locale}/library/vocabulary`}
+              className="text-[#b17f4a] hover:underline"
+            >
+              View all vocabulary collections
+            </Link>
           </div>
         </div>
       </section>
@@ -146,37 +185,36 @@ export default async function LibraryPage({
             Master Vietnamese grammar with our comprehensive guides and explanations.
           </p>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {/* This would be populated from CMS */}
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Basic Sentence Structure</h3>
-              <p className="text-sm mb-3">Learn the fundamentals of Vietnamese sentence construction</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Read More
-              </button>
-            </div>
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Verb Tenses</h3>
-              <p className="text-sm mb-3">Comprehensive guide to Vietnamese verb tenses and usage</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Read More
-              </button>
-            </div>
-            <div className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-              <h3 className="font-semibold mb-2">Particles and Classifiers</h3>
-              <p className="text-sm mb-3">Understanding Vietnamese particles and classifiers</p>
-              <button 
-                className="text-white px-4 py-2 rounded-md"
-                style={{ backgroundColor: colors.primary }}
-              >
-                Read More
-              </button>
-            </div>
+            {grammarResources.length > 0 ? (
+              grammarResources.map((resource) => (
+                <div 
+                  key={resource.id} 
+                  className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                >
+                  <h3 className="font-semibold mb-2">{resource.attributes.title}</h3>
+                  <p className="text-sm mb-3">{resource.attributes.description}</p>
+                  <Link 
+                    href={`/${locale}/library/grammar/${resource.attributes.slug}`}
+                    className="text-white px-4 py-2 rounded-md inline-block"
+                    style={{ backgroundColor: colors.primary }}
+                  >
+                    Read More
+                  </Link>
+                </div>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-8">
+                <p>No grammar guides available yet. Check back soon!</p>
+              </div>
+            )}
+          </div>
+          <div className="mt-4 text-center">
+            <Link 
+              href={`/${locale}/library/grammar`}
+              className="text-[#b17f4a] hover:underline"
+            >
+              View all grammar guides
+            </Link>
           </div>
         </div>
       </section>
