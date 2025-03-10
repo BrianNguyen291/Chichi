@@ -1,4 +1,5 @@
 import { WORDPRESS_API_URL } from '@/config'
+import { categoryTranslations } from '@/translations/categories'
 
 export interface WPCategory {
   id: number
@@ -9,6 +10,10 @@ export interface WPCategory {
   count: number
   link: string
   meta: any[]
+}
+
+export interface TranslatedCategory extends WPCategory {
+  translatedName: string
 }
 
 export interface WPPost {
@@ -86,7 +91,7 @@ async function fetchFromWordPress(endpoint: string, params: Record<string, any> 
   }
 }
 
-export async function getCategories(locale: string = 'en'): Promise<WPCategory[]> {
+export async function getCategories(locale: string = 'en'): Promise<TranslatedCategory[]> {
   console.log('📁 Fetching categories for locale:', locale)
   try {
     const data = await fetchFromWordPress('categories', {
@@ -101,12 +106,44 @@ export async function getCategories(locale: string = 'en'): Promise<WPCategory[]
       return []
     }
 
-    // Filter out the "Uncategorized" category (typically has ID 1 or slug "uncategorized")
-    const filteredCategories = data.filter(category => 
-      category.id !== 1 && category.slug !== 'uncategorized'
-    )
+    // Filter out the "Uncategorized" category
+    let filteredCategories = data
+      .filter(category => 
+        category.id !== 1 && category.slug !== 'uncategorized'
+      )
 
-    console.log('📁 Categories fetched:', filteredCategories)
+    // Filter categories based on locale
+    if (locale === 'vi') {
+      // For Vietnamese, show only Vietnamese course categories
+      filteredCategories = filteredCategories.filter(category => 
+        category.slug === 'khoa-hoc-tieng-viet' || 
+        ['cao-cap', 'trung-cap', 'so-cap'].includes(category.slug) ||
+        // Include subcategories of Vietnamese course
+        data.find(parentCat => 
+          parentCat.slug === 'khoa-hoc-tieng-viet' && 
+          category.parent === parentCat.id
+        )
+      )
+    } else if (locale === 'zh-Hant' || locale === 'zh-Hans') {
+      // For Chinese languages, show only Chinese course categories
+      filteredCategories = filteredCategories.filter(category => 
+        category.slug === 'course' || 
+        ['高級', '中級', '初級'].includes(category.slug) ||
+        // Include subcategories of Chinese course
+        data.find(parentCat => 
+          parentCat.slug === 'course' && 
+          category.parent === parentCat.id
+        )
+      )
+    }
+
+    // Add translations
+    filteredCategories = filteredCategories.map(category => ({
+      ...category,
+      translatedName: categoryTranslations[category.slug]?.[locale] || category.name
+    }))
+
+    console.log('📁 Categories fetched and translated:', filteredCategories)
     return filteredCategories
   } catch (error) {
     console.error('❌ Error fetching categories:', error)

@@ -26,6 +26,32 @@ export function WordPressNav({ locale }: WordPressNavProps) {
         setError(null)
         const data = await getCategories(locale)
         const organized = organizeCategories(data)
+        
+        // Additional frontend filtering based on locale
+        if (locale === 'vi') {
+          const vietnameseCourse = organized.mainCategories.find(cat => cat.slug === 'khoa-hoc-tieng-viet')
+          if (vietnameseCourse) {
+            organized.mainCategories = [vietnameseCourse]
+            organized.subCategories = {
+              [vietnameseCourse.id]: organized.subCategories[vietnameseCourse.id] || []
+            }
+          } else {
+            organized.mainCategories = []
+            organized.subCategories = {}
+          }
+        } else if (locale === 'zh-Hant' || locale === 'zh-Hans') {
+          const chineseCourse = organized.mainCategories.find(cat => cat.slug === 'course')
+          if (chineseCourse) {
+            organized.mainCategories = [chineseCourse]
+            organized.subCategories = {
+              [chineseCourse.id]: organized.subCategories[chineseCourse.id] || []
+            }
+          } else {
+            organized.mainCategories = []
+            organized.subCategories = {}
+          }
+        }
+        
         console.log('📁 Organized categories:', organized)
         setCategories(organized)
       } catch (err) {
@@ -42,7 +68,6 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   // Static menu items
   const staticItems = [
     { label: 'Về chúng tôi', href: '/about' },
-  
     { label: 'Liên hệ', href: '/contact' },
   ]
 
@@ -107,7 +132,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
             className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
             style={{ color: colors.darkOlive }}
           >
-            {category.name}
+            {category.translatedName || category.name}
             {categories.subCategories[category.id]?.length > 0 && (
               <ChevronDown
                 className={`ml-1 h-4 w-4 transition-transform ${
@@ -130,7 +155,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
                   className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
                   style={{ color: colors.darkOlive }}
                 >
-                  {subCategory.name}
+                  {subCategory.translatedName || subCategory.name}
                 </Link>
               ))}
             </div>
