@@ -28,6 +28,7 @@ export interface WPPost {
   }
   categories: number[]
   featured_media: number
+  jetpack_featured_media_url?: string // WordPress.com specific
   _embedded?: {
     'wp:featuredmedia'?: Array<{
       source_url: string

@@ -20,7 +20,10 @@ export default async function PostPage({ params: { locale, slug } }: PostPagePro
     notFound()
   }
 
-  const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+  // Try both WordPress.com and self-hosted WordPress featured image URLs
+  const featuredImage = 
+    post.jetpack_featured_media_url || 
+    post._embedded?.['wp:featuredmedia']?.[0]?.source_url
 
   return (
     <article className="container mx-auto px-4 py-8 max-w-4xl">
@@ -33,6 +36,7 @@ export default async function PostPage({ params: { locale, slug } }: PostPagePro
             fill
             className="object-cover"
             priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
           />
         </div>
       )}
@@ -69,7 +73,7 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
 
   const title = post.title.rendered.replace(/<[^>]*>/g, '')
   const description = post.excerpt.rendered.replace(/<[^>]*>/g, '').slice(0, 160)
-  const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url
+  const featuredImage = post.jetpack_featured_media_url || post._embedded?.['wp:featuredmedia']?.[0]?.source_url
 
   return {
     title,
