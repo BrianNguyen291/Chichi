@@ -8,138 +8,138 @@ interface TestimonialsSectionProps {
 const testimonials: Record<Locale, TestimonialProps[]> = {
   'en': [
     {
-      name: "Nguyễn Văn A",
-      role: "IELTS Student",
-      content: "Thanks to CCVN, I improved my IELTS score from 6.0 to 7.5 in just 3 months. The teachers are very professional and supportive.",
+      name: "Lê Vũ Linh Trang",
+      role: "HSK 5 Student",
+      content: "Studying Chinese at CCVN has been a great experience. The teachers are professional and the teaching methods are effective. I improved my HSK score significantly in just a few months.",
       rating: 5,
       image: "/testimonials/student1.jpg",
-      language: "IELTS"
+      language: "HSK"
     },
     {
-      name: "李小明",
-      role: "Business Chinese Student",
-      content: "The business Chinese course helped me secure a job at a multinational company. The practical approach to teaching made all the difference.",
+      name: "Trần Huệ Lý",
+      role: "HSK 3 Student",
+      content: "After studying at CCVN, I gained confidence in my Chinese language skills. The practical approach and cultural insights helped me progress quickly and effectively.",
       rating: 5,
       image: "/testimonials/student2.jpg",
-      language: "Business Chinese"
+      language: "Chinese"
+    },
+    {
+      name: "Nguyễn Phương Linh",
+      role: "HSK 6 Student",
+      content: "I've always wanted to study in China, but my Chinese wasn't good enough. After a year at CCVN, I improved dramatically and now I'm confident I'll achieve my HSK 6 goal.",
+      rating: 5,
+      image: "/testimonials/student3.jpg",
+      language: "Chinese"
     },
     {
       name: "Sarah Johnson",
       role: "Vietnamese Learner",
-      content: "Learning Vietnamese at CCVN has been an amazing experience. The cultural insights and patient teaching approach helped me progress quickly.",
-      rating: 5,
-      image: "/testimonials/student3.jpg",
-      language: "Vietnamese"
-    },
-    {
-      name: "王大明",
-      role: "HSK 6 Student",
-      content: "I prepared for HSK 6 at CCVN. The teachers are professional and the teaching methods are efficient. I achieved excellent results in HSK 6 in just three months.",
+      content: "Learning Vietnamese at CCVN has been an amazing experience. The cultural insights and patient teaching approach helped me progress quickly and communicate effectively.",
       rating: 5,
       image: "/testimonials/student4.jpg",
-      language: "HSK"
+      language: "Vietnamese"
     }
   ],
   'zh-Hant': [
     {
-      name: "阮文明",
-      role: "雅思考生",
-      content: "感謝CCVN，我在短短三個月內將雅思成績從6.0提升到7.5。老師們非常專業且樂於協助。",
+      name: "黎武靈莊",
+      role: "HSK 5級學生",
+      content: "在CCVN學習中文是一次很棒的經歷。老師們很專業，教學方法也很有效。短短幾個月內，我的HSK成績就有了顯著提高。",
       rating: 5,
       image: "/testimonials/student1.jpg",
-      language: "IELTS"
+      language: "HSK"
     },
     {
-      name: "李小明",
-      role: "商務中文學生",
-      content: "商務中文課程幫助我在跨國公司找到工作。實用的教學方式讓我受益匪淺。",
+      name: "陳慧麗",
+      role: "HSK 3級學生",
+      content: "在CCVN學習後，我對自己的中文能力更有信心。實用的教學方法和文化洞察力幫助我快速有效地進步。",
       rating: 5,
       image: "/testimonials/student2.jpg",
-      language: "商務中文"
+      language: "中文"
     },
     {
-      name: "Sarah Johnson",
-      role: "越南語學習者",
-      content: "在CCVN學習越南語是一次很棒的經歷。文化洞察和耐心的教學方式幫助我快速進步。",
+      name: "阮芳靈",
+      role: "HSK 6級學生",
+      content: "我一直想去中國留學，但我的中文不夠好。在CCVN學習一年後，我的中文有了顯著提高，現在我有信心能達到HSK 6的目標。",
       rating: 5,
       image: "/testimonials/student3.jpg",
-      language: "越南語"
+      language: "中文"
     },
     {
-      name: "王大明",
-      role: "HSK 6級考生",
-      content: "我在CCVN準備HSK 6考試，老師們都很專業，教學方法也很有效率。三個月就考到了HSK 6優秀的成績。",
+      name: "莎拉·約翰遜",
+      role: "越南語學習者",
+      content: "在CCVN學習越南語是一次很棒的經歷。文化洞察和耐心的教學方式幫助我快速進步並有效溝通。",
       rating: 5,
       image: "/testimonials/student4.jpg",
-      language: "HSK"
+      language: "越南語"
     }
   ],
   'vi': [
     {
-      name: "Nguyễn Văn A",
-      role: "Học viên IELTS",
-      content: "Nhờ CCVN, tôi đã cải thiện điểm IELTS từ 6.0 lên 7.5 chỉ trong 3 tháng. Các giáo viên rất chuyên nghiệp và nhiệt tình.",
+      name: "Lê Vũ Linh Trang",
+      role: "Học viên HSK 5",
+      content: "Học tiếng Trung tại CCVN là một trải nghiệm tuyệt vời. Các giáo viên rất chuyên nghiệp và phương pháp giảng dạy hiệu quả. Tôi đã cải thiện điểm HSK của mình đáng kể chỉ trong vài tháng.",
       rating: 5,
       image: "/testimonials/student1.jpg",
-      language: "IELTS"
+      language: "HSK"
     },
     {
-      name: "李小明",
-      role: "Học viên Tiếng Trung Thương mại",
-      content: "Khóa học tiếng Trung thương mại đã giúp tôi có được công việc tại một công ty đa quốc gia. Phương pháp giảng dạy thực tế đã tạo nên sự khác biệt.",
+      name: "Trần Huệ Lý",
+      role: "Học viên HSK 3",
+      content: "Sau khi học tại CCVN, tôi tự tin hơn về kỹ năng tiếng Trung của mình. Phương pháp thực tế và hiểu biết văn hóa đã giúp tôi tiến bộ nhanh chóng và hiệu quả.",
       rating: 5,
       image: "/testimonials/student2.jpg",
-      language: "Tiếng Trung Thương mại"
+      language: "Tiếng Trung"
+    },
+    {
+      name: "Nguyễn Phương Linh",
+      role: "Học viên HSK 6",
+      content: "Tôi luôn muốn du học Trung Quốc nhưng tiếng Trung của tôi chưa đủ tốt. Sau một năm học tại CCVN, tôi đã tiến bộ đáng kể và giờ đây tôi tự tin sẽ đạt được mục tiêu HSK 6 của mình.",
+      rating: 5,
+      image: "/testimonials/student3.jpg",
+      language: "Tiếng Trung"
     },
     {
       name: "Sarah Johnson",
       role: "Học viên Tiếng Việt",
-      content: "Học tiếng Việt tại CCVN là một trải nghiệm tuyệt vời. Hiểu biết về văn hóa và phương pháp giảng dạy kiên nhẫn đã giúp tôi tiến bộ nhanh chóng.",
-      rating: 5,
-      image: "/testimonials/student3.jpg",
-      language: "Tiếng Việt"
-    },
-    {
-      name: "王大明",
-      role: "Học viên HSK 6",
-      content: "Tôi đã chuẩn bị kỳ thi HSK 6 tại CCVN. Các giáo viên rất chuyên nghiệp và phương pháp giảng dạy hiệu quả. Tôi đã đạt được kết quả xuất sắc trong HSK 6 chỉ sau ba tháng.",
+      content: "Học tiếng Việt tại CCVN là một trải nghiệm tuyệt vời. Hiểu biết về văn hóa và phương pháp giảng dạy kiên nhẫn đã giúp tôi tiến bộ nhanh chóng và giao tiếp hiệu quả.",
       rating: 5,
       image: "/testimonials/student4.jpg",
-      language: "HSK"
+      language: "Tiếng Việt"
     }
   ],
   'zh-Hans': [
     {
-      name: "阮文明",
-      role: "雅思考生",
-      content: "感谢CCVN，我在短短三个月内将雅思成绩从6.0提升到7.5。老师们非常专业且乐于协助。",
+      name: "黎武灵庄",
+      role: "HSK 5级学生",
+      content: "在CCVN学习中文是一次很棒的经历。老师们很专业，教学方法也很有效。短短几个月内，我的HSK成绩就有了显著提高。",
       rating: 5,
       image: "/testimonials/student1.jpg",
-      language: "IELTS"
+      language: "HSK"
     },
     {
-      name: "李小明",
-      role: "商务中文学生",
-      content: "商务中文课程帮助我在跨国公司找到工作。实用的教学方式让我受益匪浅。",
+      name: "陈慧丽",
+      role: "HSK 3级学生",
+      content: "在CCVN学习后，我对自己的中文能力更有信心。实用的教学方法和文化洞察力帮助我快速有效地进步。",
       rating: 5,
       image: "/testimonials/student2.jpg",
-      language: "商务中文"
+      language: "中文"
     },
     {
-      name: "Sarah Johnson",
-      role: "越南语学习者",
-      content: "在CCVN学习越南语是一次很棒的经历。文化洞察和耐心的教学方式帮助我快速进步。",
+      name: "阮芳灵",
+      role: "HSK 6级学生",
+      content: "我一直想去中国留学，但我的中文不够好。在CCVN学习一年后，我的中文有了显著提高，现在我有信心能达到HSK 6的目标。",
       rating: 5,
       image: "/testimonials/student3.jpg",
-      language: "越南语"
+      language: "中文"
     },
     {
-      name: "王大明",
-      role: "HSK 6级考生",
-      content: "我在CCVN准备HSK 6考试，老师们都很专业，教学方法也很有效率。三个月就考到了HSK 6优秀的成绩。",
+      name: "莎拉·约翰逊",
+      role: "越南语学习者",
+      content: "在CCVN学习越南语是一次很棒的经历。文化洞察和耐心的教学方式帮助我快速进步并有效沟通。",
       rating: 5,
       image: "/testimonials/student4.jpg",
-      language: "HSK"
+      language: "越南语"
     }
   ]
 };
@@ -151,10 +151,9 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
   return (
     <section className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="container mx-auto px-4">
-        {/* Section header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            {t.testimonials.title}
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-700">
+            CẢM NHẬN CỦA HỌC VIÊN
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             {t.testimonials.subtitle}
@@ -183,4 +182,6 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
       </div>
     </section>
   );
-} 
+}
+
+export { TestimonialsSection as Testimonials }; 

@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Header } from '@/components/header'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { QuickContact } from '@/components/QuickContact'
+import { FloatingButtons } from '@/components/FloatingButtons'
 import type { Locale } from '@/lib/i18n'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -36,6 +37,7 @@ export default function RootLayout({ children, params: { locale } }: RootLayoutP
             <main className="flex-1 pb-16 md:pb-0">{children}</main>
             <ScrollToTop />
             <QuickContact locale={locale} />
+            <FloatingButtons />
           </div>
         </ThemeProvider>
       </body>

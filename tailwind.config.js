@@ -50,6 +50,18 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        zalo: {
+          DEFAULT: '#0068FF',
+          dark: '#0055CC',
+        },
+        line: {
+          DEFAULT: '#00B900',
+          dark: '#009900',
+        },
+        messenger: {
+          DEFAULT: '#0099FF',
+          dark: '#0077CC',
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
