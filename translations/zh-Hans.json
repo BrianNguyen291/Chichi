@@ -3,9 +3,9 @@
     "home": "首页",
     "about": "关于我们",
     "courses": "课程",
-    "byLevel": "按水平",
+    "byLevel": "按级别",
     "byFormat": "线上/线下",
-    "byType": "企业/个人",
+    "byType": "商务/个人",
     "library": "资料库",
     "practiceExams": "练习题",
     "vocabulary": "词汇",
@@ -17,11 +17,13 @@
     "contact": "联系我们",
     "blog": "博客",
     "language": "语言",
-    "brand": "Chi Chi Vietnamese",
+    "brand": "芝芝越南语",
     "openMenu": "打开菜单",
     "menu": "菜单",
     "followUs": "关注我们",
-    "contactInfo": "联系方式"
+    "contactInfo": "联系方式",
+    "teachers": "教师团队",
+    "careers": "招聘信息"
   },
   "nav": {
     "menu": "菜单",
@@ -30,10 +32,10 @@
   "contact_form": {
     "title": "联系我们",
     "name": "姓名",
-    "email": "电子邮件",
-    "message": "信息",
+    "email": "电子邮箱",
+    "message": "留言",
     "submit": "提交",
-    "success": "信息已成功发送！",
+    "success": "消息发送成功！",
     "error": "发生错误，请重试。"
   },
   "course_card": {
@@ -47,12 +49,31 @@
     "min_read": "分钟阅读",
     "related_posts": "相关文章",
     "no_posts": "暂无文章",
-    "error_loading": "加载文章时出错，请稍后再试"
+    "error_loading": "加载失败，请稍后重试",
+    "readMore": "阅读更多",
+    "recentPosts": "最新文章",
+    "categories": "分类",
+    "tags": "标签",
+    "postedOn": "发布于",
+    "by": "作者"
   },
   "404": {
     "title": "404",
-    "heading": "找不到页面",
-    "description": "您要查找的页面不存在或已被移动。",
+    "heading": "页面未找到",
+    "description": "您访问的页面不存在或已被移动。",
     "button": "返回首页"
+  },
+  "testimonials": {
+    "title": "学员反馈",
+    "subtitle": "听听我们的学员分享他们在CCVN的学习经历。他们的成功故事激励我们继续提供优质的语言教育。",
+    "cta": {
+      "text": "准备好开始您的语言学习之旅了吗？",
+      "button": "加入我们的课程"
+    }
+  },
+  "error": {
+    "404": "页面未找到",
+    "500": "服务器错误",
+    "goHome": "返回首页"
   }
 } 

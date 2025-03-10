@@ -21,7 +21,9 @@
     "openMenu": "Open Menu",
     "menu": "Menu",
     "followUs": "Follow Us",
-    "contactInfo": "Contact Info"
+    "contactInfo": "Contact Info",
+    "teachers": "Teachers",
+    "careers": "Careers"
   },
   "nav": {
     "menu": "Menu",
@@ -47,7 +49,13 @@
     "min_read": "min read",
     "related_posts": "Related Posts",
     "no_posts": "No posts available",
-    "error_loading": "Error loading posts, please try again later"
+    "error_loading": "Error loading posts, please try again later",
+    "readMore": "Read More",
+    "recentPosts": "Recent Posts",
+    "categories": "Categories",
+    "tags": "Tags",
+    "postedOn": "Posted on",
+    "by": "by"
   },
   "404": {
     "title": "404",
@@ -62,5 +70,10 @@
       "text": "Ready to start your language learning journey?",
       "button": "Join Our Classes"
     }
+  },
+  "error": {
+    "404": "Page not found",
+    "500": "Server error",
+    "goHome": "Go back home"
   }
 } 

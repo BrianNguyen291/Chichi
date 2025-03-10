@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import { WPPost } from '@/lib/wordpress-api'
 import { colors } from '@/lib/colors'
+import { getTranslation } from '@/lib/translations'
 
 interface CategoryGridProps {
   posts: WPPost[]
@@ -63,7 +64,7 @@ export function CategoryGrid({ posts, locale }: CategoryGridProps) {
                   color: colors.lightCream
                 }}
               >
-                Read More
+                {getTranslation('readMore', locale)}
               </Link>
             </div>
           </article>

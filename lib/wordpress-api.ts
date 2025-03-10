@@ -101,8 +101,13 @@ export async function getCategories(locale: string = 'en'): Promise<WPCategory[]
       return []
     }
 
-    console.log('📁 Categories fetched:', data)
-    return data
+    // Filter out the "Uncategorized" category (typically has ID 1 or slug "uncategorized")
+    const filteredCategories = data.filter(category => 
+      category.id !== 1 && category.slug !== 'uncategorized'
+    )
+
+    console.log('📁 Categories fetched:', filteredCategories)
+    return filteredCategories
   } catch (error) {
     console.error('❌ Error fetching categories:', error)
     return []
@@ -127,6 +132,11 @@ export async function getPosts(
   } = params
 
   try {
+    // First, get all categories to identify the "Uncategorized" category ID
+    const allCategories = await getCategories(locale)
+    const uncategorizedId = 1 // Default WordPress uncategorized category ID
+
+    // Fetch posts
     const data = await fetchFromWordPress('posts', {
       per_page: perPage,
       page,
@@ -141,7 +151,14 @@ export async function getPosts(
       return []
     }
 
-    return data
+    // Filter out posts that are only in the "Uncategorized" category
+    const filteredPosts = data.filter(post => {
+      // If the post has multiple categories and one is uncategorized, keep it
+      // Only filter out posts that are ONLY in uncategorized
+      return !(post.categories.length === 1 && post.categories[0] === uncategorizedId)
+    })
+
+    return filteredPosts
   } catch (error) {
     console.error('❌ Error fetching posts:', error)
     return []

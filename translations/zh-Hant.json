@@ -17,11 +17,13 @@
     "contact": "聯絡我們",
     "blog": "部落格",
     "language": "語言",
-    "brand": "Chi Chi Vietnamese",
+    "brand": "芝芝越南語",
     "openMenu": "開啟選單",
     "menu": "選單",
     "followUs": "關注我們",
-    "contactInfo": "聯絡方式"
+    "contactInfo": "聯絡方式",
+    "teachers": "教師團隊",
+    "careers": "職涯機會"
   },
   "nav": {
     "menu": "選單",
@@ -47,7 +49,13 @@
     "min_read": "分鐘閱讀",
     "related_posts": "相關文章",
     "no_posts": "暫無文章",
-    "error_loading": "載入文章時出錯，請稍後再試"
+    "error_loading": "載入文章時出錯，請稍後再試",
+    "readMore": "閱讀更多",
+    "recentPosts": "最新文章",
+    "categories": "分類",
+    "tags": "標籤",
+    "postedOn": "發布於",
+    "by": "作者"
   },
   "404": {
     "title": "404",
@@ -62,5 +70,10 @@
       "text": "準備好開始您的語言學習之旅了嗎？",
       "button": "立即報名"
     }
+  },
+  "error": {
+    "404": "找不到頁面",
+    "500": "伺服器錯誤",
+    "goHome": "返回首頁"
   }
 } 
