@@ -7,6 +7,7 @@ import { colors } from '@/lib/colors'
 
 export const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const toggleVisibility = () => {
@@ -17,10 +18,20 @@ export const ScrollToTop = () => {
       }
     }
 
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+
+    // Initial checks
+    toggleVisibility()
+    checkMobile()
+
     window.addEventListener('scroll', toggleVisibility)
+    window.addEventListener('resize', checkMobile)
 
     return () => {
       window.removeEventListener('scroll', toggleVisibility)
+      window.removeEventListener('resize', checkMobile)
     }
   }, [])
 
@@ -35,7 +46,7 @@ export const ScrollToTop = () => {
     <>
       {isVisible && (
         <Button
-          className="fixed bottom-20 right-4 z-50 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 md:bottom-4"
+          className={`fixed ${isMobile ? 'bottom-[70px] right-4' : 'bottom-4 right-4'} z-40 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110`}
           onClick={scrollToTop}
           style={{ 
             backgroundColor: colors.primary,

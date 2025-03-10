@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { colors } from '@/lib/colors'
 import Link from 'next/link'
@@ -58,10 +58,26 @@ const contactOptions = [
 
 export function QuickContact({ locale }: QuickContactProps) {
   const [isExpanded, setIsExpanded] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const t = translations[locale as keyof typeof translations] || translations.en
 
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Initial check
+    checkMobile()
+    
+    // Add event listener
+    window.addEventListener('resize', checkMobile)
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   return (
-    <div className="fixed bottom-20 right-4 z-50 flex flex-col items-end space-y-2">
+    <div className={`fixed ${isMobile ? 'bottom-[130px]' : 'bottom-20'} right-4 z-40 flex flex-col items-end space-y-2`}>
       {isExpanded && (
         <div className="flex flex-col items-end space-y-2 mb-2">
           {contactOptions.map((option) => (
