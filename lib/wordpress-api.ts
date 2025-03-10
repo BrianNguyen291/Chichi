@@ -147,6 +147,26 @@ export async function getPosts(
   }
 }
 
+export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
+  try {
+    const data = await fetchFromWordPress('posts', {
+      slug,
+      lang: locale,
+      _embed: true
+    })
+
+    if (!Array.isArray(data) || data.length === 0) {
+      console.error('❌ Post not found:', slug)
+      return null
+    }
+
+    return data[0]
+  } catch (error) {
+    console.error('❌ Error fetching post:', error)
+    return null
+  }
+}
+
 export async function getCategoryBySlug(slug: string, locale: string = 'en'): Promise<WPCategory | null> {
   try {
     const data = await fetchFromWordPress('categories', {
