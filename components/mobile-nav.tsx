@@ -6,21 +6,58 @@ import { usePathname } from 'next/navigation'
 import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
-import { Home, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone, Menu, X } from 'lucide-react'
-import Image from "next/image"
+import { Home, Menu, X, ChevronRight, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone } from 'lucide-react'
+import { getCategories, organizeCategories } from "@/lib/wordpress-api"
+
+interface NavMenuItem {
+  label: string
+  href: string
+  icon?: React.ElementType
+  children?: NavMenuItem[]
+}
 
 interface MobileNavProps {
   locale: Locale
 }
 
+// Static menu items that won't come from WordPress
+const staticNavItems: NavMenuItem[] = [
+  { 
+    href: '/', 
+    label: 'Trang chủ', 
+    icon: Home 
+  },
+  { 
+    href: '/about', 
+    label: 'Về chúng tôi', 
+    icon: Home 
+  },
+  { 
+    href: '/contact', 
+    label: 'Liên hệ', 
+    icon: Phone 
+  },
+]
+
+// Main items for bottom navigation
+const mainNavItems = [
+  { href: '/', label: 'Trang chủ', icon: Home },
+  { href: '/about', label: 'Về chúng tôi', icon: Home },
+  { href: '/contact', label: 'Liên hệ', icon: Phone },
+]
+
 export function MobileNav({ locale }: MobileNavProps) {
   const pathname = usePathname()
   const { translate } = useTranslations(locale)
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const [activeSubmenu, setActiveSubmenu] = React.useState<string | null>(null)
+  const [navItems, setNavItems] = React.useState<NavMenuItem[]>(staticNavItems)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   React.useEffect(() => {
     async function fetchCategories() {
       try {
+        setIsLoading(true)
         const categories = await getCategories(locale)
         const { mainCategories, subCategories } = organizeCategories(categories)
 
@@ -28,6 +65,7 @@ export function MobileNav({ locale }: MobileNavProps) {
         const wpMenuItems = mainCategories.map(cat => ({
           label: cat.name,
           href: `/category/${cat.slug}`,
+          icon: Newspaper,
           ...(subCategories[cat.id] && {
             children: subCategories[cat.id].map(subCat => ({
               label: subCat.name,
@@ -36,21 +74,65 @@ export function MobileNav({ locale }: MobileNavProps) {
           }),
         }))
 
-        // Combine static and WordPress menu items
-        setNavItems([...staticNavItems, ...wpMenuItems])
+        // Add WordPress categories between Home and Contact
+        setNavItems([
+          staticNavItems[0], // Home
+          staticNavItems[1], // About
+          ...wpMenuItems,
+          staticNavItems[2], // Contact
+        ])
       } catch (error) {
-        console.error('Error fetching categories:', error)
+        console.error('❌ Error fetching categories:', error)
+        setNavItems(staticNavItems)
+      } finally {
+        setIsLoading(false)
       }
     }
 
     fetchCategories()
   }, [locale])
 
-  // Main items for bottom navigation - use first 4 items
-  const mainNavItems = navItems.slice(0, 4)
-
   const handleSubmenuClick = (label: string) => {
     setActiveSubmenu(activeSubmenu === label ? null : label)
+  }
+
+  if (isLoading) {
+    return (
+      <nav 
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
+        style={{ 
+          backgroundColor: colors.lightCream,
+          borderColor: colors.secondary 
+        }}
+      >
+        <div className="grid grid-cols-4 h-16 font-medium">
+          {mainNavItems.map((item) => {
+            const Icon = item.icon
+            return (
+              <Link
+                key={item.href}
+                href={`/${locale}${item.href}`}
+                className="flex flex-col items-center justify-center space-y-1"
+                style={{ color: colors.darkOlive }}
+              >
+                {Icon && <Icon className="h-5 w-5" />}
+                <span className="text-xs">{item.label}</span>
+              </Link>
+            )
+          })}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="flex flex-col items-center justify-center space-y-1"
+            style={{ color: colors.darkOlive }}
+          >
+            <Menu className="h-5 w-5" />
+            <span className="text-xs">
+              {translate('menu', 'common')}
+            </span>
+          </button>
+        </div>
+      </nav>
+    )
   }
 
   return (
@@ -74,7 +156,7 @@ export function MobileNav({ locale }: MobileNavProps) {
             <div className="flex flex-col space-y-2 p-4">
               {navItems.map((item) => {
                 const Icon = item.icon
-                const isActive = pathname === item.href
+                const isActive = pathname === `/${locale}${item.href}`
                 const isSubmenuOpen = activeSubmenu === item.label
                 
                 return (
@@ -146,10 +228,10 @@ export function MobileNav({ locale }: MobileNavProps) {
           borderColor: colors.secondary 
         }}
       >
-        <div className="grid grid-cols-5 h-16 font-medium">
+        <div className="grid grid-cols-4 h-16 font-medium">
           {mainNavItems.map((item) => {
             const Icon = item.icon
-            const isActive = pathname === item.href
+            const isActive = pathname === `/${locale}${item.href}`
             
             return (
               <Link

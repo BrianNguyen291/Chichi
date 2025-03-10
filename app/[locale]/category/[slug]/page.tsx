@@ -13,8 +13,8 @@ interface CategoryPageProps {
 }
 
 export default function CategoryPage({ params }: CategoryPageProps) {
-  const [posts, setPosts] = useState<WPPost[]>([])
   const [category, setCategory] = useState<WPCategory | null>(null)
+  const [posts, setPosts] = useState<WPPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -24,49 +24,36 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         setIsLoading(true)
         setError(null)
 
-        // First get the category details
-        const categoryData = await getCategoryBySlug(params.slug, params.locale)
-        if (!categoryData) {
-          throw new Error('Category not found')
-        }
-        setCategory(categoryData)
+        console.log('Loading category:', params.slug, 'locale:', params.locale)
 
-        // Then get posts for this category
-        const categoryPosts = await getPosts({
-          locale: params.locale,
-          categories: [categoryData.id],
-          perPage: 100 // Increase if you have more posts
-        })
-        setPosts(categoryPosts)
+        // First get the category info
+        const categoryInfo = await getCategoryBySlug(params.slug, params.locale)
+        console.log('Category info:', categoryInfo)
+        setCategory(categoryInfo)
+
+        if (categoryInfo) {
+          // Then get posts for this category
+          const categoryPosts = await getPosts({
+            categories: [categoryInfo.id],
+            perPage: 100, // Adjust as needed
+            locale: params.locale
+          })
+          console.log('Category posts:', categoryPosts)
+          setPosts(categoryPosts)
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load content')
-        console.error('Error loading category content:', err)
+        setError('Failed to load category content')
+        console.error('Error loading category and posts:', err)
       } finally {
         setIsLoading(false)
       }
     }
 
     loadCategoryAndPosts()
-  }, [params.locale, params.slug])
+  }, [params.slug, params.locale])
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 
-        className="mb-8 text-3xl font-bold"
-        style={{ color: colors.darkOlive }}
-      >
-        {category?.name || params.slug.replace(/-/g, ' ')}
-      </h1>
-
-      {category?.description && (
-        <div 
-          className="mb-8 text-lg"
-          style={{ color: colors.darkOlive }}
-        >
-          {category.description}
-        </div>
-      )}
-
       {isLoading && (
         <div className="flex items-center justify-center py-12">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
@@ -82,17 +69,36 @@ export default function CategoryPage({ params }: CategoryPageProps) {
         </div>
       )}
 
-      {!isLoading && !error && posts.length === 0 && (
-        <div 
-          className="text-center py-12"
-          style={{ color: colors.darkOlive }}
-        >
-          No posts found in this category.
-        </div>
-      )}
+      {!isLoading && !error && category && (
+        <>
+          <div className="mb-8">
+            <h1 
+              className="text-3xl font-bold mb-2"
+              style={{ color: colors.darkOlive }}
+            >
+              {category.name}
+            </h1>
+            {category.description && (
+              <p 
+                className="text-lg"
+                style={{ color: colors.darkOlive }}
+              >
+                {category.description}
+              </p>
+            )}
+          </div>
 
-      {!isLoading && !error && posts.length > 0 && (
-        <CategoryGrid posts={posts} locale={params.locale} />
+          {posts.length === 0 ? (
+            <div 
+              className="text-center py-12"
+              style={{ color: colors.darkOlive }}
+            >
+              No posts found in this category.
+            </div>
+          ) : (
+            <CategoryGrid posts={posts} locale={params.locale} />
+          )}
+        </>
       )}
     </div>
   )

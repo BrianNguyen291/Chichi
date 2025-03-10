@@ -3,9 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { getNavigationCategories } from '@/lib/wordpress/api'
+import { getCategories, organizeCategories } from '@/lib/wordpress-api'
 import type { Locale } from '@/lib/i18n'
 import { colors } from '@/lib/colors'
+import { ChevronDown } from 'lucide-react'
 
 interface WordPressNavProps {
   locale: Locale
@@ -21,74 +22,121 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   useEffect(() => {
     async function fetchCategories() {
       try {
-        const data = await getNavigationCategories()
-        setCategories(data)
-        setLoading(false)
+        setLoading(true)
+        setError(null)
+        const data = await getCategories(locale)
+        const organized = organizeCategories(data)
+        console.log('📁 Organized categories:', organized)
+        setCategories(organized)
       } catch (err) {
-        console.error('Error fetching categories:', err)
+        console.error('❌ Error in WordPressNav:', err)
         setError('Failed to load categories')
+      } finally {
         setLoading(false)
       }
     }
 
     fetchCategories()
-  }, [])
+  }, [locale])
+
+  // Static menu items
+  const staticItems = [
+    { label: 'Về chúng tôi', href: '/about' },
+  
+    { label: 'Liên hệ', href: '/contact' },
+  ]
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <nav className="flex items-center space-x-6 font-medium">
+        {staticItems.map((item) => (
+          <Link
+            key={item.href}
+            href={`/${locale}${item.href}`}
+            className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+            style={{ color: colors.darkOlive }}
+          >
+            {item.label}
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+          </Link>
+        ))}
+      </nav>
+    )
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return (
+      <nav className="flex items-center space-x-6 font-medium">
+        {staticItems.map((item) => (
+          <Link
+            key={item.href}
+            href={`/${locale}${item.href}`}
+            className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+            style={{ color: colors.darkOlive }}
+          >
+            {item.label}
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+          </Link>
+        ))}
+      </nav>
+    )
   }
 
   return (
-    <nav className="bg-white shadow-md">
-      <div className="container mx-auto px-4">
-        <ul className="flex flex-wrap">
-          {categories.mainCategories.map((category: any) => (
-            <li 
-              key={category.id}
-              className="relative group"
-              onMouseEnter={() => setActiveCategory(category.id)}
-              onMouseLeave={() => setActiveCategory(null)}
-            >
-              <Link
-                href={`/${locale}/category/${category.slug}`}
-                className={`block px-4 py-2 hover:text-[#b17f4a] transition-colors ${
-                  pathname.includes(category.slug) ? 'text-[#b17f4a]' : ''
+    <nav className="flex items-center space-x-6 font-medium">
+      {staticItems.map((item) => (
+        <Link
+          key={item.href}
+          href={`/${locale}${item.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+          style={{ color: colors.darkOlive }}
+        >
+          {item.label}
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
+      ))}
+      {categories.mainCategories.map((category: any) => (
+        <div 
+          key={category.id}
+          className="relative"
+          onMouseEnter={() => setActiveCategory(category.id)}
+          onMouseLeave={() => setActiveCategory(null)}
+        >
+          <Link
+            href={`/${locale}/category/${category.slug}`}
+            className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
+            style={{ color: colors.darkOlive }}
+          >
+            {category.name}
+            {categories.subCategories[category.id]?.length > 0 && (
+              <ChevronDown
+                className={`ml-1 h-4 w-4 transition-transform ${
+                  activeCategory === category.id ? "rotate-180" : ""
                 }`}
-              >
-                {category.name}
-              </Link>
+              />
+            )}
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+          </Link>
 
-              {/* Dropdown for subcategories */}
-              {categories.subCategories[category.id]?.length > 0 && (
-                <div 
-                  className={`absolute left-0 mt-0 w-48 bg-white shadow-lg rounded-b-lg transition-opacity duration-150 ${
-                    activeCategory === category.id ? 'opacity-100 visible' : 'opacity-0 invisible'
-                  }`}
+          {categories.subCategories[category.id]?.length > 0 && activeCategory === category.id && (
+            <div
+              className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
+              style={{ borderColor: colors.secondary }}
+            >
+              {categories.subCategories[category.id].map((subCategory: any) => (
+                <Link
+                  key={subCategory.id}
+                  href={`/${locale}/category/${subCategory.slug}`}
+                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                  style={{ color: colors.darkOlive }}
                 >
-                  <ul className="py-2">
-                    {categories.subCategories[category.id].map((subCategory: any) => (
-                      <li key={subCategory.id}>
-                        <Link
-                          href={`/${locale}/category/${subCategory.slug}`}
-                          className={`block px-4 py-2 hover:bg-gray-100 ${
-                            pathname.includes(subCategory.slug) ? 'text-[#b17f4a]' : ''
-                          }`}
-                        >
-                          {subCategory.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      </div>
+                  {subCategory.name}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
     </nav>
   )
 } 
