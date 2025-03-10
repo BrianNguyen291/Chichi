@@ -34,7 +34,7 @@ export default function RootLayout({ children, params: { locale } }: RootLayoutP
         >
           <div className="flex min-h-screen flex-col overflow-x-hidden">
             <Header locale={locale as Locale} />
-            <main className="flex-1 pb-16 md:pb-0">{children}</main>
+            <main className="flex-1 pb-16 md:pb-0 pt-14 sm:pt-16">{children}</main>
             <ScrollToTop />
             <QuickContact locale={locale} />
             <FloatingButtons />
