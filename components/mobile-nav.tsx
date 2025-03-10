@@ -6,45 +6,17 @@ import { usePathname } from 'next/navigation'
 import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
-import { Home, Menu, X, ChevronRight } from 'lucide-react'
-import { getCategories, organizeCategories } from "@/lib/wordpress-api"
-
-interface NavMenuItem {
-  label: string
-  href: string
-  icon?: React.ElementType
-  children?: NavMenuItem[]
-}
+import { Home, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone, Menu, X } from 'lucide-react'
+import Image from "next/image"
 
 interface MobileNavProps {
   locale: Locale
 }
 
-// Static menu items that are not from WordPress
-const staticNavItems: NavMenuItem[] = [
-  { 
-    href: '/', 
-    label: 'Home', 
-    icon: Home 
-  },
-  { 
-    href: '/about', 
-    label: 'About Us', 
-    icon: Home 
-  },
-  { 
-    href: '/contact', 
-    label: 'Contact', 
-    icon: Home 
-  },
-]
-
 export function MobileNav({ locale }: MobileNavProps) {
   const pathname = usePathname()
   const { translate } = useTranslations(locale)
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-  const [activeSubmenu, setActiveSubmenu] = React.useState<string | null>(null)
-  const [navItems, setNavItems] = React.useState<NavMenuItem[]>(staticNavItems)
 
   React.useEffect(() => {
     async function fetchCategories() {
