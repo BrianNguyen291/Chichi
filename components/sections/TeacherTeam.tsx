@@ -68,73 +68,69 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
 
   return (
-    <section className="py-16 bg-[#f9f5f0]">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Left side - Image */}
-          <div className="relative">
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-lg">
+    <section className="py-16 md:py-24 bg-[#f9f5f0]">
+      <div className="container mx-auto px-4 md:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 xl:gap-16 items-start">
+          {/* Main Image - Always visible */}
+          <div className="relative max-w-[450px] mx-auto w-full">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-square border-4 border-white">
               <Image
-                src="/images/3c89a5ce595299e003408648c5f9f1e0.jpg"
+                src="/images/teacherteam.jpg"
                 alt={t.teacherName}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                width={600}
+                height={600}
                 className="object-cover"
+                priority
               />
             </div>
             {/* Decorative elements */}
-            <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-[#f5e6d3] rounded-full -z-10" />
-            <div className="absolute -top-6 -left-6 w-32 h-32 bg-[#e6d5c3] rounded-full -z-10" />
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-[#f5e6d3] rounded-full -z-10 md:-bottom-6 md:-right-6 md:w-48 md:h-48" />
+            <div className="absolute -top-4 -left-4 w-24 h-24 bg-[#e6d5c3] rounded-full -z-10 md:-top-6 md:-left-6 md:w-32 md:h-32" />
           </div>
 
-          {/* Right side - Content */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-3xl font-bold text-[#b17f4a] mb-4">
+          {/* Content Section */}
+          <div className="space-y-6 md:space-y-8">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#b17f4a] mb-6 
+                leading-tight tracking-wide">
                 {t.title}
               </h2>
-              <div className="space-y-4 text-gray-700">
+              <div className="space-y-4 text-gray-700 md:text-lg leading-relaxed">
                 {t.description.map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
+                  <p key={index} className="text-justify">{paragraph}</p>
                 ))}
               </div>
             </div>
 
-            {/* Teacher Credentials */}
-            <div className="bg-white p-6 rounded-xl shadow-md">
-              <h3 className="text-xl font-semibold text-[#b17f4a] mb-4">
+            {/* Second Image - Now visible on all screens */}
+            <div className="max-w-[450px] mx-auto w-full rounded-xl overflow-hidden shadow-lg aspect-square border-4 border-white">
+              <Image
+                src="/images/teamcherteam2.jpg"
+                alt="Teaching environment"
+                width={600}
+                height={600}
+                className="object-cover"
+              />
+            </div>
+
+            {/* Credentials Card */}
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg 
+              transition-all hover:shadow-xl">
+              <h3 className="text-xl md:text-2xl font-semibold text-[#b17f4a] mb-4 
+                border-b-2 border-[#f5e6d3] pb-2">
                 {t.teacherName}
               </h3>
-              <ul className="space-y-2 text-gray-700">
+              <ul className="space-y-3 md:space-y-4">
                 {t.credentials.map((credential, index) => (
-                  <li key={index} className="flex items-center space-x-2">
-                    <span className="w-2 h-2 bg-[#b17f4a] rounded-full" />
-                    <span>{credential}</span>
+                  <li key={index} className="flex items-start space-x-3 group">
+                    <span className="w-3 h-3 bg-[#b17f4a] rounded-full mt-1.5 
+                      flex-shrink-0 transition-transform group-hover:scale-125" />
+                    <span className="text-gray-700 md:text-lg leading-relaxed">
+                      {credential}
+                    </span>
                   </li>
                 ))}
               </ul>
-            </div>
-
-            {/* Course Preview */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-md">
-                <Image
-                  src="/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg"
-                  alt="Vietnamese Popular Words Series 2"
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="relative aspect-[3/4] rounded-lg overflow-hidden shadow-md">
-                <Image
-                  src="/images/e21eb12c580c4af99dae01b7ce9b1130.jpg"
-                  alt="Vietnamese Popular Words Series 1"
-                  fill
-                  sizes="(max-width: 768px) 50vw, 25vw"
-                  className="object-cover"
-                />
-              </div>
             </div>
           </div>
         </div>

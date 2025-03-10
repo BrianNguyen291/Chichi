@@ -1,7 +1,17 @@
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
+import { Playfair_Display, Inter } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap'
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap'
+})
 
 interface HeroSectionProps {
   locale: string;
@@ -50,21 +60,29 @@ const translations = {
   }
 }
 
+const colors = {
+  primary: '#B17F4A',
+  secondary: '#8B633A',
+  accent: '#2A5C3F',
+  light: '#F5F2EB',
+  dark: '#3A3A3A'
+}
+
 export const HeroSection = ({ locale }: HeroSectionProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-80px)] bg-[#f5f2eb] overflow-hidden">
+    <section className={`relative w-full min-h-[calc(100vh-80px)] bg-[#f5f2eb] overflow-hidden ${playfair.variable} ${inter.variable}`}>
       <div className="container mx-auto px-4 py-12 md:py-16 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-8 lg:gap-16 items-center">
           {/* Left Side Content */}
           <div className="space-y-8 max-w-xl mx-auto lg:mx-0 lg:pr-8">
             {/* Title and Promise with animation */}
             <div className="space-y-6">
-              <h2 className="text-5xl md:text-6xl font-bold text-[#b17f4a] leading-tight animate-fade-in-up">
+              <h2 className="text-5xl md:text-6xl font-bold text-[#2A5C3F] leading-tight animate-fade-in-up font-playfair">
                 {t.subtitle}
               </h2>
-              <p className="text-xl md:text-2xl text-[#8b633a] leading-relaxed opacity-90 animate-fade-in-up delay-100">
+              <p className="text-xl md:text-2xl text-[#3A3A3A] leading-relaxed font-inter animate-fade-in-up delay-100">
                 {t.promise}
               </p>
             </div>
@@ -85,10 +103,10 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
             {/* Action Buttons with hover effects */}
             <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8">
               <button 
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-white rounded-full text-[#b17f4a] font-medium shadow-md 
-                          hover:shadow-lg transition-all duration-300 hover:bg-[#b17f4a] hover:text-white 
-                          focus:outline-none focus:ring-2 focus:ring-[#b17f4a] focus:ring-offset-2
-                          flex-grow sm:flex-grow-0"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-white rounded-full text-[#2A5C3F] font-medium shadow-md 
+                          hover:shadow-lg transition-all duration-300 hover:bg-[#2A5C3F] hover:text-white 
+                          focus:outline-none focus:ring-2 focus:ring-[#2A5C3F] focus:ring-offset-2
+                          flex-grow sm:flex-grow-0 font-inter"
               >
                 <span>{t.consultation}</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -96,10 +114,10 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 </svg>
               </button>
               <button 
-                className="flex items-center justify-center gap-2 px-8 py-4 bg-[#b17f4a] rounded-full text-white font-medium shadow-md 
-                          hover:shadow-lg transition-all duration-300 hover:bg-[#8b633a]
-                          focus:outline-none focus:ring-2 focus:ring-[#b17f4a] focus:ring-offset-2
-                          flex-grow sm:flex-grow-0"
+                className="flex items-center justify-center gap-2 px-8 py-4 bg-[#2A5C3F] rounded-full text-white font-medium shadow-md 
+                          hover:shadow-lg transition-all duration-300 hover:bg-[#1E4630]
+                          focus:outline-none focus:ring-2 focus:ring-[#2A5C3F] focus:ring-offset-2
+                          flex-grow sm:flex-grow-0 font-inter"
               >
                 <span>{t.tryNow}</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -141,9 +159,9 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
             </div>
 
             {/* Rating Badge */}
-            <div className="absolute top-8 right-4 lg:right-8 bg-white px-6 py-3 rounded-xl shadow-lg 
+            <div className="absolute top-8 right-4 lg:right-8 bg-white/95 px-6 py-3 rounded-xl shadow-lg 
                           flex items-center space-x-3 transform hover:scale-105 transition-transform duration-300
-                          backdrop-blur-sm bg-opacity-90 z-20">
+                          backdrop-blur-sm border border-[#ffffff80] font-inter">
               <span className="text-3xl font-bold text-[#b17f4a]">4.8</span>
               <div className="flex flex-col">
                 <div className="flex gap-1">
