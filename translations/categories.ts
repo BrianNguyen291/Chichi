@@ -6,19 +6,19 @@ export const categoryTranslations = {
     "zh-Hans": "课程"
   },
   "cao-cap": {
-    "vi": "高級",
+    "vi": "Cao Cấp",
     "en": "Advanced",
     "zh-Hant": "高級",
     "zh-Hans": "高级"
   },
   "trung-cap": {
-    "vi": "中級",
+    "vi": "Trung Cấp",
     "en": "Intermediate",
     "zh-Hant": "中級",
     "zh-Hans": "中级"
   },
   "so-cap": {
-    "vi": "初級",
+    "vi": "Sơ Cấp",
     "en": "Beginner",
     "zh-Hant": "初級",
     "zh-Hans": "初级"
