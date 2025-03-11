@@ -27,6 +27,14 @@ export function MobileNav({ locale }: MobileNavProps) {
   const [activeSubmenu, setActiveSubmenu] = React.useState<string | null>(null)
   const [navItems, setNavItems] = React.useState<NavMenuItem[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
+  
+  // Cache for categories
+  const categoriesCache = React.useRef<{
+    [key: string]: {
+      items: NavMenuItem[]
+      timestamp: number
+    }
+  }>({})
 
   // Get translated static items
   const staticNavItems = React.useMemo(() => [
@@ -55,10 +63,32 @@ export function MobileNav({ locale }: MobileNavProps) {
   ], [translate])
 
   React.useEffect(() => {
+    let isMounted = true;
+
     async function fetchCategories() {
       try {
+        // Check cache first
+        const cached = categoriesCache.current[locale]
+        const now = Date.now()
+        if (cached && (now - cached.timestamp) < 5 * 60 * 1000) { // 5 minutes cache
+          console.log('📱 Using cached categories for locale:', locale)
+          setNavItems([
+            staticNavItems[0],
+            staticNavItems[1],
+            ...cached.items,
+            staticNavItems[2]
+          ])
+          setIsLoading(false)
+          return
+        }
+
+        if (!isMounted) return;
         setIsLoading(true)
+        console.log('🔄 Fetching categories for locale:', locale)
         const categories = await getCategories(locale)
+        
+        if (!isMounted) return;
+        
         const { mainCategories, subCategories } = organizeCategories(categories)
 
         // Define the order of top-level categories
@@ -79,18 +109,28 @@ export function MobileNav({ locale }: MobileNavProps) {
             return aIndex - bIndex
           })
 
-        // Convert WordPress categories to menu items
-        const wpMenuItems = filteredMainCategories.map(cat => ({
-          label: cat.translatedName || cat.name,
-          href: `/category/${cat.slug}`,
-          icon: Newspaper,
-          ...(subCategories[cat.id] && {
-            children: subCategories[cat.id].map(subCat => ({
+        // Convert WordPress categories to menu items with proper children handling
+        const wpMenuItems = filteredMainCategories.map(cat => {
+          const categoryChildren = subCategories[cat.id] || [];
+          
+          return {
+            label: cat.translatedName || cat.name,
+            href: `/category/${cat.slug}`,
+            icon: getIconForCategory(cat.slug),
+            children: categoryChildren.length > 0 ? categoryChildren.map(subCat => ({
               label: subCat.translatedName || subCat.name,
               href: `/category/${subCat.slug}`,
-            })),
-          }),
-        }))
+            })) : []  // Always return an array, empty if no children
+          }
+        })
+
+        // Cache the menu items
+        categoriesCache.current[locale] = {
+          items: wpMenuItems,
+          timestamp: now
+        }
+
+        if (!isMounted) return;
 
         // Add WordPress categories between Home and Contact
         setNavItems([
@@ -101,16 +141,46 @@ export function MobileNav({ locale }: MobileNavProps) {
         ])
       } catch (error) {
         console.error('❌ Error fetching categories:', error)
-        setNavItems(staticNavItems)
+        if (isMounted) {
+          setNavItems(staticNavItems)
+        }
       } finally {
-        setIsLoading(false)
+        if (isMounted) {
+          setIsLoading(false)
+        }
       }
     }
 
     fetchCategories()
+
+    return () => {
+      isMounted = false;
+    }
   }, [locale, staticNavItems])
 
+  // Helper function to get appropriate icon for each category
+  const getIconForCategory = (slug: string) => {
+    switch (slug) {
+      case 'activities':
+        return Activity
+      case 'course':
+        return GraduationCap
+      case 'library':
+        return Library
+      case 'blogs':
+        return BookOpen
+      default:
+        return Newspaper
+    }
+  }
+
+  // Reset active submenu when language changes
+  React.useEffect(() => {
+    setActiveSubmenu(null)
+  }, [locale])
+
   const handleSubmenuClick = (label: string) => {
+    console.log('📱 Toggle submenu:', label, 'Current:', activeSubmenu)
     setActiveSubmenu(activeSubmenu === label ? null : label)
   }
 
@@ -152,71 +222,72 @@ export function MobileNav({ locale }: MobileNavProps) {
       {/* Full menu overlay */}
       {isMenuOpen && (
         <div 
-          className="md:hidden fixed inset-0 z-50 flex flex-col"
+          className="md:hidden fixed inset-0 z-50 flex flex-col bg-white"
           style={{ backgroundColor: colors.lightCream }}
         >
-          <div className="flex justify-end p-4">
+          {/* Header */}
+          <div className="flex justify-between items-center p-4 border-b" style={{ borderColor: colors.secondary }}>
+            <span className="text-lg font-medium" style={{ color: colors.darkOlive }}>
+              {translate('menu', 'common')}
+            </span>
             <button 
               onClick={() => setIsMenuOpen(false)}
-              className="p-2"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               style={{ color: colors.darkOlive }}
             >
               <X className="h-6 w-6" />
             </button>
           </div>
+
+          {/* Menu Content */}
           <div className="flex-1 overflow-y-auto">
-            <div className="flex flex-col space-y-2 p-4">
+            <div className="flex flex-col p-4">
               {navItems.map((item) => {
                 const Icon = item.icon
                 const isActive = pathname === `/${locale}${item.href}`
                 const isSubmenuOpen = activeSubmenu === item.label
+                const hasChildren = item.children && item.children.length > 0
                 
                 return (
-                  <div key={item.label}>
-                    <div className="flex items-center justify-between">
-                      {item.href ? (
-                        <Link
-                          href={`/${locale}${item.href}`}
-                          onClick={() => !item.children && setIsMenuOpen(false)}
-                          className={`flex items-center space-x-2 text-lg font-medium transition-colors p-2 rounded-md w-full ${
-                            isActive ? 'text-[#b17f4a] bg-white/50' : ''
-                          }`}
-                          style={{ color: isActive ? colors.primary : colors.darkOlive }}
-                        >
-                          {Icon && <Icon className="h-5 w-5" />}
-                          <span>{item.label}</span>
-                        </Link>
-                      ) : (
-                        <span
-                          className="flex items-center space-x-2 text-lg font-medium p-2"
-                          style={{ color: colors.darkOlive }}
-                        >
-                          {Icon && <Icon className="h-5 w-5" />}
-                          <span>{item.label}</span>
-                        </span>
-                      )}
-                      {item.children && (
+                  <div key={item.label} className="border-b last:border-b-0" style={{ borderColor: colors.secondary }}>
+                    <div className="flex items-center justify-between py-3">
+                      <Link
+                        href={`/${locale}${item.href}`}
+                        onClick={() => !hasChildren && setIsMenuOpen(false)}
+                        className={`flex items-center space-x-3 text-lg font-medium flex-grow ${
+                          isActive ? 'text-[#b17f4a]' : ''
+                        }`}
+                        style={{ color: isActive ? colors.primary : colors.darkOlive }}
+                      >
+                        {Icon && <Icon className="h-5 w-5 shrink-0" />}
+                        <span>{item.label}</span>
+                      </Link>
+                      {hasChildren && (
                         <button
-                          onClick={() => handleSubmenuClick(item.label)}
-                          className="p-2"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSubmenuClick(item.label);
+                          }}
+                          className="p-2 hover:bg-gray-100 rounded-full transition-colors ml-2"
                           style={{ color: colors.darkOlive }}
                         >
                           <ChevronRight
-                            className={`h-5 w-5 transition-transform ${
+                            className={`h-5 w-5 transition-transform duration-200 ${
                               isSubmenuOpen ? 'rotate-90' : ''
                             }`}
                           />
                         </button>
                       )}
                     </div>
-                    {item.children && isSubmenuOpen && (
-                      <div className="ml-6 mt-2 space-y-2">
+                    {hasChildren && isSubmenuOpen && item.children && (
+                      <div className="ml-8 mb-3 space-y-3">
                         {item.children.map((child) => (
                           <Link
                             key={child.label}
                             href={`/${locale}${child.href}`}
                             onClick={() => setIsMenuOpen(false)}
-                            className="block p-2 text-base transition-colors rounded-md"
+                            className="block py-2 text-base transition-colors hover:text-[#b17f4a]"
                             style={{ color: colors.darkOlive }}
                           >
                             {child.label}
@@ -234,7 +305,7 @@ export function MobileNav({ locale }: MobileNavProps) {
 
       {/* Bottom navigation */}
       <nav 
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t bg-white"
         style={{ 
           backgroundColor: colors.lightCream,
           borderColor: colors.secondary 
