@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { getCategories, organizeCategories } from '@/lib/wordpress-api'
+import { getCategories, organizeCategories, TranslatedCategory } from '@/lib/wordpress-api'
 import type { Locale } from '@/lib/i18n'
+import { useTranslations } from '@/lib/i18n'
 import { colors } from '@/lib/colors'
 import { ChevronDown } from 'lucide-react'
 
@@ -14,10 +15,26 @@ interface WordPressNavProps {
 
 export function WordPressNav({ locale }: WordPressNavProps) {
   const pathname = usePathname()
-  const [categories, setCategories] = useState<any>({ mainCategories: [], subCategories: {} })
+  const { translate } = useTranslations(locale)
+  const [categories, setCategories] = useState<{
+    mainCategories: TranslatedCategory[],
+    subCategories: { [key: number]: TranslatedCategory[] }
+  }>({ mainCategories: [], subCategories: {} })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<number | null>(null)
+
+  // Get translated static items
+  const staticItems = {
+    about: { 
+      label: translate('about', 'common'), 
+      href: '/about' 
+    },
+    contact: { 
+      label: translate('contact', 'common'), 
+      href: '/contact' 
+    }
+  }
 
   useEffect(() => {
     async function fetchCategories() {
@@ -25,35 +42,21 @@ export function WordPressNav({ locale }: WordPressNavProps) {
         setLoading(true)
         setError(null)
         const data = await getCategories(locale)
-        const organized = organizeCategories(data)
         
-        // Additional frontend filtering based on locale
-        if (locale === 'vi') {
-          const vietnameseCourse = organized.mainCategories.find(cat => cat.slug === 'khoa-hoc-tieng-viet')
-          if (vietnameseCourse) {
-            organized.mainCategories = [vietnameseCourse]
-            organized.subCategories = {
-              [vietnameseCourse.id]: organized.subCategories[vietnameseCourse.id] || []
+        // Organize categories into main categories and subcategories
+        const mainCategories = data.filter(cat => cat.parent === 0)
+        const subCategories = data.reduce((acc, cat) => {
+          if (cat.parent !== 0) {
+            if (!acc[cat.parent]) {
+              acc[cat.parent] = []
             }
-          } else {
-            organized.mainCategories = []
-            organized.subCategories = {}
+            acc[cat.parent].push(cat)
           }
-        } else if (locale === 'zh-Hant' || locale === 'zh-Hans') {
-          const chineseCourse = organized.mainCategories.find(cat => cat.slug === 'course')
-          if (chineseCourse) {
-            organized.mainCategories = [chineseCourse]
-            organized.subCategories = {
-              [chineseCourse.id]: organized.subCategories[chineseCourse.id] || []
-            }
-          } else {
-            organized.mainCategories = []
-            organized.subCategories = {}
-          }
-        }
-        
-        console.log('📁 Organized categories:', organized)
-        setCategories(organized)
+          return acc
+        }, {} as { [key: number]: TranslatedCategory[] })
+
+        setCategories({ mainCategories, subCategories })
+        console.log('Navigation categories:', { mainCategories, subCategories })
       } catch (err) {
         console.error('❌ Error in WordPressNav:', err)
         setError('Failed to load categories')
@@ -65,31 +68,11 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     fetchCategories()
   }, [locale])
 
-  // Static menu items
-  const staticItems = {
-    about: { label: 'Về chúng tôi', href: '/about' },
-    contact: { label: 'Liên hệ', href: '/contact' }
-  }
-
   if (loading) {
     return (
       <nav className="flex items-center space-x-6 font-medium">
-        <Link
-          href={`/${locale}${staticItems.about.href}`}
-          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-          style={{ color: colors.darkOlive }}
-        >
-          {staticItems.about.label}
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-        </Link>
-        <Link
-          href={`/${locale}${staticItems.contact.href}`}
-          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-          style={{ color: colors.darkOlive }}
-        >
-          {staticItems.contact.label}
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-        </Link>
+        <div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
+        <div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
       </nav>
     )
   }
@@ -97,25 +80,27 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   if (error) {
     return (
       <nav className="flex items-center space-x-6 font-medium">
-        <Link
-          href={`/${locale}${staticItems.about.href}`}
-          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-          style={{ color: colors.darkOlive }}
-        >
-          {staticItems.about.label}
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-        </Link>
-        <Link
-          href={`/${locale}${staticItems.contact.href}`}
-          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-          style={{ color: colors.darkOlive }}
-        >
-          {staticItems.contact.label}
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-        </Link>
+        <div className="text-red-500">Failed to load navigation</div>
       </nav>
     )
   }
+
+  // Group categories by their parent
+  const topLevelCategories = [
+    'activities',
+    'blogs',
+    'course',
+    'library',
+    'vietnamese-tests'
+  ]
+
+  const filteredMainCategories = categories.mainCategories
+    .filter(cat => topLevelCategories.includes(cat.slug))
+    .sort((a, b) => {
+      const aIndex = topLevelCategories.indexOf(a.slug)
+      const bIndex = topLevelCategories.indexOf(b.slug)
+      return aIndex - bIndex
+    })
 
   return (
     <nav className="flex items-center space-x-6 font-medium">
@@ -130,7 +115,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
       </Link>
 
       {/* WordPress Categories */}
-      {categories.mainCategories.map((category: any) => (
+      {filteredMainCategories.map((category) => (
         <div 
           key={category.id}
           className="relative"
@@ -158,7 +143,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
               className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
               style={{ borderColor: colors.secondary }}
             >
-              {categories.subCategories[category.id].map((subCategory: any) => (
+              {categories.subCategories[category.id].map((subCategory) => (
                 <Link
                   key={subCategory.id}
                   href={`/${locale}/category/${subCategory.slug}`}

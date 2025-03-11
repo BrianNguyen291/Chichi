@@ -112,39 +112,43 @@ export async function getCategories(locale: string = 'en'): Promise<TranslatedCa
         category.id !== 1 && category.slug !== 'uncategorized'
       )
 
-    // Filter categories based on locale
-    if (locale === 'vi') {
-      // For Vietnamese, show only Vietnamese course categories
-      filteredCategories = filteredCategories.filter(category => 
-        category.slug === 'khoa-hoc-tieng-viet' || 
-        ['cao-cap', 'trung-cap', 'so-cap'].includes(category.slug) ||
-        // Include subcategories of Vietnamese course
-        data.find(parentCat => 
-          parentCat.slug === 'khoa-hoc-tieng-viet' && 
-          category.parent === parentCat.id
-        )
-      )
-    } else if (locale === 'zh-Hant' || locale === 'zh-Hans') {
-      // For Chinese languages, show only Chinese course categories
-      filteredCategories = filteredCategories.filter(category => 
-        category.slug === 'course' || 
-        ['高級', '中級', '初級'].includes(category.slug) ||
-        // Include subcategories of Chinese course
-        data.find(parentCat => 
-          parentCat.slug === 'course' && 
-          category.parent === parentCat.id
-        )
-      )
-    }
+    console.log('📁 Categories before translation:', 
+      JSON.stringify(filteredCategories.map(c => ({
+        id: c.id,
+        name: c.name,
+        slug: c.slug
+      })), null, 2)
+    )
 
-    // Add translations
-    filteredCategories = filteredCategories.map(category => ({
-      ...category,
-      translatedName: categoryTranslations[category.slug]?.[locale] || category.name
-    }))
+    // Add translations from categoryTranslations
+    const translatedCategories = filteredCategories.map(category => {
+      const translation = categoryTranslations[category.slug as keyof typeof categoryTranslations]
+      console.log('🔍 Translation lookup for:', JSON.stringify({
+        slug: category.slug,
+        locale: locale,
+        foundTranslation: !!translation,
+        availableTranslation: translation?.[locale as keyof typeof translation],
+        finalName: translation?.[locale as keyof typeof translation] || category.name,
+        allTranslations: translation,
+        categoryTranslationsKeys: Object.keys(categoryTranslations)
+      }, null, 2))
+      
+      return {
+        ...category,
+        translatedName: translation?.[locale as keyof typeof translation] || category.name
+      }
+    })
 
-    console.log('📁 Categories fetched and translated:', filteredCategories)
-    return filteredCategories
+    console.log('📁 Categories after translation:', 
+      JSON.stringify(translatedCategories.map(c => ({
+        id: c.id,
+        name: c.name,
+        translatedName: c.translatedName,
+        slug: c.slug
+      })), null, 2)
+    )
+    
+    return translatedCategories
   } catch (error) {
     console.error('❌ Error fetching categories:', error)
     return []
@@ -242,9 +246,9 @@ export async function getCategoryBySlug(slug: string, locale: string = 'en'): Pr
   }
 }
 
-export function organizeCategories(categories: WPCategory[]): {
-  mainCategories: WPCategory[]
-  subCategories: { [parentId: number]: WPCategory[] }
+export function organizeCategories(categories: TranslatedCategory[]): {
+  mainCategories: TranslatedCategory[]
+  subCategories: { [parentId: number]: TranslatedCategory[] }
 } {
   if (!Array.isArray(categories)) {
     console.error('❌ Invalid categories array:', categories)
@@ -260,7 +264,7 @@ export function organizeCategories(categories: WPCategory[]): {
       acc[cat.parent].push(cat)
     }
     return acc
-  }, {} as { [parentId: number]: WPCategory[] })
+  }, {} as { [parentId: number]: TranslatedCategory[] })
 
   return { mainCategories, subCategories }
 } 

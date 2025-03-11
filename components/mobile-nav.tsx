@@ -7,7 +7,7 @@ import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
 import { Home, Menu, X, ChevronRight, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone } from 'lucide-react'
-import { getCategories, organizeCategories } from "@/lib/wordpress-api"
+import { getCategories, organizeCategories, TranslatedCategory } from "@/lib/wordpress-api"
 
 interface NavMenuItem {
   label: string
@@ -20,39 +20,39 @@ interface MobileNavProps {
   locale: Locale
 }
 
-// Static menu items that won't come from WordPress
-const staticNavItems: NavMenuItem[] = [
-  { 
-    href: '/', 
-    label: 'Trang chủ', 
-    icon: Home 
-  },
-  { 
-    href: '/about', 
-    label: 'Về chúng tôi', 
-    icon: Home 
-  },
-  { 
-    href: '/contact', 
-    label: 'Liên hệ', 
-    icon: Phone 
-  },
-]
-
-// Main items for bottom navigation
-const mainNavItems = [
-  { href: '/', label: 'Trang chủ', icon: Home },
-  { href: '/about', label: 'Về chúng tôi', icon: Home },
-  { href: '/contact', label: 'Liên hệ', icon: Phone },
-]
-
 export function MobileNav({ locale }: MobileNavProps) {
   const pathname = usePathname()
   const { translate } = useTranslations(locale)
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
   const [activeSubmenu, setActiveSubmenu] = React.useState<string | null>(null)
-  const [navItems, setNavItems] = React.useState<NavMenuItem[]>(staticNavItems)
+  const [navItems, setNavItems] = React.useState<NavMenuItem[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
+
+  // Get translated static items
+  const staticNavItems = React.useMemo(() => [
+    { 
+      href: '/', 
+      label: translate('home', 'common'),
+      icon: Home 
+    },
+    { 
+      href: '/about', 
+      label: translate('about', 'common'),
+      icon: Home 
+    },
+    { 
+      href: '/contact', 
+      label: translate('contact', 'common'),
+      icon: Phone 
+    },
+  ], [translate])
+
+  // Main items for bottom navigation
+  const mainNavItems = React.useMemo(() => [
+    { href: '/', label: translate('home', 'common'), icon: Home },
+    { href: '/about', label: translate('about', 'common'), icon: Home },
+    { href: '/contact', label: translate('contact', 'common'), icon: Phone },
+  ], [translate])
 
   React.useEffect(() => {
     async function fetchCategories() {
@@ -61,14 +61,32 @@ export function MobileNav({ locale }: MobileNavProps) {
         const categories = await getCategories(locale)
         const { mainCategories, subCategories } = organizeCategories(categories)
 
+        // Define the order of top-level categories
+        const topLevelCategories = [
+          'activities',
+          'blogs',
+          'course',
+          'library',
+          'vietnamese-tests'
+        ]
+
+        // Filter and sort main categories
+        const filteredMainCategories = mainCategories
+          .filter(cat => topLevelCategories.includes(cat.slug))
+          .sort((a, b) => {
+            const aIndex = topLevelCategories.indexOf(a.slug)
+            const bIndex = topLevelCategories.indexOf(b.slug)
+            return aIndex - bIndex
+          })
+
         // Convert WordPress categories to menu items
-        const wpMenuItems = mainCategories.map(cat => ({
-          label: cat.name,
+        const wpMenuItems = filteredMainCategories.map(cat => ({
+          label: cat.translatedName || cat.name,
           href: `/category/${cat.slug}`,
           icon: Newspaper,
           ...(subCategories[cat.id] && {
             children: subCategories[cat.id].map(subCat => ({
-              label: subCat.name,
+              label: subCat.translatedName || subCat.name,
               href: `/category/${subCat.slug}`,
             })),
           }),
@@ -90,7 +108,7 @@ export function MobileNav({ locale }: MobileNavProps) {
     }
 
     fetchCategories()
-  }, [locale])
+  }, [locale, staticNavItems])
 
   const handleSubmenuClick = (label: string) => {
     setActiveSubmenu(activeSubmenu === label ? null : label)
@@ -120,16 +138,10 @@ export function MobileNav({ locale }: MobileNavProps) {
               </Link>
             )
           })}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="flex flex-col items-center justify-center space-y-1"
-            style={{ color: colors.darkOlive }}
-          >
-            <Menu className="h-5 w-5" />
-            <span className="text-xs">
-              {translate('menu', 'common')}
-            </span>
-          </button>
+          <div className="flex flex-col items-center justify-center space-y-1">
+            <div className="h-5 w-5 bg-gray-200 animate-pulse rounded" />
+            <div className="h-3 w-12 bg-gray-200 animate-pulse rounded" />
+          </div>
         </div>
       </nav>
     )
@@ -243,9 +255,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                 style={{ color: isActive ? colors.primary : colors.darkOlive }}
               >
                 {Icon && <Icon className="h-5 w-5" />}
-                <span className="text-xs">
-                  {item.label}
-                </span>
+                <span className="text-xs">{item.label}</span>
               </Link>
             )
           })}
