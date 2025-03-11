@@ -24,7 +24,7 @@ export function FloatingButtons() {
   }, []);
 
   return (
-    <div className={`fixed ${isMobile ? 'bottom-[70px] left-1/2 -translate-x-1/2' : 'left-4 top-1/2 -translate-y-1/2'} flex ${isMobile ? 'flex-row' : 'flex-col'} gap-2 z-40`}>
+    <div className={`fixed ${isMobile ? 'bottom-[70px] left-1/2 -translate-x-1/2' : 'left-4 top-[75%] -translate-y-1/2'} flex ${isMobile ? 'flex-row' : 'flex-col'} gap-2 z-40`}>
       {/* Zalo */}
       <a
         href="https://zalo.me/0931715889"
