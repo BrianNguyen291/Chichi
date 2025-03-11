@@ -66,25 +66,30 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   }, [locale])
 
   // Static menu items
-  const staticItems = [
-    { label: 'Về chúng tôi', href: '/about' },
-    { label: 'Liên hệ', href: '/contact' },
-  ]
+  const staticItems = {
+    about: { label: 'Về chúng tôi', href: '/about' },
+    contact: { label: 'Liên hệ', href: '/contact' }
+  }
 
   if (loading) {
     return (
       <nav className="flex items-center space-x-6 font-medium">
-        {staticItems.map((item) => (
-          <Link
-            key={item.href}
-            href={`/${locale}${item.href}`}
-            className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-            style={{ color: colors.darkOlive }}
-          >
-            {item.label}
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-          </Link>
-        ))}
+        <Link
+          href={`/${locale}${staticItems.about.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+          style={{ color: colors.darkOlive }}
+        >
+          {staticItems.about.label}
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
+        <Link
+          href={`/${locale}${staticItems.contact.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+          style={{ color: colors.darkOlive }}
+        >
+          {staticItems.contact.label}
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
       </nav>
     )
   }
@@ -92,34 +97,39 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   if (error) {
     return (
       <nav className="flex items-center space-x-6 font-medium">
-        {staticItems.map((item) => (
-          <Link
-            key={item.href}
-            href={`/${locale}${item.href}`}
-            className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-            style={{ color: colors.darkOlive }}
-          >
-            {item.label}
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-          </Link>
-        ))}
+        <Link
+          href={`/${locale}${staticItems.about.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+          style={{ color: colors.darkOlive }}
+        >
+          {staticItems.about.label}
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
+        <Link
+          href={`/${locale}${staticItems.contact.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+          style={{ color: colors.darkOlive }}
+        >
+          {staticItems.contact.label}
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
       </nav>
     )
   }
 
   return (
     <nav className="flex items-center space-x-6 font-medium">
-      {staticItems.map((item) => (
-        <Link
-          key={item.href}
-          href={`/${locale}${item.href}`}
-          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-          style={{ color: colors.darkOlive }}
-        >
-          {item.label}
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-        </Link>
-      ))}
+      {/* About Us link */}
+      <Link
+        href={`/${locale}${staticItems.about.href}`}
+        className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+        style={{ color: colors.darkOlive }}
+      >
+        {staticItems.about.label}
+        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+      </Link>
+
+      {/* WordPress Categories */}
       {categories.mainCategories.map((category: any) => (
         <div 
           key={category.id}
@@ -162,6 +172,16 @@ export function WordPressNav({ locale }: WordPressNavProps) {
           )}
         </div>
       ))}
+
+      {/* Contact link */}
+      <Link
+        href={`/${locale}${staticItems.contact.href}`}
+        className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+        style={{ color: colors.darkOlive }}
+      >
+        {staticItems.contact.label}
+        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+      </Link>
     </nav>
   )
 } 
