@@ -183,20 +183,20 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
           width={24}
           height={24}
           aria-hidden="true"
-          className="object-contain"
+          className="object-contain opacity-80 group-hover:opacity-100 transition-opacity"
         />
       </div>
       {contact.href ? (
         <a 
           href={contact.href} 
-          className="text-white text-sm transition-colors duration-200 hover:text-primary-200 hover:underline whitespace-pre-line"
+          className="text-gray-200 text-sm transition-all duration-200 hover:text-white hover:translate-x-1"
           target={contact.component === 'email' ? '_self' : '_blank'}
           rel="noopener noreferrer"
         >
           {contact.text}
         </a>
       ) : (
-        <span className="text-white text-sm whitespace-pre-line">
+        <span className="text-gray-200 text-sm whitespace-pre-line">
           {contact.text}
         </span>
       )}
@@ -214,7 +214,7 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
         <div className="container mx-auto px-4">
           <h2 
             id="partners-heading"
-            className="text-3xl font-bold text-center mb-12 scroll-mt-16"
+            className="text-3xl font-bold text-center mb-12 scroll-mt-16 font-serif"
             style={{ color: colors.darkOlive }}
           >
             {t.partnersTitle}
@@ -234,7 +234,7 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
                     href={partner.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center p-4"
+                    className="block w-[200px] h-[100px] bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center p-4 hover:bg-gray-50"
                     aria-label={`Visit ${partner.name} website`}
                   >
                     <Image
@@ -255,22 +255,22 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
       </section>
 
       <footer 
-        className="w-full py-12"
+        className="w-full py-16 relative"
         style={{ backgroundColor: colors.darkOlive }}
         role="contentinfo"
       >
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div className="flex flex-col items-center lg:items-start">
-              <h3 className="text-xl font-bold mb-6 text-white">
+              <h3 className="text-xl font-serif font-bold mb-8 text-primary-200">
                 {t.followUs}
               </h3>
-              <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
+              <div className="flex flex-wrap gap-6 justify-center lg:justify-start">
                 {socialLinks.map((social, index) => (
                   <Link
                     key={index}
                     href={social.href}
-                    className="transition-all hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary-300 rounded-full w-10 h-10 flex items-center justify-center bg-white bg-opacity-10 p-2"
+                    className="transition-all duration-300 hover:scale-110 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-primary-300 rounded-full w-12 h-12 flex items-center justify-center bg-white bg-opacity-10 hover:bg-opacity-20 p-2.5"
                     aria-label={social.ariaLabel}
                   >
                     <Image
@@ -287,12 +287,12 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-8">
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {contactInfo.slice(0, 4).map((contact, index) => (
                   renderContactItem(contact)
                 ))}
               </div>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {contactInfo.slice(4, 5).map((contact, index) => (
                   renderContactItem(contact)
                 ))}
@@ -301,7 +301,7 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
 
             <div className="flex flex-col items-center lg:items-start">
               <h3 className="sr-only">Address Information</h3>
-              <div className="space-y-4 w-full max-w-[300px]">
+              <div className="space-y-6 w-full max-w-[300px]">
                 {contactInfo.slice(5).map((contact, index) => (
                   renderContactItem(contact)
                 ))}
@@ -309,16 +309,16 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
             </div>
           </div>
 
-          <div className="text-center pt-8 mt-8 border-t border-gray-600">
-            <p className="text-white text-sm">
+          <div className="text-center pt-12 mt-12 border-t border-gray-600">
+            <p className="text-gray-300 text-sm font-light">
               {t.copyright.replace('2024', `${currentYear}`)}
             </p>
-            <p className="text-white text-sm mt-1">
+            <p className="text-gray-400 text-sm mt-2">
               <a 
                 href="https://texmate.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="hover:underline focus:outline-none focus:ring-2 focus:ring-primary-300"
+                className="hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-300"
                 aria-label="Visit tecxmate.com website"
               >
                 {t.madeBy}
@@ -326,6 +326,11 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
             </p>
           </div>
         </div>
+        
+        <div 
+          className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-10 pointer-events-none"
+          aria-hidden="true"
+        />
       </footer>
     </>
   )
