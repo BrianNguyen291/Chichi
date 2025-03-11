@@ -21,6 +21,8 @@ const nextConfig = {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
+    scrollRestoration: true,
+    optimizeCss: true,
   }
 }
 
