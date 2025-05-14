@@ -30,6 +30,10 @@ export function WordPressNav({ locale }: WordPressNavProps) {
       label: translate('about', 'common'), 
       href: '/about' 
     },
+    teacherTeam: {
+      label: translate('teacherTeam', 'common') || 'Teacher Team',
+      href: '/teacher-team'
+    },
     contact: { 
       label: translate('contact', 'common'), 
       href: '/contact' 
@@ -85,13 +89,12 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     )
   }
 
-  // Group categories by their parent
+  // Updated order of categories
   const topLevelCategories = [
-    'activities',
-    'blogs',
     'course',
     'library',
-    'vietnamese-tests'
+    'vietnamese-tests',
+    'blogs'
   ]
 
   const filteredMainCategories = categories.mainCategories
@@ -114,7 +117,17 @@ export function WordPressNav({ locale }: WordPressNavProps) {
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
       </Link>
 
-      {/* WordPress Categories */}
+      {/* Teacher Team link */}
+      <Link
+        href={`/${locale}${staticItems.teacherTeam.href}`}
+        className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+        style={{ color: colors.darkOlive }}
+      >
+        {staticItems.teacherTeam.label}
+        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+      </Link>
+
+      {/* WordPress Categories - Now in the correct order */}
       {filteredMainCategories.map((category) => (
         <div 
           key={category.id}

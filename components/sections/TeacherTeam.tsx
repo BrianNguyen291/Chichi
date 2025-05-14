@@ -6,20 +6,6 @@ interface TeacherTeamProps {
 }
 
 const translations = {
-  vi: {
-    title: 'Đội ngũ giáo viên xuất sắc',
-    description: [
-      'Tại Chi Chi Vietnamese, chúng tôi tự hào có đội ngũ giáo viên chuyên nghiệp, thông thạo tiếng Trung và có nhiều năm kinh nghiệm giảng dạy tại các trường đại học và trung tâm đào tạo ngôn ngữ uy tín.',
-      'Họ hiểu rõ nhu cầu học tập của học viên ở mọi lứa tuổi và có nhiều phương pháp giảng dạy phong phú.',
-      'Thông qua các hoạt động học tập tương tác, mô phỏng tình huống và trải nghiệm văn hóa, đội ngũ giáo viên của chúng tôi cam kết mang đến chất lượng giảng dạy tiếng Việt tốt nhất, giúp học viên nắm vững kỹ năng ngôn ngữ trong môi trường học tập thoải mái và vui vẻ.'
-    ],
-    teacherName: 'Cô Chi Chi - 7 năm kinh nghiệm giảng dạy',
-    credentials: [
-      'Học bổng Bộ Giáo dục Đài Loan',
-      'Thạc sĩ Đại học Chính trị Quốc gia',
-      'Đã đào tạo hơn 500 học viên và nhiều lớp tiếng Việt cho doanh nghiệp'
-    ]
-  },
   en: {
     title: 'Elite Teaching Team',
     description: [

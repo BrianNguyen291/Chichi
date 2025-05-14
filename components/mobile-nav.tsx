@@ -49,6 +49,11 @@ export function MobileNav({ locale }: MobileNavProps) {
       label: translate('about', 'common'),
       icon: Home 
     },
+    {
+      href: '/teacher-team',
+      label: translate('teacherTeam', 'common') || 'Teacher Team',
+      icon: GraduationCap
+    },
     { 
       href: '/contact', 
       label: translate('contact', 'common'),
@@ -111,11 +116,10 @@ export function MobileNav({ locale }: MobileNavProps) {
 
         // Define the order of top-level categories
         const topLevelCategories = [
-          'activities',
-          'blogs',
           'course',
           'library',
-          'vietnamese-tests'
+          'vietnamese-tests',
+          'blogs'
         ];
 
         // Filter and sort main categories
@@ -148,8 +152,9 @@ export function MobileNav({ locale }: MobileNavProps) {
         const completeNavItems = [
           { ...staticNavItems[0], href: `/${locale}` }, // Home
           { ...staticNavItems[1], href: `/${locale}/about` }, // About
+          { ...staticNavItems[2], href: `/${locale}/teacher-team` }, // Teacher Team
           ...wpMenuItems,
-          { ...staticNavItems[2], href: `/${locale}/contact` }, // Contact
+          { ...staticNavItems[3], href: `/${locale}/contact` }, // Contact
         ];
 
         // Update cache
@@ -165,6 +170,7 @@ export function MobileNav({ locale }: MobileNavProps) {
         setMainNavItems([
           { href: `/${locale}`, label: translate('home', 'common'), icon: Home },
           { href: `/${locale}/about`, label: translate('about', 'common'), icon: Home },
+          { href: `/${locale}/teacher-team`, label: translate('teacherTeam', 'common') || 'Teacher Team', icon: GraduationCap },
           { href: `/${locale}/contact`, label: translate('contact', 'common'), icon: Phone },
         ]);
 
@@ -172,9 +178,10 @@ export function MobileNav({ locale }: MobileNavProps) {
         console.error('❌ Error fetching categories:', error);
         if (isMounted) {
           const fallbackItems = [
-            { ...staticNavItems[0], href: `/${locale}` },
-            { ...staticNavItems[1], href: `/${locale}/about` },
-            { ...staticNavItems[2], href: `/${locale}/contact` }
+            { ...staticNavItems[0], href: `/${locale}` }, // Home
+            { ...staticNavItems[1], href: `/${locale}/about` }, // About
+            { ...staticNavItems[2], href: `/${locale}/teacher-team` }, // Teacher Team
+            { ...staticNavItems[3], href: `/${locale}/contact` } // Contact
           ];
           setNavItems(fallbackItems);
           setMainNavItems(fallbackItems);

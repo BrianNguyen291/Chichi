@@ -1,10 +1,8 @@
-import vi from '@/translations/vi.json'
 import en from '@/translations/en.json'
 import zhHant from '@/translations/zh-Hant.json'
 import zhHans from '@/translations/zh-Hans.json'
 
 export const translations = {
-  vi,
   en,
   'zh-Hant': zhHant,
   'zh-Hans': zhHans,

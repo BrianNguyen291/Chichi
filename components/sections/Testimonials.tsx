@@ -74,40 +74,6 @@ const testimonials: Record<Locale, TestimonialProps[]> = {
       language: "越南語"
     }
   ],
-  'vi': [
-    {
-      name: "Lê Vũ Linh Trang",
-      role: "Học viên HSK 5",
-      content: "Học tiếng Trung tại CCVN là một trải nghiệm tuyệt vời. Các giáo viên rất chuyên nghiệp và phương pháp giảng dạy hiệu quả. Tôi đã cải thiện điểm HSK của mình đáng kể chỉ trong vài tháng.",
-      rating: 5,
-      image: "/testimonials/student1.jpg",
-      language: "HSK"
-    },
-    {
-      name: "Trần Huệ Lý",
-      role: "Học viên HSK 3",
-      content: "Sau khi học tại CCVN, tôi tự tin hơn về kỹ năng tiếng Trung của mình. Phương pháp thực tế và hiểu biết văn hóa đã giúp tôi tiến bộ nhanh chóng và hiệu quả.",
-      rating: 5,
-      image: "/testimonials/student2.jpg",
-      language: "Tiếng Trung"
-    },
-    {
-      name: "Nguyễn Phương Linh",
-      role: "Học viên HSK 6",
-      content: "Tôi luôn muốn du học Trung Quốc nhưng tiếng Trung của tôi chưa đủ tốt. Sau một năm học tại CCVN, tôi đã tiến bộ đáng kể và giờ đây tôi tự tin sẽ đạt được mục tiêu HSK 6 của mình.",
-      rating: 5,
-      image: "/testimonials/student3.jpg",
-      language: "Tiếng Trung"
-    },
-    {
-      name: "Sarah Johnson",
-      role: "Học viên Tiếng Việt",
-      content: "Học tiếng Việt tại CCVN là một trải nghiệm tuyệt vời. Hiểu biết về văn hóa và phương pháp giảng dạy kiên nhẫn đã giúp tôi tiến bộ nhanh chóng và giao tiếp hiệu quả.",
-      rating: 5,
-      image: "/testimonials/student4.jpg",
-      language: "Tiếng Việt"
-    }
-  ],
   'zh-Hans': [
     {
       name: "黎武灵庄",
@@ -153,7 +119,7 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-red-700">
-            CẢM NHẬN CỦA HỌC VIÊN
+            STUDENT TESTIMONIALS
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             {t.testimonials.subtitle}

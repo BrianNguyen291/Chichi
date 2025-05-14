@@ -6,16 +6,6 @@ interface TeachingPhilosophyProps {
 }
 
 const translations = {
-  vi: {
-    title: 'Ba Yếu Tố Chính của Chi Chi',
-    subtitle: 'Thực tế - Thú vị - Cá nhân hóa',
-    description: [
-      'Chúng tôi luôn đặt "học đi đôi với hành" làm trọng tâm, kết hợp việc học tiếng Việt với ứng dụng thực tế, giúp việc học ngôn ngữ trở nên sinh động và thiết thực hơn.',
-      'Chúng tôi tùy chỉnh theo tính cách và nhu cầu của từng học viên, cung cấp kế hoạch học tập phù hợp, đảm bảo mỗi người đều có thể tìm thấy phương pháp học phù hợp tại Chi Chi.',
-      'Chúng tôi kiên định với phương pháp "lấy học viên làm trung tâm", tập trung vào việc khơi dậy hứng thú và tiềm năng học tập của học viên.',
-      'Thông qua việc giảng dạy tiếng Việt, Chi Chi giúp nhiều người hiểu sâu hơn về phong tục tập quán Việt Nam. Chương trình giảng dạy của chúng tôi không chỉ bao gồm kiến thức ngôn ngữ mà còn tích hợp các yếu tố văn hóa, giúp học viên trải nghiệm sự đa dạng văn hóa trong quá trình học tiếng Việt.'
-    ]
-  },
   en: {
     title: 'Chi Chi\'s Three Pillars',
     subtitle: 'Practical - Fun - Personalized',

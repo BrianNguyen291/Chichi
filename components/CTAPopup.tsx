@@ -11,12 +11,6 @@ interface CTAPopupProps {
 }
 
 const translations = {
-  vi: {
-    title: 'Bắt đầu hành trình học tiếng Việt của bạn!',
-    description: 'Đăng ký ngay để nhận tư vấn miễn phí và ưu đãi đặc biệt',
-    courseButton: 'Xem lịch học',
-    consultButton: 'Đăng ký tư vấn',
-  },
   en: {
     title: 'Start Your Vietnamese Learning Journey!',
     description: 'Register now for free consultation and special offers',

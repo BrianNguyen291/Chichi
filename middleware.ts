@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // List of supported locales
-export const locales = ['vi', 'en', 'zh-Hant', 'zh-Hans'] as const
+export const locales = ['en', 'zh-Hant', 'zh-Hans'] as const
 export type Locale = typeof locales[number]
-export const defaultLocale = 'vi'
+export const defaultLocale = 'en'
 
 // Validate if a string is a supported locale
 function isValidLocale(locale: string): locale is Locale {
@@ -14,7 +14,6 @@ function isValidLocale(locale: string): locale is Locale {
 // Map common locale patterns to our supported locales
 function mapToSupportedLocale(locale: string): Locale {
   const lowerLocale = locale.toLowerCase()
-  if (lowerLocale.startsWith('vi')) return 'vi'
   if (lowerLocale.startsWith('en')) return 'en'
   if (lowerLocale.startsWith('zh-tw') || lowerLocale.startsWith('zh-hant')) return 'zh-Hant'
   if (lowerLocale.startsWith('zh-cn') || lowerLocale.startsWith('zh-hans')) return 'zh-Hans'

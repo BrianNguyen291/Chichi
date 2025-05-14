@@ -18,7 +18,6 @@ interface LanguageSwitcherProps {
 }
 
 const locales = {
-  vi: 'Tiếng Việt',
   en: 'English',
   'zh-Hant': '繁體中文',
   'zh-Hans': '简体中文'

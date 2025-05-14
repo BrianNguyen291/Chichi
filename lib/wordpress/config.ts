@@ -30,11 +30,6 @@ export const WP_CONFIG = {
   
   // Languages
   languages: {
-    vi: {
-      name: 'Tiếng Việt',
-      locale: 'vi',
-      dateFormat: 'dd/MM/yyyy',
-    },
     en: {
       name: 'English',
       locale: 'en',
@@ -53,7 +48,7 @@ export const WP_CONFIG = {
   } as const,
   
   // Default Language
-  defaultLanguage: 'vi',
+  defaultLanguage: 'en',
   
   // Cache Settings
   cache: {

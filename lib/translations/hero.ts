@@ -1,14 +1,4 @@
 export const translations = {
-  vi: {
-    subtitle: 'Học tiếng Việt dễ dàng',
-    promise: 'không chỉ là khẩu hiệu của chúng tôi, mà còn là lời hứa với mỗi học viên.',
-    consultation: 'Tư vấn miễn phí',
-    tryNow: 'Học thử ngay',
-    altText: {
-      hero: 'Cô Chi Chi',
-      rightSide: 'Phong cảnh Hà Nội'
-    }
-  },
   en: {
     subtitle: 'Learn Vietnamese Easily',
     promise: 'not just our slogan, but our promise to every student.',

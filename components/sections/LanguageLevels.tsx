@@ -7,32 +7,6 @@ interface LanguageLevelsProps {
 }
 
 const translations = {
-  vi: {
-    title: 'Cấp Độ Ngôn Ngữ',
-    levels: [
-      {
-        level: 'A1-A2',
-        title: 'Sơ Cấp',
-        description: 'Bắt đầu hành trình học tiếng Việt',
-        image: '/images/57f31c9320e1de5769cbf4669ff6fbbd.jpg',
-        buttonText: 'Tìm Hiểu Thêm'
-      },
-      {
-        level: 'B1-B2',
-        title: 'Trung Cấp',
-        description: 'Nâng cao kỹ năng giao tiếp',
-        image: '/images/d0c3616a88054c9141e871e80e992bd9.jpg',
-        buttonText: 'Tìm Hiểu Thêm'
-      },
-      {
-        level: 'C1-C2',
-        title: 'Cao Cấp',
-        description: 'Làm chủ các khái niệm tiếng Việt phức tạp',
-        image: '/images/f92a926edc6969013d29f39ed1d17d40.jpg',
-        buttonText: 'Tìm Hiểu Thêm'
-      }
-    ]
-  },
   en: {
     title: 'Language Levels',
     levels: [
