@@ -8,53 +8,67 @@ interface LanguageLevelsProps {
 
 const translations = {
   en: {
-    title: 'Language Levels',
+    title: 'Course Introduction',
     levels: [
       {
+        level: 'A0',
+        title: 'Beginner Foundation',
+        description: 'Start your Vietnamese learning journey',
+        image: '/images/language_level/A0.jpg',
+        buttonText: 'Learn More'
+      },
+      {
         level: 'A1-A2',
-        title: 'Beginner',
-        description: 'Start your Vietnamese journey',
-        image: '/images/57f31c9320e1de5769cbf4669ff6fbbd.jpg',
+        title: 'Elementary Level',
+        description: 'Basic Vietnamese communication skills',
+        image: '/images/language_level/A1_A2.jpg',
         buttonText: 'Learn More'
       },
       {
         level: 'B1-B2',
-        title: 'Intermediate',
-        description: 'Enhance your communication skills',
-        image: '/images/d0c3616a88054c9141e871e80e992bd9.jpg',
+        title: 'Intermediate Level',
+        description: 'Enhance your communication abilities',
+        image: '/images/language_level/B1_B2.jpg',
         buttonText: 'Learn More'
       },
       {
         level: 'C1-C2',
-        title: 'Advanced',
+        title: 'Advanced Level',
         description: 'Master complex Vietnamese concepts',
-        image: '/images/f92a926edc6969013d29f39ed1d17d40.jpg',
+        image: '/images/language_level/C1_C2.jpg',
         buttonText: 'Learn More'
       }
     ]
   },
   'zh-Hant': {
-    title: '課程等級',
+    title: '課程介紹',
     levels: [
+      {
+        level: 'A0',
+        title: '零基礎',
+        description: '開始您的越南語學習之旅',
+        image: '/images/language_level/A0.jpg',
+        buttonText: '了解更多'
+      },
       {
         level: 'A1-A2',
         title: '初級',
-        description: '開始您的越南語學習之旅',
-        image: '/images/57f31c9320e1de5769cbf4669ff6fbbd.jpg',
+        description: '基礎越南語溝通能力',
+        image: '/images/language_level/A1_A2.jpg',
         buttonText: '了解更多'
       },
       {
         level: 'B1-B2',
         title: '中級',
         description: '提升您的溝通能力',
-        image: '/images/d0c3616a88054c9141e871e80e992bd9.jpg',
+        image: '/images/language_level/B1_B2.jpg',
         buttonText: '了解更多'
       },
       {
         level: 'C1-C2',
         title: '高級',
         description: '掌握複雜的越南語概念',
-        image: '/images/f92a926edc6969013d29f39ed1d17d40.jpg',
+        image: '/images/language_level/C1_C2.jpg',
         buttonText: '了解更多'
       }
     ]
@@ -66,21 +80,21 @@ const translations = {
         level: 'A1-A2',
         title: '初级',
         description: '开始您的越南语学习之旅',
-        image: '/images/57f31c9320e1de5769cbf4669ff6fbbd.jpg',
+        image: '/images/language_level/A1_A2.jpg',
         buttonText: '了解更多'
       },
       {
         level: 'B1-B2',
         title: '中级',
         description: '提升您的沟通能力',
-        image: '/images/d0c3616a88054c9141e871e80e992bd9.jpg',
+        image: '/images/language_level/B1_B2.jpg',
         buttonText: '了解更多'
       },
       {
         level: 'C1-C2',
         title: '高级',
         description: '掌握复杂的越南语概念',
-        image: '/images/f92a926edc6969013d29f39ed1d17d40.jpg',
+        image: '/images/language_level/C1_C2.jpg',
         buttonText: '了解更多'
       }
     ]
@@ -97,7 +111,7 @@ export const LanguageLevels = ({ locale }: LanguageLevelsProps) => {
           {t.title}
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {t.levels.map((level, index) => (
             <Card 
               key={index} 
