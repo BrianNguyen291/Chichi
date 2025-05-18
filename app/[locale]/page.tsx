@@ -1,7 +1,6 @@
 import { HeroSection } from '@/components/sections/HeroSection'
 import { TeacherTeam } from '@/components/sections/TeacherTeam'
 import { CourseFeatures } from '@/components/sections/CourseFeatures'
-import { TeachingPhilosophy } from '@/components/sections/TeachingPhilosophy'
 import { LearningEnvironment } from '@/components/sections/LearningEnvironment'
 import { LanguageLevels } from '@/components/sections/LanguageLevels'
 import { PartnersAndFooter } from '@/components/sections/PartnersAndFooter'
@@ -22,8 +21,7 @@ export default function HomePage({ params: { locale } }: HomePageProps) {
       <HeroSection locale={locale} />
       <TeacherTeam locale={locale} />
       <CourseFeatures locale={locale} />
-      <TeachingPhilosophy locale={locale} />
-      <TestimonialsSection locale={locale} />
+       <TestimonialsSection locale={locale} />
       <LearningEnvironment locale={locale} />
       <LanguageLevels locale={locale} />
       <PartnersAndFooter locale={locale} />

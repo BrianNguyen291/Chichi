@@ -11,8 +11,8 @@ const translations = {
     title: 'Môi Trường Học Tập',
     environments: [
       {
-        title: 'Học Trực Tiếp',
-        description: 'Tương tác trực tiếp, giao lưu văn hóa sâu sắc',
+        title: 'Lớp Luyện Thi Chứng Chỉ Tiếng Việt',
+        description: 'Hệ thống ôn tập chuyên sâu cho các cấp độ A, B, C',
         mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
         gallery: [
           '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
@@ -21,8 +21,8 @@ const translations = {
         ]
       },
       {
-        title: 'Học Trực Tuyến',
-        description: 'Học tập linh hoạt, không giới hạn không gian và thời gian',
+        title: 'Lớp Doanh Nghiệp Tiếng Việt',
+        description: 'Giải pháp đào tạo tiếng Việt thiết kế riêng cho doanh nghiệp',
         mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
         gallery: [
           '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
@@ -36,8 +36,8 @@ const translations = {
     title: 'Learning Environment',
     environments: [
       {
-        title: 'Offline Learning',
-        description: 'Face-to-face interaction, deep cultural exchange',
+        title: 'Vietnamese Certification Course',
+        description: 'Systematic preparation for LEVEL A, B, and C certifications',
         mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
         gallery: [
           '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
@@ -46,8 +46,8 @@ const translations = {
         ]
       },
       {
-        title: 'Online Learning',
-        description: 'Flexible learning, no space and time limitations',
+        title: 'Business Vietnamese Solutions',
+        description: 'Customized corporate training programs',
         mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
         gallery: [
           '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
@@ -60,9 +60,11 @@ const translations = {
   'zh-Hant': {
     title: '多元學習環境',
     environments: [
+      
+
       {
-        title: '實體課程',
-        description: '面對面互動，深入文化交流',
+        title: '越南語檢定衝刺班',
+        description: '系統備考 LEVEL A、LEVEL B、LEVEL C',
         mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
         gallery: [
           '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
@@ -71,8 +73,8 @@ const translations = {
         ]
       },
       {
-        title: '線上課程',
-        description: '靈活的線上學習，打破時空限制',
+        title: '越南語企業方案',
+        description: '量身定制的企業培訓課程',
         mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
         gallery: [
           '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
@@ -85,9 +87,11 @@ const translations = {
   'zh-Hans': {
     title: '多元学习环境',
     environments: [
+    
+      
       {
-        title: '实体课程',
-        description: '面对面互动，深入文化交流',
+        title: '越南语检定冲刺班',
+        description: '系统备考 LEVEL A、LEVEL B、LEVEL C',
         mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
         gallery: [
           '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
@@ -96,8 +100,8 @@ const translations = {
         ]
       },
       {
-        title: '线上课程',
-        description: '灵活的线上学习，打破时空限制',
+        title: '越南语企业方案',
+        description: '量身定制的企业培训课程',
         mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
         gallery: [
           '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
