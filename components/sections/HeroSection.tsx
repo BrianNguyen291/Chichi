@@ -24,15 +24,36 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
 
   return (
     <section 
-      className={`relative w-full min-h-[calc(85vh-80px)] bg-[#f5f2eb] overflow-hidden ${playfair.variable} ${inter.variable}`}
+      className={`relative w-full min-h-[calc(90vh-80px)] overflow-hidden ${playfair.variable} ${inter.variable}`}
       aria-label="Hero section"
     >
-      <div className="container mx-auto px-4 py-4 md:py-6 lg:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-3 lg:gap-8 items-center">
+      {/* Background Image Container - Full Width & Height */}
+      <div className="absolute inset-0 w-full h-full z-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#f5f2eb] via-[#f5f2eb]/90 to-transparent z-8"></div>
+        <div className="absolute top-0 right-0 w-full md:w-2/3 lg:w-3/4 h-full">
+          <Image
+            src="/images/hero pictuture right handside.png"
+            alt={t.altText.rightSide}
+            fill
+            loading="eager"
+            className="object-cover object-right"
+            priority
+            sizes="100vw"
+            quality={100}
+          />
+        </div>
+        
+        {/* Decorative elements */}
+        <div className="absolute bottom-20 left-1/4 w-32 h-32 md:w-40 md:h-40 rounded-full bg-[#2A5C3F]/5 blur-xl z-0"></div>
+        <div className="absolute top-1/4 right-1/3 w-24 h-24 md:w-56 md:h-56 rounded-full bg-[#b17f4a]/5 blur-xl z-0"></div>
+      </div>
+
+      <div className="container relative mx-auto px-4 py-8 md:py-12 lg:py-16 z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_9fr] gap-8 items-center">
           {/* Left Side Content */}
-          <div className="space-y-3 md:space-y-4 max-w-xl mx-auto lg:mx-0 lg:pr-4 text-center lg:text-left">
+          <div className="space-y-4 md:space-y-6 max-w-xl lg:max-w-lg mx-auto lg:mx-0 lg:pr-4 text-center lg:text-left">
             {/* Title and Promise with animation */}
-            <div className="space-y-2 md:space-y-3">
+            <div className="space-y-3 md:space-y-4">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#2A5C3F] leading-tight animate-fade-in-up font-playfair">
                 {t.subtitle}
               </h1>
@@ -41,24 +62,10 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
               </p>
             </div>
 
-            {/* Teacher Image with animation - Mobile only */}
-            <div className="lg:hidden relative w-full max-w-[200px] aspect-[3/5] mx-auto rounded-2xl overflow-hidden shadow-xl transform hover:scale-105 transition-transform duration-300">
-              <Image
-                src="/images/hero.png"
-                alt={t.altText.hero}
-                fill
-                loading="eager"
-                className="object-cover"
-                priority
-                sizes="200px"
-                quality={90}
-              />
-            </div>
-
             {/* Action Buttons with hover effects */}
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-2 sm:gap-3 pt-3 sm:pt-4">
+            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4 sm:pt-6">
               <button 
-                className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-white rounded-full text-[#2A5C3F] font-medium shadow-md 
+                className="flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-white rounded-full text-[#2A5C3F] font-medium shadow-md 
                           hover:shadow-lg transition-all duration-300 hover:bg-[#2A5C3F] hover:text-white 
                           focus:outline-none focus:ring-2 focus:ring-[#2A5C3F] focus:ring-offset-2
                           flex-grow sm:flex-grow-0 text-sm sm:text-base font-inter"
@@ -70,7 +77,7 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 </svg>
               </button>
               <button 
-                className="flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-[#2A5C3F] rounded-full text-white font-medium shadow-md 
+                className="flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-[#2A5C3F] rounded-full text-white font-medium shadow-md 
                           hover:shadow-lg transition-all duration-300 hover:bg-[#1E4630]
                           focus:outline-none focus:ring-2 focus:ring-[#2A5C3F] focus:ring-offset-2
                           flex-grow sm:flex-grow-0 text-sm sm:text-base font-inter"
@@ -83,69 +90,44 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 </svg>
               </button>
             </div>
+            
+            {/* Empty div for spacing */}
+            <div className="h-8 md:h-12 lg:hidden"></div>
           </div>
 
-          {/* Right Side Content */}
-          <div className="relative h-[240px] sm:h-[320px] md:h-[400px] lg:h-[520px] mt-3 lg:mt-0">
-            {/* Teacher Image - Desktop only */}
-            <div className="hidden lg:block absolute left-0 -bottom-6 w-[260px] h-[440px] rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-300 z-10">
-              <Image
-                src="/images/hero.png"
-                alt={t.altText.hero}
-                fill
-                loading="eager"
-                className="object-cover"
-                priority
-                sizes="260px"
-                quality={90}
-              />
-            </div>
-
-            {/* Right Side Hero Image */}
-            <div className="absolute inset-0 top-0 sm:top-6 right-0 scale-95 hover:scale-100 transition-transform duration-300">
-              <div className="relative w-[90%] h-[92%] ml-auto mr-0">
-                <Image
-                  src="/images/hero pictuture right handside.png"
-                  alt={t.altText.rightSide}
-                  fill
-                  loading="eager"
-                  className="object-contain object-right-bottom"
-                  priority
-                  sizes="(max-width: 640px) 90vw, (max-width: 768px) 85vw, (max-width: 1024px) 70vw, 42.5vw"
-                  quality={90}
-                />
-              </div>
-            </div>
-
-            {/* Rating Badge */}
-            <div 
-              className="absolute bottom-4 sm:bottom-6 right-2 sm:right-6 lg:right-10 bg-white/95 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl shadow-lg 
-                        flex items-center space-x-2 sm:space-x-3 transform hover:scale-105 transition-transform duration-300
-                        backdrop-blur-sm border border-[#ffffff80] font-inter z-20 max-w-[160px] sm:max-w-none"
-              role="complementary"
-              aria-label="Trustpilot rating"
-            >
-              <span className="text-xl sm:text-2xl font-bold text-[#b17f4a]">4.8</span>
-              <div className="flex flex-col">
-                <div className="flex gap-[2px]" role="img" aria-label="4.8 out of 5 stars">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg 
-                      key={star} 
-                      className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${star <= 4 ? 'text-[#FACC15]' : 'text-[#FACC15]/50'}`}
-                      fill="currentColor" 
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                  ))}
-                </div>
-                <div className="flex items-center mt-0.5">
-                  <span className="text-[11px] sm:text-sm text-gray-600">Trustpilot</span>
-                  <span className="text-[9px] sm:text-xs text-gray-500 ml-1 sm:ml-1.5">(120+)</span>
-                </div>
-              </div>
-            </div>
+          {/* Right Side Content - Empty to let background image show */}
+          <div className="relative hidden lg:block h-[500px]">
+            {/* This is intentionally empty to allow background image to show through */}
+          </div>
+        </div>
+      </div>
+      
+      {/* Rating Badge - Floating */}
+      <div 
+        className="absolute bottom-8 right-8 md:bottom-12 md:right-12 lg:bottom-16 lg:right-16 bg-white/90 px-4 sm:px-5 py-2.5 sm:py-3.5 rounded-xl shadow-xl 
+                  flex items-center space-x-3 transform hover:scale-110 transition-transform duration-300
+                  backdrop-blur-sm border border-[#ffffff80] font-inter z-30 animate-fade-in-up"
+        role="complementary"
+        aria-label="Trustpilot rating"
+      >
+        <span className="text-2xl sm:text-3xl font-bold text-[#b17f4a]">5.0</span>
+        <div className="flex flex-col">
+          <div className="flex gap-[2px]" role="img" aria-label="5 out of 5 stars">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <svg 
+                key={star} 
+                className="w-4 h-4 sm:w-5 sm:h-5 text-[#FACC15]"
+                fill="currentColor" 
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+            ))}
+          </div>
+          <div className="flex items-center mt-0.5">
+            <span className="text-xs sm:text-sm text-gray-600 font-medium">Trustpilot</span>
+            <span className="text-[10px] sm:text-xs text-gray-500 ml-1.5 sm:ml-2">(120+)</span>
           </div>
         </div>
       </div>
