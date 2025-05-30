@@ -224,7 +224,15 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
     loop: true,
     align: 'start',
     skipSnaps: false,
-    inViewThreshold: 0.7
+    inViewThreshold: 0.7,
+    dragFree: false,
+    containScroll: 'trimSnaps',
+    slidesToScroll: 3,
+    breakpoints: {
+      '(max-width: 768px)': { slidesToScroll: 1 },
+      '(min-width: 769px) and (max-width: 1023px)': { slidesToScroll: 2 },
+      '(min-width: 1024px)': { slidesToScroll: 3 }
+    }
   });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -282,7 +290,7 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex">
               {currentTestimonials.map((testimonial, index) => (
-                <div key={index} className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] px-3">
+                <div key={index} className="flex-[0_0_100%] md:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-3">
                   <TestimonialCard {...testimonial} />
                 </div>
               ))}

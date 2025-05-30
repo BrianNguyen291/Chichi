@@ -239,16 +239,20 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
+  // Calculate the number of slides needed based on 3 teachers per slide
+  const teachersPerSlide = 3;
+  const totalSlides = Math.ceil(t.teachers.length / teachersPerSlide);
+
   // Auto slide functionality
   useEffect(() => {
     if (isPaused) return;
     
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % t.teachers.length);
+      setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-  }, [isPaused, t.teachers.length]);
+  }, [isPaused, totalSlides]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
@@ -271,7 +275,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
 
         {/* Carousel Container */}
         <div 
-          className="relative w-full max-w-md mx-auto overflow-hidden"
+          className="relative w-full max-w-4xl mx-auto overflow-hidden"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -280,41 +284,47 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
-            {t.teachers.map((teacher, index) => (
+            {Array.from({ length: totalSlides }).map((_, slideIndex) => (
               <div 
-                key={index}
-                className="w-full flex-shrink-0 px-2"
+                key={slideIndex}
+                className="w-full flex-shrink-0 px-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
               >
-                <div className="bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
-                  <div className="relative h-80 w-full">
-                    <Image
-                      src={teacher.image}
-                      alt={teacher.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-gray-800 mb-1">{teacher.name}</h3>
-                    <p className="text-[#b17f4a] text-sm font-medium mb-2">{teacher.experience}</p>
-                    <ul className="space-y-1">
-                      {teacher.credentials.map((credential, i) => (
-                        <li key={i} className="flex items-start">
-                          <span className="text-[#b17f4a] text-xs mr-1">•</span>
-                          <span className="text-gray-600 text-xs">{credential}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                {t.teachers
+                  .slice(slideIndex * teachersPerSlide, (slideIndex + 1) * teachersPerSlide)
+                  .map((teacher, teacherIndex) => (
+                    <div key={`${slideIndex}-${teacherIndex}`} className="w-full">
+                      <div className="bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
+                        <div className="relative h-80 w-full">
+                          <Image
+                            src={teacher.image}
+                            alt={teacher.name}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                        </div>
+                        <div className="p-4">
+                          <h3 className="text-lg font-bold text-gray-800 mb-1">{teacher.name}</h3>
+                          <p className="text-[#b17f4a] text-sm font-medium mb-2">{teacher.experience}</p>
+                          <ul className="space-y-1">
+                            {teacher.credentials.map((credential, i) => (
+                              <li key={i} className="flex items-start">
+                                <span className="text-[#b17f4a] text-xs mr-1">•</span>
+                                <span className="text-gray-600 text-xs">{credential}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
               </div>
             ))}
           </div>
 
           {/* Navigation Dots */}
-          <div className="flex justify-center mt-4 space-x-1.5">
-            {t.teachers.map((_, index) => (
+          <div className="flex justify-center mt-6 space-x-2">
+            {Array.from({ length: totalSlides }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
