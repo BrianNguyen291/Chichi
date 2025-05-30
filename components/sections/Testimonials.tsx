@@ -1,3 +1,7 @@
+'use client';
+
+import { useCallback, useEffect, useState } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { TestimonialCard, TestimonialProps } from '../ui/testimonial-card';
 import { useTranslations, Locale } from '@/lib/i18n';
 
@@ -208,27 +212,112 @@ const testimonials: Record<Locale, TestimonialProps[]> = {
 };
 
 export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
-  const { t } = useTranslations(locale);
+  const { t, translate } = useTranslations(locale);
   const currentTestimonials = testimonials[locale] || testimonials['en'];
+  
+  // Get translations for the testimonials section
+  const testimonialsTitle = translate('title', 'testimonials');
+  const testimonialsSubtitle = translate('subtitle', 'testimonials');
+  const ctaText = translate('cta.text', 'testimonials');
+  const ctaButton = translate('cta.button', 'testimonials');
+  const [emblaRef, emblaApi] = useEmblaCarousel({ 
+    loop: true,
+    align: 'start',
+    skipSnaps: false,
+    inViewThreshold: 0.7
+  });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const scrollTo = useCallback((index: number) => {
+    if (emblaApi) emblaApi.scrollTo(index);
+  }, [emblaApi]);
+
+  // Auto-scroll functionality
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const autoScroll = setInterval(() => {
+      const nextIndex = (selectedIndex + 1) % currentTestimonials.length;
+      scrollTo(nextIndex);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(autoScroll);
+  }, [emblaApi, selectedIndex, currentTestimonials.length, scrollTo]);
+
+  // Update selected index
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    emblaApi.on('select', () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    });
+    
+    return () => {
+      emblaApi.off('select');
+    };
+  }, [emblaApi]);
 
   return (
-    <section className="py-16 bg-[#f9f5f0]">
+    <section className="py-16 bg-[#f9f5f0] overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#b17f4a]">
-            {t.testimonials.title}
+            {testimonialsTitle}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            {t.testimonials.subtitle}
+            {testimonialsSubtitle}
           </p>
         </div>
 
-        {/* Testimonials grid - updated to a more responsive grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {currentTestimonials.map((testimonial, index) => (
-            <TestimonialCard
+        {/* Carousel container */}
+        <div className="relative">
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {currentTestimonials.map((testimonial, index) => (
+                <div key={index} className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] xl:flex-[0_0_25%] px-3">
+                  <TestimonialCard {...testimonial} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Navigation buttons */}
+          <button 
+            onClick={scrollPrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -ml-2 p-2 rounded-full bg-white/80 text-[#2A5C3F] shadow-md hover:bg-white transition-colors z-10"
+            aria-label="Previous testimonial"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </button>
+          <button 
+            onClick={scrollNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 -mr-2 p-2 rounded-full bg-white/80 text-[#2A5C3F] shadow-md hover:bg-white transition-colors z-10"
+            aria-label="Next testimonial"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Dots indicator */}
+        <div className="flex justify-center mt-6 space-x-2">
+          {currentTestimonials.map((_, index) => (
+            <button
               key={index}
-              {...testimonial}
+              onClick={() => scrollTo(index)}
+              className={`w-3 h-3 rounded-full transition-all ${index === selectedIndex ? 'bg-[#2A5C3F] w-8' : 'bg-gray-300'}`}
+              aria-label={`Go to testimonial ${index + 1}`}
             />
           ))}
         </div>
@@ -236,10 +325,10 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
         {/* Call to action */}
         <div className="text-center mt-12">
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {t.testimonials.cta.text}
+            {ctaText}
           </p>
           <button className="bg-[#2A5C3F] text-white px-8 py-3 rounded-full hover:bg-[#1E4630] transition-colors">
-            {t.testimonials.cta.button}
+            {ctaButton}
           </button>
         </div>
       </div>

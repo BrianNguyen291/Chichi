@@ -1,5 +1,8 @@
-import Image from 'next/image'
-import { colors } from '@/lib/colors'
+"use client";
+
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { colors } from '@/lib/colors';
 
 interface TeacherTeamProps {
   locale: string;
@@ -8,6 +11,10 @@ interface TeacherTeamProps {
 const translations = {
   en: {
     title: 'Elite Teaching Team',
+    cta: {
+      text: 'Learn from the best Vietnamese language experts',
+      button: 'Join Our Classes'
+    },
     description: [
       'At Chi Chi Vietnamese, we are proud to have a team of professional teachers who are fluent in Chinese and have many years of teaching experience at prestigious universities and language training centers.',
       'They understand the learning needs of students of all ages and have diverse teaching methods.',
@@ -78,6 +85,10 @@ const translations = {
   },
   'zh-Hant': {
     title: '菁英教師團隊',
+    cta: {
+      text: '向最優秀的越南語專家學習',
+      button: '立即報名'
+    },
     description: [
       '在芝芝越語，我們很自豪地擁有一支由資深教育專家組成的教師團隊，他們精通中文，並曾在多所知名大學和語言培訓機構任教多年。',
       '他們深深不同年齡層和不同背景學生的學習需求，能夠提供豐富多彩的教學方案。',
@@ -148,6 +159,10 @@ const translations = {
   },
   'zh-Hans': {
     title: '精英教师团队',
+    cta: {
+      text: '向最优秀的越南语专家学习',
+      button: '立即报名'
+    },
     description: [
       '在芝芝越语，我们很自豪地拥有一支由资深教育专家组成的教师团队，他们精通中文，并曾在多所知名大学和语言培训机构任教多年。',
       '他们深深不同年龄层和不同背景学生的学习需求，能够提供丰富多彩的教学方案。',
@@ -221,78 +236,108 @@ const translations = {
 export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto slide functionality
+  useEffect(() => {
+    if (isPaused) return;
+    
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % t.teachers.length);
+    }, 5000); // Change slide every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, t.teachers.length]);
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
   return (
-    <section className="py-16 md:py-24 bg-[#f9f5f0]">
-      <div className="container mx-auto px-4 md:px-8">
+    <section className="py-12 md:py-16 bg-[#f9f5f0] overflow-hidden">
+      <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#b17f4a] mb-6 
-            leading-tight tracking-wide">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#b17f4a] mb-4 leading-tight">
             {t.title}
           </h2>
-          <div className="space-y-4 text-gray-700 md:text-lg leading-relaxed">
-            {t.description.map((paragraph, index) => (
-              <p key={index} className="text-justify">{paragraph}</p>
+          <div className="space-y-3 text-gray-700 text-sm md:text-base leading-relaxed">
+            {t.description.map((paragraph, i) => (
+              <p key={i} className="text-sm">{paragraph}</p>
             ))}
           </div>
         </div>
 
-        {/* Teacher Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {t.teachers.map((teacher, index) => (
-            <div key={index} className="bg-white rounded-2xl overflow-hidden shadow-lg 
-              transition-all hover:shadow-xl transform hover:-translate-y-1 duration-300">
-              {/* Teacher Image */}
-              <div className="relative h-[280px] overflow-hidden border-b-4 border-[#f5e6d3]">
-                <Image
-                  src={teacher.image}
-                  alt={teacher.name}
-                  fill
-                  className="object-cover object-center"
-                />
+        {/* Carousel Container */}
+        <div 
+          className="relative w-full max-w-md mx-auto overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Slides */}
+          <div 
+            className="flex transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+          >
+            {t.teachers.map((teacher, index) => (
+              <div 
+                key={index}
+                className="w-full flex-shrink-0 px-2"
+              >
+                <div className="bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
+                  <div className="relative h-80 w-full">
+                    <Image
+                      src={teacher.image}
+                      alt={teacher.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-gray-800 mb-1">{teacher.name}</h3>
+                    <p className="text-[#b17f4a] text-sm font-medium mb-2">{teacher.experience}</p>
+                    <ul className="space-y-1">
+                      {teacher.credentials.map((credential, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className="text-[#b17f4a] text-xs mr-1">•</span>
+                          <span className="text-gray-600 text-xs">{credential}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               </div>
-              
-              {/* Teacher Info */}
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-[#b17f4a] mb-1">
-                  {teacher.name}
-                </h3>
-                <p className="text-gray-600 mb-4 italic">
-                  {teacher.experience}
-                </p>
-                
-                {/* Credentials */}
-                <ul className="space-y-2">
-                  {teacher.credentials.map((credential, idx) => (
-                    <li key={idx} className="flex items-start space-x-3 group">
-                      <span className="w-2.5 h-2.5 bg-[#b17f4a] rounded-full mt-1.5 
-                        flex-shrink-0 transition-transform group-hover:scale-125" />
-                      <span className="text-gray-700 text-sm">
-                        {credential}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Navigation Dots */}
+          <div className="flex justify-center mt-4 space-x-1.5">
+            {t.teachers.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all ${currentSlide === index ? 'bg-[#b17f4a] w-6' : 'bg-gray-300'}`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Decorative elements */}
-        <div className="relative mt-20 pt-16 border-t border-[#e6d5c3]">
-          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 
-            w-20 h-20 bg-[#f5e6d3] rounded-full flex items-center justify-center">
-            <div className="w-16 h-16 bg-[#b17f4a] bg-opacity-20 rounded-full flex items-center justify-center">
-              <div className="w-10 h-10 bg-[#b17f4a] bg-opacity-40 rounded-full"></div>
+        {/* CTA Section */}
+        <div className="mt-12 text-center">
+          <div className="inline-flex items-center justify-center mb-4">
+            <div className="w-12 h-12 bg-[#b17f4a] bg-opacity-20 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#b17f4a] bg-opacity-40 rounded-full"></div>
             </div>
           </div>
           
-          <p className="text-center text-lg text-[#b17f4a] font-medium">
-            {locale === 'en' ? 'Learn from the best Vietnamese language experts' : 
-              locale === 'zh-Hans' ? '向最优秀的越南语专家学习' : '向最優秀的越南語專家學習'}
+          <p className="text-center text-base text-[#b17f4a] font-medium">
+            {t.cta.text}
           </p>
         </div>
       </div>
     </section>
   )
-} 
+}
