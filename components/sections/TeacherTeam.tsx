@@ -325,18 +325,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
           </div>
         </div>
 
-        {/* CTA Section */}
-        <div className="mt-12 text-center">
-          <div className="inline-flex items-center justify-center mb-4">
-            <div className="w-12 h-12 bg-[#b17f4a] bg-opacity-20 rounded-full flex items-center justify-center">
-              <div className="w-8 h-8 bg-[#b17f4a] bg-opacity-40 rounded-full"></div>
-            </div>
-          </div>
-          
-          <p className="text-center text-base text-[#b17f4a] font-medium">
-            {t.cta.text}
-          </p>
-        </div>
+
       </div>
     </section>
   )

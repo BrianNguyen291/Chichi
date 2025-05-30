@@ -19,7 +19,7 @@ export function TestimonialCard({
   language,
 }: TestimonialProps) {
   return (
-    <div className="relative flex flex-col p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-full">
+    <div className="relative flex flex-col p-6 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 h-[400px] overflow-hidden">
       {/* Quote mark decoration */}
       <div className="absolute -top-4 right-4 text-6xl text-[#b17f4a]/20">"</div>
       
@@ -53,8 +53,8 @@ export function TestimonialCard({
       </div>
 
       {/* Content */}
-      <div className="flex-grow">
-        <blockquote className="text-gray-700 italic text-sm leading-relaxed line-clamp-6 hover:line-clamp-none transition-all duration-300">
+      <div className="flex-grow overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-[#b17f4a]/30 scrollbar-track-transparent hover:scrollbar-thumb-[#b17f4a]/50">
+        <blockquote className="text-gray-700 italic text-sm leading-relaxed">
           {content}
         </blockquote>
       </div>

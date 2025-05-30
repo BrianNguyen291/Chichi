@@ -63,7 +63,7 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
             </div>
 
             {/* Action Buttons with hover effects */}
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4 sm:pt-6">
+            <div className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4 sm:pt-6">
               <button 
                 className="flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-white rounded-full text-[#2A5C3F] font-medium shadow-md 
                           hover:shadow-lg transition-all duration-300 hover:bg-[#2A5C3F] hover:text-white 
