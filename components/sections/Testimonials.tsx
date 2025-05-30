@@ -322,15 +322,7 @@ export function TestimonialsSection({ locale }: TestimonialsSectionProps) {
           ))}
         </div>
 
-        {/* Call to action */}
-        <div className="text-center mt-12">
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {ctaText}
-          </p>
-          <button className="bg-[#2A5C3F] text-white px-8 py-3 rounded-full hover:bg-[#1E4630] transition-colors">
-            {ctaButton}
-          </button>
-        </div>
+
       </div>
     </section>
   );
