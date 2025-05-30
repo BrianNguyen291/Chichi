@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
-import { Home, Menu, X, ChevronRight, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone, Languages } from 'lucide-react'
+import { Home, Menu, X, ChevronRight, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone, Languages, Globe } from 'lucide-react'
 import { LanguageSwitcher } from './language-switcher'
 import { getCategories, organizeCategories, TranslatedCategory } from "@/lib/wordpress-api"
 
@@ -455,13 +455,11 @@ export function MobileNav({ locale }: MobileNavProps) {
                 {translate('menu', 'common')}
               </span>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm">
-                <div className="relative z-50">
-                  <LanguageSwitcher locale={locale} />
-                </div>
+            <div className="flex items-center space-x-2">
+              <div className="relative z-50">
+                <LanguageSwitcher locale={locale} />
               </div>
-<button
+              <button
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -473,6 +471,37 @@ export function MobileNav({ locale }: MobileNavProps) {
               >
                 <X className="h-6 w-6" />
               </button>
+            </div>
+          </div>
+
+          {/* Language Selector Section */}
+          <div className="border-b p-4" style={{ borderColor: colors.secondary }}>
+            <div className="flex items-center space-x-2 text-sm font-medium" style={{ color: colors.darkOlive }}>
+              <Globe className="h-5 w-5" />
+              <span>{translate('language', 'common') || 'Language'}</span>
+            </div>
+            <div className="mt-2 flex space-x-2">
+              {Object.entries({
+                'en': 'English',
+                'zh-Hant': '繁體中文',
+                'zh-Hans': '简体中文'
+              }).map(([key, label]) => (
+                <Link
+                  key={key}
+                  href={`/${key}${pathname.replace(/^\/[a-z]{2}(-[A-Za-z]{2,4})?/, '') || '/'}`}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                    key === locale 
+                      ? 'bg-[#b17f4a] text-white' 
+                      : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
+                  }`}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    document.dispatchEvent(new Event('menu-close'));
+                  }}
+                >
+                  {key.toUpperCase()}
+                </Link>
+              ))}
             </div>
           </div>
 
