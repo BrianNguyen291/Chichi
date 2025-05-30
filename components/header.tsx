@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
+import { LanguageSwitcher } from '@/components/language-switcher'
 import { MobileNav } from '@/components/mobile-nav'
 import { WordPressNav } from '@/components/wordpress-nav'
 import { colors } from '@/lib/colors'
@@ -49,7 +49,9 @@ export function Header({ locale }: HeaderProps) {
           </div>
 
           <div className="flex items-center space-x-2 md:space-x-4">
-            <LanguageSwitcher locale={locale} />
+            <div className="hidden md:block">
+              <LanguageSwitcher locale={locale} />
+            </div>
             <MobileNav locale={locale} />
           </div>
         </div>

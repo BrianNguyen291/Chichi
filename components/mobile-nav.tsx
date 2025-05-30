@@ -6,7 +6,8 @@ import { usePathname } from 'next/navigation'
 import { colors } from '@/lib/colors'
 import { useTranslations } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n'
-import { Home, Menu, X, ChevronRight, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone } from 'lucide-react'
+import { Home, Menu, X, ChevronRight, BookOpen, Library, GraduationCap, Activity, Newspaper, Phone, Languages } from 'lucide-react'
+import { LanguageSwitcher } from './language-switcher'
 import { getCategories, organizeCategories, TranslatedCategory } from "@/lib/wordpress-api"
 
 interface NavMenuItem {
@@ -349,6 +350,8 @@ export function MobileNav({ locale }: MobileNavProps) {
                   ))}
                 </div>
               )}
+              
+              {/* Language selector has been moved to the header */}
             </div>
           );
         })}
@@ -377,6 +380,38 @@ export function MobileNav({ locale }: MobileNavProps) {
           </Link>
         );
       })}
+    </div>
+  ), [mainNavItems, safePath, translate, colors.primary, colors.darkOlive, isMenuOpen, toggleMenu]);
+
+  if (isLoading) {
+    return (
+      <>
+        {/* Menu Button at Top Right */}
+        <button
+          type="button"
+          className="fixed top-4 right-4 z-50 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-colors md:hidden"
+          style={{ color: colors.darkOlive }}
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+        
+        {/* Bottom Navigation */}
+        <nav 
+          className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
+          style={{ 
+            backgroundColor: colors.lightCream,
+            borderColor: colors.secondary 
+          }}
+        >
+          {bottomNav}
+        </nav>
+      </>
+    );
+  }
+
+  return (
+    <div className="md:hidden">
+      {/* Menu Button at Top Right */}
       <button
         type="button"
         onClick={(e) => {
@@ -384,37 +419,16 @@ export function MobileNav({ locale }: MobileNavProps) {
           e.stopPropagation();
           toggleMenu(!isMenuOpen);
         }}
-        className="flex flex-col items-center justify-center space-y-1 w-full"
+        className="fixed top-4 right-4 z-50 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-colors"
         style={{ color: colors.darkOlive }}
       >
         {isMenuOpen ? (
-          <X className="h-5 w-5" />
+          <X className="h-6 w-6" />
         ) : (
-          <Menu className="h-5 w-5" />
+          <Menu className="h-6 w-6" />
         )}
-        <span className="text-xs">
-          {isMenuOpen ? translate('close', 'common') : translate('menu', 'common')}
-        </span>
       </button>
-    </div>
-  ), [mainNavItems, safePath, translate, colors.primary, colors.darkOlive, isMenuOpen, toggleMenu]);
 
-  if (isLoading) {
-    return (
-      <nav 
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
-        style={{ 
-          backgroundColor: colors.lightCream,
-          borderColor: colors.secondary 
-        }}
-      >
-        {bottomNav}
-      </nav>
-    );
-  }
-
-  return (
-    <div className="md:hidden">
       {/* Overlay when menu is open */}
       {isMenuOpen && (
         <div 
@@ -435,21 +449,29 @@ export function MobileNav({ locale }: MobileNavProps) {
           {/* Header */}
           <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b bg-white z-10"
                style={{ borderColor: colors.secondary }}>
-            <span className="text-lg font-medium" style={{ color: colors.darkOlive }}>
-              {translate('menu', 'common')}
-            </span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleMenu(false);
-              }}
-              className="p-2 rounded-full hover:bg-gray-100"
-              style={{ color: colors.darkOlive }}
-            >
-              <X className="h-6 w-6" />
-            </button>
+            <div className="flex-1">
+              <span className="text-lg font-medium" style={{ color: colors.darkOlive }}>
+                {translate('menu', 'common')}
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 text-sm">
+                <Languages className="h-4 w-4" />
+                <LanguageSwitcher locale={locale} />
+              </div>
+<button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleMenu(false);
+                }}
+                className="p-2 rounded-full hover:bg-gray-100"
+                style={{ color: colors.darkOlive }}
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
           </div>
 
           {/* Menu Content */}
