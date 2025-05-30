@@ -328,37 +328,6 @@ export default function CoursesPage({ params: { locale } }: CoursePageProps) {
 
   return (
     <div className="bg-white">
-      {/* Hero Section - Improved with pattern overlay, animations and better spacing */}
-      <section className="relative bg-gradient-to-r from-primary-700 to-primary-900 text-white py-24 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{ backgroundImage: 'url("/images/pattern-bg.png")', backgroundSize: '400px', backgroundRepeat: 'repeat' }}></div>
-        </div>
-        <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-primary-500 rounded-full opacity-20 blur-3xl"></div>
-        <div className="absolute -top-16 -right-16 w-64 h-64 bg-primary-400 rounded-full opacity-20 blur-3xl"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in-up">
-              {t.title}
-            </h1>
-            <p className="text-xl md:text-2xl mb-10 animate-fade-in-up animation-delay-200 text-primary-50">
-              {t.subtitle}
-            </p>
-            <div className="flex justify-center space-x-4 animate-fade-in-up animation-delay-300">
-              <Button asChild size="lg" className="bg-white text-primary-700 hover:bg-primary-50 hover:text-primary-800 transition-all duration-300">
-                <Link href={`#courses`}>
-                  View Courses
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary-700 transition-all duration-300">
-                <Link href={`/${locale}/contact`}>
-                  Contact Us
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Courses Grid - Improved with section heading, filters and animations */}
       <Section id="courses" className="py-20 bg-gray-50">

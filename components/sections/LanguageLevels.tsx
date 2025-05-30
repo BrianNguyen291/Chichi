@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { Card } from '../ui/card'
 import { colors } from '@/lib/colors'
 
@@ -149,15 +150,17 @@ export const LanguageLevels = ({ locale }: LanguageLevelsProps) => {
                 >
                   {level.description}
                 </p>
-                <button
-                  className="w-full py-2 px-4 rounded-lg mt-4 transition-colors hover:opacity-90"
-                  style={{ 
-                    backgroundColor: colors.secondary,
-                    color: colors.lightCream
-                  }}
-                >
-                  {level.buttonText}
-                </button>
+                <Link href={`/${locale}/courses`} className="block">
+                  <button
+                    className="w-full py-2 px-4 rounded-lg mt-4 transition-colors hover:opacity-90"
+                    style={{ 
+                      backgroundColor: colors.secondary,
+                      color: colors.lightCream
+                    }}
+                  >
+                    {level.buttonText}
+                  </button>
+                </Link>
               </div>
             </Card>
           ))}
