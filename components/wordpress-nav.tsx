@@ -8,7 +8,7 @@ import type { Locale } from '@/lib/i18n'
 import { useTranslations } from '@/lib/i18n'
 import { colors } from '@/lib/colors'
 import { ChevronDown } from 'lucide-react'
-
+import React from 'react'
 interface WordPressNavProps {
   locale: Locale
 }
@@ -37,6 +37,10 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     course: {
       label: translate('courses', 'common') || 'Courses',
       href: '/courses'
+    },
+    examInfo: {
+      label: (translate('vietnameseExam', 'common') || 'Vietnamese Exam') + ' ',
+      href: '/exam-info'
     },
     contact: { 
       label: translate('contact', 'common'), 
@@ -78,7 +82,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
 
   if (loading) {
     return (
-      <nav className="flex items-center space-x-6 font-medium">
+      <nav className="flex items-center space-x-8 font-medium">
         <div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
         <div className="h-8 w-20 bg-gray-200 animate-pulse rounded"></div>
       </nav>
@@ -87,7 +91,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
 
   if (error) {
     return (
-      <nav className="flex items-center space-x-6 font-medium">
+      <nav className="flex items-center space-x-8 font-medium">
         <div className="text-red-500">Failed to load navigation</div>
       </nav>
     )
@@ -110,7 +114,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     })
 
   return (
-    <nav className="flex items-center space-x-6 font-medium">
+    <nav className="flex items-center space-x-8 font-medium">
       {/* About Us link */}
       <Link
         href={`/${locale}${staticItems.about.href}`}
@@ -135,55 +139,70 @@ export function WordPressNav({ locale }: WordPressNavProps) {
       <Link
         href={`/${locale}${staticItems.course.href}`}
         className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-        style={{ color: colors.darkOlive }}
+        style={{ color: colors.darkOlive, marginRight: '2rem' }}
       >
         {staticItems.course.label}
-        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
       </Link>
 
       {/* WordPress Categories - Now in the correct order */}
-      {filteredMainCategories.map((category) => (
-        <div 
-          key={category.id}
-          className="relative"
-          onMouseEnter={() => setActiveCategory(category.id)}
-          onMouseLeave={() => setActiveCategory(null)}
-        >
-          <Link
-            href={`/${locale}/category/${category.slug}`}
-            className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
-            style={{ color: colors.darkOlive }}
-          >
-            {category.translatedName || category.name}
-            {categories.subCategories[category.id]?.length > 0 && (
-              <ChevronDown
-                className={`ml-1 h-4 w-4 transition-transform ${
-                  activeCategory === category.id ? "rotate-180" : ""
-                }`}
-              />
-            )}
-            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-          </Link>
-
-          {categories.subCategories[category.id]?.length > 0 && activeCategory === category.id && (
-            <div
-              className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
-              style={{ borderColor: colors.secondary }}
+      {filteredMainCategories
+        .filter(cat => cat.slug !== 'vietnamese-tests')
+        .map((category) => (
+          <span key={category.id} className="contents">
+            <div 
+              className="relative"
+              onMouseEnter={() => setActiveCategory(category.id)}
+              onMouseLeave={() => setActiveCategory(null)}
             >
-              {categories.subCategories[category.id].map((subCategory) => (
-                <Link
-                  key={subCategory.id}
-                  href={`/${locale}/category/${subCategory.slug}`}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
-                  style={{ color: colors.darkOlive }}
+              <Link
+                href={`/${locale}/category/${category.slug}`}
+                className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
+                style={{ color: colors.darkOlive }}
+              >
+                {category.translatedName || category.name}
+                {categories.subCategories[category.id]?.length > 0 && (
+                  <ChevronDown
+                    className={`ml-1 h-4 w-4 transition-transform ${
+                      activeCategory === category.id ? "rotate-180" : ""
+                    }`}
+                  />
+                )}
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+              </Link>
+
+              {categories.subCategories[category.id]?.length > 0 && activeCategory === category.id && (
+                <div
+                  className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
+                  style={{ borderColor: colors.secondary }}
                 >
-                  {subCategory.translatedName || subCategory.name}
-                </Link>
-              ))}
+                  {categories.subCategories[category.id].map((subCategory) => (
+                    <Link
+                      key={subCategory.id}
+                      href={`/${locale}/category/${subCategory.slug}`}
+                      className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                      style={{ color: colors.darkOlive }}
+                    >
+                      {subCategory.translatedName || subCategory.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      ))}
+            
+            {/* Exam Info Link - Placed after Library */}
+            {category.slug === 'library' && (
+              <Link
+                href={`/${locale}${staticItems.examInfo.href}`}
+                className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+                style={{ color: colors.darkOlive, marginRight: '2rem' }}
+              >
+                {staticItems.examInfo.label}
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+              </Link>
+            )}
+          </span>
+        ))}
 
       {/* Contact link */}
       <Link
