@@ -434,18 +434,19 @@ export function MobileNav({ locale }: MobileNavProps) {
         <div 
           className="fixed inset-0 bg-black/50 z-40"
           onClick={() => toggleMenu(false)}
+          style={{ pointerEvents: 'auto' }}
         />
       )}
 
       {/* Menu Panel */}
       <div 
         data-menu-content
-        className={`fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 bottom-0 z-50 transform transition-transform duration-300 ease-in-out ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        style={{ maxHeight: '100vh', overflowY: 'hidden' }}
+        style={{ width: '100%', maxWidth: '400px', height: '80vh', overflowY: 'auto' }}
       >
-        <div className="absolute inset-0 bg-white flex flex-col">
+        <div className="h-full bg-white flex flex-col shadow-lg">
           {/* Header */}
           <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b bg-white z-10"
                style={{ borderColor: colors.secondary }}>
