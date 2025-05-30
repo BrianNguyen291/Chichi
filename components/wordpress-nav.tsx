@@ -32,7 +32,11 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     },
     teacherTeam: {
       label: translate('teacherTeam', 'common') || 'Teacher Team',
-      href: '/teacher-team'
+      href: '/#teacher-team'
+    },
+    course: {
+      label: translate('courses', 'common') || 'Courses',
+      href: '/courses'
     },
     contact: { 
       label: translate('contact', 'common'), 
@@ -124,6 +128,16 @@ export function WordPressNav({ locale }: WordPressNavProps) {
         style={{ color: colors.darkOlive }}
       >
         {staticItems.teacherTeam.label}
+        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+      </Link>
+
+      {/* Course link */}
+      <Link
+        href={`/${locale}${staticItems.course.href}`}
+        className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+        style={{ color: colors.darkOlive }}
+      >
+        {staticItems.course.label}
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
       </Link>
 

@@ -51,7 +51,7 @@ export function MobileNav({ locale }: MobileNavProps) {
       icon: Home 
     },
     {
-      href: '/teacher-team',
+      href: '/#teacher-team',
       label: translate('teacherTeam', 'common') || 'Teacher Team',
       icon: GraduationCap
     },
@@ -171,7 +171,7 @@ export function MobileNav({ locale }: MobileNavProps) {
         setMainNavItems([
           { href: `/${locale}`, label: translate('home', 'common'), icon: Home },
           { href: `/${locale}/about`, label: translate('about', 'common'), icon: Home },
-          { href: `/${locale}/teacher-team`, label: translate('teacherTeam', 'common') || 'Teacher Team', icon: GraduationCap },
+          { href: `/${locale}/#teacher-team`, label: translate('teacherTeam', 'common') || 'Teacher Team', icon: GraduationCap },
           { href: `/${locale}/contact`, label: translate('contact', 'common'), icon: Phone },
         ]);
 

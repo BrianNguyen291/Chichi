@@ -259,7 +259,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
   };
 
   return (
-    <section className="py-12 md:py-16 bg-[#f9f5f0] overflow-hidden">
+    <section id="teacher-team" className="py-12 md:py-16 bg-[#f9f5f0] overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
