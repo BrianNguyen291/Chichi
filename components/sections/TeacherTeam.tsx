@@ -293,8 +293,9 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
                   .slice(slideIndex * teachersPerSlide, (slideIndex + 1) * teachersPerSlide)
                   .map((teacher, teacherIndex) => (
                     <div key={`${slideIndex}-${teacherIndex}`} className="w-full">
-                      <div className="bg-white rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full">
+                      <div className="bg-white rounded-lg overflow-hidden shadow-md h-full">
                         <div className="relative h-80 w-full">
+                          <div className="absolute inset-0 bg-black bg-opacity-10 z-10"></div>
                           <Image
                             src={teacher.image}
                             alt={teacher.name}
