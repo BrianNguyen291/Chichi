@@ -457,8 +457,9 @@ export function MobileNav({ locale }: MobileNavProps) {
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-sm">
-                <Languages className="h-4 w-4" />
-                <LanguageSwitcher locale={locale} />
+                <div className="relative z-50">
+                  <LanguageSwitcher locale={locale} />
+                </div>
               </div>
 <button
                 type="button"

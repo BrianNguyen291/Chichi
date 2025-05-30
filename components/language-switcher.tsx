@@ -35,7 +35,12 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   // Remove the current locale from the pathname
   const pathnameWithoutLocale = React.useMemo(() => {
     if (!pathname) return '/'
-    return pathname.replace(`/${locale}`, '') || '/'
+    // Split by '/' and remove the first segment if it matches the current locale
+    const segments = pathname.split('/')
+    if (segments[1] === locale) {
+      return '/' + segments.slice(2).join('/') || '/'
+    }
+    return pathname
   }, [pathname, locale])
 
   if (!mounted) {
@@ -49,23 +54,26 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
-          {locales[locale as keyof typeof locales]}
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <Button variant="ghost" size="sm" className="gap-1 px-2 h-8 text-sm">
+          <span className="hidden sm:inline">{locales[locale as keyof typeof locales]}</span>
+          <span className="sm:hidden">{locale.toUpperCase()}</span>
+          <svg className="w-3.5 h-3.5 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="min-w-[120px]">
         {Object.entries(locales).map(([key, label]) => (
-          <DropdownMenuItem key={key} asChild>
+          <DropdownMenuItem key={key} asChild className="px-3 py-2 text-sm">
             <Link
               href={`/${key}${pathnameWithoutLocale}`}
-              className={`w-full ${
+              className={`w-full flex items-center ${
                 key === locale ? 'font-medium' : 'font-normal'
               }`}
+              onClick={() => document.dispatchEvent(new Event('menu-close'))}
             >
-              {label}
+              <span className="hidden sm:inline">{label}</span>
+              <span className="sm:hidden">{key.toUpperCase()}</span>
             </Link>
           </DropdownMenuItem>
         ))}
