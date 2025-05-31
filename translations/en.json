@@ -43,6 +43,14 @@
     "learn_more": "Learn More",
     "enroll": "Enroll Now"
   },
+  "courseLevels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "certification": "Certification Class",
+    "corporate": "Corporate Class",
+    "private": "Private Class"
+  },
   "blog": {
     "featured": "Featured Posts",
     "latest": "Latest Posts",

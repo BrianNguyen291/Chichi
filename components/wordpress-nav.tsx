@@ -160,14 +160,14 @@ export function WordPressNav({ locale }: WordPressNavProps) {
             className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[160px] z-50"
             style={{ borderColor: colors.secondary }}
           >
-            {['初級', '中級', '高級', '考證班', '企業班', '個人班'].map((level) => (
+            {['beginner', 'intermediate', 'advanced', 'certification', 'corporate', 'private'].map((levelKey) => (
               <Link
-                key={level}
-                href={`/${locale}${staticItems.course.href}?level=${encodeURIComponent(level)}`}
+                key={levelKey}
+                href={`/${locale}${staticItems.course.href}?level=${encodeURIComponent(levelKey)}`}
                 className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors whitespace-nowrap"
                 style={{ color: colors.darkOlive }}
               >
-                {level}
+                {translate(levelKey, 'courseLevels')}
               </Link>
             ))}
           </div>

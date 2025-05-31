@@ -43,6 +43,14 @@
     "learn_more": "了解更多",
     "enroll": "立即報名"
   },
+  "courseLevels": {
+    "beginner": "初級",
+    "intermediate": "中級",
+    "advanced": "高級",
+    "certification": "考證班",
+    "corporate": "企業班",
+    "private": "個人班"
+  },
   "blog": {
     "featured": "精選文章",
     "latest": "最新文章",
