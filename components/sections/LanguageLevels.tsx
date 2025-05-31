@@ -78,6 +78,12 @@ const translations = {
     title: '课程等级',
     levels: [
       {
+        title: '零基础',
+        description: '开始您的越南语学习之旅',
+        image: '/images/language_level/A0.jpg',
+        buttonText: '了解更多'
+      },
+      {
         level: 'A1-A2',
         title: '初级',
         description: '开始您的越南语学习之旅',
