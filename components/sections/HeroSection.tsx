@@ -54,10 +54,10 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
         <div className="absolute top-1/4 right-1/3 w-24 h-24 md:w-56 md:h-56 rounded-full bg-[#b17f4a]/5 blur-xl z-0"></div>
       </div>
 
-      <div className="container relative mx-auto px-4 py-8 md:py-12 lg:py-16 z-20">
-        <div className="grid grid-cols-1 lg:grid-cols-[3fr_9fr] gap-8 items-center">
+      <div className="container relative mx-auto px-4 pt-16 pb-8 sm:pt-20 md:pt-24 md:pb-12 lg:py-16 z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-[3fr_9fr] gap-8 items-center mt-8 sm:mt-12 md:mt-0">
           {/* Left Side Content */}
-          <div className="space-y-4 md:space-y-6 max-w-xl lg:max-w-lg mx-auto lg:mx-0 lg:pr-4 text-center lg:text-left">
+          <div className="space-y-6 md:space-y-8 max-w-xl lg:max-w-lg mx-auto lg:mx-0 lg:pr-4 text-center lg:text-left mt-12 sm:mt-16 md:mt-0">
             {/* Title and Promise with animation */}
             <div className="space-y-3 md:space-y-4">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#2A5C3F] leading-tight animate-fade-in-up font-playfair">
