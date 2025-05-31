@@ -64,7 +64,7 @@ const socialLinks = [
   },
   { 
     name: 'Threads', 
-    icon: '/images/threads.png', 
+    icon: '/images/Threads.png', 
     href: 'https://www.threads.com/@zhizhi_yuenanyu', 
     ariaLabel: 'Follow us on Threads',
     width: 40,
