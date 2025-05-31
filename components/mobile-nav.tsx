@@ -53,7 +53,8 @@ export function MobileNav({ locale }: MobileNavProps) {
     {
       href: '/#teacher-team',
       label: translate('teacherTeam', 'common') || 'Teacher Team',
-      icon: GraduationCap
+      icon: GraduationCap,
+      scroll: true
     },
     { 
       href: '/contact', 
@@ -64,10 +65,20 @@ export function MobileNav({ locale }: MobileNavProps) {
 
   // Initialize mainNavItems state
   const [mainNavItems, setMainNavItems] = React.useState(() => 
-    staticNavItems.map(item => ({
-      ...item,
-      href: `/${locale}${item.href}`
-    }))
+    staticNavItems.map(item => {
+      // Special handling for teacher-team link to preserve the hash
+      if (item.href.includes('#')) {
+        const [path, hash] = item.href.split('#');
+        return {
+          ...item,
+          href: `/${locale}${path}#${hash}`
+        };
+      }
+      return {
+        ...item,
+        href: `/${locale}${item.href}`
+      };
+    })
   );
 
   // Safe pathname check
@@ -153,7 +164,7 @@ export function MobileNav({ locale }: MobileNavProps) {
         const completeNavItems = [
           { ...staticNavItems[0], href: `/${locale}` }, // Home
           { ...staticNavItems[1], href: `/${locale}/about` }, // About
-          { ...staticNavItems[2], href: `/${locale}/teacher-team` }, // Teacher Team
+          { ...staticNavItems[2], href: `/${locale}/#teacher-team` }, // Teacher Team
           ...wpMenuItems,
           { ...staticNavItems[3], href: `/${locale}/contact` }, // Contact
         ];
@@ -181,7 +192,7 @@ export function MobileNav({ locale }: MobileNavProps) {
           const fallbackItems = [
             { ...staticNavItems[0], href: `/${locale}` }, // Home
             { ...staticNavItems[1], href: `/${locale}/about` }, // About
-            { ...staticNavItems[2], href: `/${locale}/teacher-team` }, // Teacher Team
+            { ...staticNavItems[2], href: `/${locale}/#teacher-team` }, // Teacher Team
             { ...staticNavItems[3], href: `/${locale}/contact` } // Contact
           ];
           setNavItems(fallbackItems);
@@ -360,28 +371,52 @@ export function MobileNav({ locale }: MobileNavProps) {
   ), [navItems, activeSubmenu, safePath, colors.primary, colors.darkOlive, colors.secondary, translate, setIsMenuOpen]);
 
   // Bottom navigation content
-  const bottomNav = React.useMemo(() => (
-    <div className="grid grid-cols-4 h-16 font-medium">
-      {mainNavItems.map((item) => {
-        const Icon = item.icon;
-        const isActive = safePath.startsWith(item.href);
-        
-        return (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex flex-col items-center justify-center space-y-1 transition-colors ${
-              isActive ? 'text-[#b17f4a]' : ''
-            }`}
-            style={{ color: isActive ? colors.primary : colors.darkOlive }}
-          >
-            {Icon && <Icon className="h-5 w-5" />}
-            <span className="text-xs">{item.label}</span>
-          </Link>
-        );
-      })}
-    </div>
-  ), [mainNavItems, safePath, translate, colors.primary, colors.darkOlive, isMenuOpen, toggleMenu]);
+  const bottomNav = React.useMemo(() => {
+    // Get the current path without the locale prefix for comparison
+    const currentPath = pathname ? `/${pathname.split('/').slice(2).join('/')}` : '/';
+    
+    return (
+      <div className="grid grid-cols-4 h-16 font-medium">
+        {mainNavItems.map((item) => {
+          const Icon = item.icon;
+          // Check if the current path matches the item's href (ignoring hash and query params)
+          const isActive = currentPath === item.href.replace(/#.*$/, '').split('?')[0];
+          const isTeacherTeamLink = item.href.includes('teacher-team');
+          
+          return (
+            <div key={item.label} className="flex flex-col items-center justify-center">
+              {isTeacherTeamLink ? (
+                <a
+                  href="#teacher-team"
+                  className={`flex flex-col items-center justify-center w-full h-full px-2 text-center ${isActive ? 'text-[#b17f4a]' : 'text-gray-700'}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const element = document.getElementById('teacher-team');
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  {Icon && <Icon className="h-5 w-5 mx-auto mb-1" />}
+                  <span className="text-xs">{item.label}</span>
+                </a>
+              ) : (
+                <Link
+                  href={item.href}
+                  className={`flex flex-col items-center justify-center w-full h-full px-2 text-center ${isActive ? 'text-[#b17f4a]' : 'text-gray-700'}`}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {Icon && <Icon className="h-5 w-5 mx-auto mb-1" />}
+                  <span className="text-xs">{item.label}</span>
+                </Link>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [mainNavItems, pathname, setIsMenuOpen]);
 
   if (isLoading) {
     return (
