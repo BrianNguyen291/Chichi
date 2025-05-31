@@ -22,7 +22,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   }>({ mainCategories: [], subCategories: {} })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeCategory, setActiveCategory] = useState<number | null>(null)
+  const [activeCategory, setActiveCategory] = useState<number | string | null>(null)
 
   // Get translated static items
   const staticItems = {
@@ -135,15 +135,44 @@ export function WordPressNav({ locale }: WordPressNavProps) {
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
       </Link>
 
-      {/* Course link */}
-      <Link
-        href={`/${locale}${staticItems.course.href}`}
-        className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-        style={{ color: colors.darkOlive, marginRight: '2rem' }}
+      {/* Course link with dropdown */}
+      <div 
+        className="relative"
+        onMouseEnter={() => setActiveCategory('courses')}
+        onMouseLeave={() => setActiveCategory(null)}
       >
-        {staticItems.course.label}
-         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-      </Link>
+        <Link
+          href={`/${locale}${staticItems.course.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
+          style={{ color: colors.darkOlive, marginRight: '2rem' }}
+        >
+          {staticItems.course.label}
+          <ChevronDown
+            className={`ml-1 h-4 w-4 transition-transform ${
+              activeCategory === 'courses' ? "rotate-180" : ""
+            }`}
+          />
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
+
+        {activeCategory === 'courses' && (
+          <div
+            className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[160px] z-50"
+            style={{ borderColor: colors.secondary }}
+          >
+            {['初級', '中級', '高級', '考證班', '企業班', '個人班'].map((level) => (
+              <Link
+                key={level}
+                href={`/${locale}${staticItems.course.href}?level=${encodeURIComponent(level)}`}
+                className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors whitespace-nowrap"
+                style={{ color: colors.darkOlive }}
+              >
+                {level}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* WordPress Categories - Now in the correct order */}
       {filteredMainCategories
@@ -195,7 +224,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
               <Link
                 href={`/${locale}${staticItems.examInfo.href}`}
                 className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-                style={{ color: colors.darkOlive, marginRight: '2rem' }}
+                style={{ color: colors.darkOlive, marginRight: '2rem', marginLeft: '2rem' }}
               >
                 {staticItems.examInfo.label}
                 <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
