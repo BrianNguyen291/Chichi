@@ -28,7 +28,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   const staticItems = {
     about: { 
       label: translate('about', 'common'), 
-      href: '/about' 
+      href: '/#courses' // Updated to point to the courses section
     },
     teacherTeam: {
       label: translate('teacherTeam', 'common') || 'Teacher Team',
@@ -97,12 +97,12 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     )
   }
 
-  // Updated order of categories
+  // Updated order of categories to match desired sequence
   const topLevelCategories = [
-    'course',
-    'library',
-    'vietnamese-tests',
-    'blogs'
+    'course',        // Khoá học
+    'library',       // Thư viện
+    'vietnamese-tests', // Kỳ thi năng lực tiếng Việt
+    'blogs'          // Blog
   ]
 
   const filteredMainCategories = categories.mainCategories
@@ -122,16 +122,6 @@ export function WordPressNav({ locale }: WordPressNavProps) {
         style={{ color: colors.darkOlive }}
       >
         {staticItems.about.label}
-        <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-      </Link>
-
-      {/* Teacher Team link */}
-      <Link
-        href={`/${locale}${staticItems.teacherTeam.href}`}
-        className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-        style={{ color: colors.darkOlive }}
-      >
-        {staticItems.teacherTeam.label}
         <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
       </Link>
 
@@ -177,61 +167,125 @@ export function WordPressNav({ locale }: WordPressNavProps) {
       {/* WordPress Categories - Now in the correct order */}
       {filteredMainCategories
         .filter(cat => cat.slug !== 'vietnamese-tests')
-        .map((category) => (
-          <span key={category.id} className="contents">
-            <div 
-              className="relative"
-              onMouseEnter={() => setActiveCategory(category.id)}
-              onMouseLeave={() => setActiveCategory(null)}
-            >
-              <Link
-                href={`/${locale}/category/${category.slug}`}
-                className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
-                style={{ color: colors.darkOlive }}
-              >
-                {category.translatedName || category.name}
-                {categories.subCategories[category.id]?.length > 0 && (
-                  <ChevronDown
-                    className={`ml-1 h-4 w-4 transition-transform ${
-                      activeCategory === category.id ? "rotate-180" : ""
-                    }`}
-                  />
-                )}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-              </Link>
-
-              {categories.subCategories[category.id]?.length > 0 && activeCategory === category.id && (
-                <div
-                  className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
-                  style={{ borderColor: colors.secondary }}
-                >
-                  {categories.subCategories[category.id].map((subCategory) => (
-                    <Link
-                      key={subCategory.id}
-                      href={`/${locale}/category/${subCategory.slug}`}
-                      className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
-                      style={{ color: colors.darkOlive }}
-                    >
-                      {subCategory.translatedName || subCategory.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+        .map((category) => {
+          // Use /courses for the course category, others keep using /category/slug
+          const categoryHref = category.slug === 'course'
+            ? `/${locale}/courses`
+            : `/${locale}/category/${category.slug}`;
             
-            {/* Exam Info Link - Placed after Library */}
-            {category.slug === 'library' && (
-              <Link
-                href={`/${locale}${staticItems.examInfo.href}`}
-                className="relative py-2 transition-colors hover:text-[#b17f4a] group"
-                style={{ color: colors.darkOlive, marginRight: '2rem', marginLeft: '2rem' }}
+          return (
+            <span key={category.id} className="contents">
+              <div 
+                className="relative"
+                onMouseEnter={() => setActiveCategory(category.id)}
+                onMouseLeave={() => setActiveCategory(null)}
               >
-                {staticItems.examInfo.label}
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
-              </Link>
-            )}
-          </span>
-        ))}
+                <Link
+                  href={categoryHref}
+                  className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
+                  style={{ color: colors.darkOlive }}
+                >
+                  {category.translatedName || category.name}
+                  {categories.subCategories[category.id]?.length > 0 && (
+                    <ChevronDown
+                      className={`ml-1 h-4 w-4 transition-transform ${
+                        activeCategory === category.id ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+                </Link>
+
+                {categories.subCategories[category.id]?.length > 0 && activeCategory === category.id && (
+                  <div
+                    className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
+                    style={{ borderColor: colors.secondary }}
+                  >
+                    {categories.subCategories[category.id].map((subCategory) => (
+                      <Link
+                        key={subCategory.id}
+                        href={`/${locale}/category/${subCategory.slug}`}
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                        style={{ color: colors.darkOlive }}
+                      >
+                        {subCategory.translatedName || subCategory.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              {/* Exam Info Link - Placed after Library */}
+              {category.slug === 'library' && (
+                <Link
+                  href={`/${locale}${staticItems.examInfo.href}`}
+                  className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+                  style={{ color: colors.darkOlive, marginRight: '2rem', marginLeft: '2rem' }}
+                >
+                  {staticItems.examInfo.label}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+                </Link>
+              )}
+            </span>
+          );
+        })}
+        
+        {/* Vietnamese Tests */}
+        {filteredMainCategories
+          .filter(cat => cat.slug === 'vietnamese-tests')
+          .map((category) => (
+            <span key={category.id} className="contents">
+              <div 
+                className="relative"
+                onMouseEnter={() => setActiveCategory(category.id)}
+                onMouseLeave={() => setActiveCategory(null)}
+              >
+                <Link
+                  href={`/${locale}/category/${category.slug}`}
+                  className="relative py-2 transition-colors hover:text-[#b17f4a] group flex items-center"
+                  style={{ color: colors.darkOlive }}
+                >
+                  {category.translatedName || category.name}
+                  {categories.subCategories[category.id]?.length > 0 && (
+                    <ChevronDown
+                      className={`ml-1 h-4 w-4 transition-transform ${
+                        activeCategory === category.id ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+                </Link>
+
+                {categories.subCategories[category.id]?.length > 0 && activeCategory === category.id && (
+                  <div
+                    className="absolute top-full left-0 mt-1 py-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
+                    style={{ borderColor: colors.secondary }}
+                  >
+                    {categories.subCategories[category.id].map((subCategory) => (
+                      <Link
+                        key={subCategory.id}
+                        href={`/${locale}/category/${subCategory.slug}`}
+                        className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors"
+                        style={{ color: colors.darkOlive }}
+                      >
+                        {subCategory.translatedName || subCategory.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </span>
+          ))}
+        
+        {/* Teacher Team link - Moved after Vietnamese Tests */}
+        <Link
+          href={`/${locale}${staticItems.teacherTeam.href}`}
+          className="relative py-2 transition-colors hover:text-[#b17f4a] group"
+          style={{ color: colors.darkOlive }}
+        >
+          {staticItems.teacherTeam.label}
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[#b17f4a] transform scale-x-0 transition-transform group-hover:scale-x-100" />
+        </Link>
 
       {/* Contact link */}
       <Link

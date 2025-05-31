@@ -46,9 +46,10 @@ export function MobileNav({ locale }: MobileNavProps) {
       icon: Home 
     },
     { 
-      href: '/about', 
+      href: '/#courses', 
       label: translate('about', 'common'),
-      icon: Home 
+      icon: Home,
+      scroll: true
     },
     {
       href: '/#teacher-team',
@@ -147,9 +148,14 @@ export function MobileNav({ locale }: MobileNavProps) {
         const wpMenuItems = filteredMainCategories.map(cat => {
           const categoryChildren = subCategories[cat.id] || [];
           
+          // Use /courses for the course category, others keep using /category/slug
+          const href = cat.slug === 'course' 
+            ? `/${locale}/courses`
+            : `/${locale}/category/${cat.slug}`;
+          
           return {
             label: cat.translatedName || cat.name,
-            href: `/${locale}/category/${cat.slug}`,
+            href,
             icon: getIconForCategory(cat.slug),
             children: categoryChildren.map(subCat => ({
               label: subCat.translatedName || subCat.name,
@@ -160,12 +166,18 @@ export function MobileNav({ locale }: MobileNavProps) {
 
         if (!isMounted) return;
 
-        // Create the complete navigation items
+        // Create the complete navigation items in the desired order:
+        // 1. About Us
+        // 2. Khoá học (Courses)
+        // 3. Thư viện (Library)
+        // 4. Kỳ thi năng lực tiếng Việt (Vietnamese Tests)
+        // 5. Đội ngũ giáo viên (Teacher Team)
+        // 6. Blog
+        // 7. Liên hệ (Contact)
         const completeNavItems = [
-          { ...staticNavItems[0], href: `/${locale}` }, // Home
-          { ...staticNavItems[1], href: `/${locale}/about` }, // About
+          { ...staticNavItems[1], href: `/${locale}/#courses` }, // About Us
+          ...wpMenuItems, // This includes Courses, Library, Vietnamese Tests, Blog in order
           { ...staticNavItems[2], href: `/${locale}/#teacher-team` }, // Teacher Team
-          ...wpMenuItems,
           { ...staticNavItems[3], href: `/${locale}/contact` }, // Contact
         ];
 
@@ -179,11 +191,24 @@ export function MobileNav({ locale }: MobileNavProps) {
         setNavItems(completeNavItems);
 
         // Update mainNavItems for bottom navigation
+        // Only show essential items in bottom nav: Home, Courses, Teacher Team, Contact
         setMainNavItems([
           { href: `/${locale}`, label: translate('home', 'common'), icon: Home },
-          { href: `/${locale}/about`, label: translate('about', 'common'), icon: Home },
-          { href: `/${locale}/#teacher-team`, label: translate('teacherTeam', 'common') || 'Teacher Team', icon: GraduationCap },
-          { href: `/${locale}/contact`, label: translate('contact', 'common'), icon: Phone },
+          { 
+            href: `/${locale}/courses`, 
+            label: translate('courses', 'common') || 'Khoá học', 
+            icon: BookOpen 
+          },
+          { 
+            href: `/${locale}/#teacher-team`, 
+            label: translate('teacherTeam', 'common') || 'Đội ngũ giáo viên', 
+            icon: GraduationCap 
+          },
+          { 
+            href: `/${locale}/contact`, 
+            label: translate('contact', 'common') || 'Liên hệ', 
+            icon: Phone 
+          },
         ]);
 
       } catch (error) {
@@ -191,7 +216,7 @@ export function MobileNav({ locale }: MobileNavProps) {
         if (isMounted) {
           const fallbackItems = [
             { ...staticNavItems[0], href: `/${locale}` }, // Home
-            { ...staticNavItems[1], href: `/${locale}/about` }, // About
+            { ...staticNavItems[1], href: `/${locale}/#courses` }, // About
             { ...staticNavItems[2], href: `/${locale}/#teacher-team` }, // Teacher Team
             { ...staticNavItems[3], href: `/${locale}/contact` } // Contact
           ];
