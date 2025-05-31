@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { translations } from '@/lib/translations/hero'
@@ -21,6 +23,10 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ locale }: HeroSectionProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
+  
+  const handleConsultClick = () => {
+    window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true&fbclid=IwY2xjawKnWNZleHRuA2FlbQIxMQABHvWzAKxujUd1LMx7v4j1ad_k4aSvD9HbnaPIjrQ7XNfxy9gTVIwzm5JLKuwZ_aem_P8fWn9-kke7Tp_UmPqcnpw', '_blank')
+  }
 
   return (
     <section 
@@ -65,10 +71,11 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
             {/* Action Buttons with hover effects */}
             <div className="flex flex-row justify-center lg:justify-start gap-3 sm:gap-4 pt-4 sm:pt-6">
               <button 
+                onClick={handleConsultClick}
                 className="flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-white rounded-full text-[#2A5C3F] font-medium shadow-md 
                           hover:shadow-lg transition-all duration-300 hover:bg-[#2A5C3F] hover:text-white 
                           focus:outline-none focus:ring-2 focus:ring-[#2A5C3F] focus:ring-offset-2
-                          flex-grow sm:flex-grow-0 text-sm sm:text-base font-inter"
+                          flex-grow sm:flex-grow-0 text-sm sm:text-base font-inter cursor-pointer"
                 aria-label={t.consultation}
               >
                 <span>{t.consultation}</span>
@@ -77,16 +84,21 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
                 </svg>
               </button>
               <button 
+                onClick={() => {
+                  const contactSection = document.getElementById('contact');
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 className="flex items-center justify-center gap-2 px-6 sm:px-7 py-3 sm:py-3.5 bg-[#2A5C3F] rounded-full text-white font-medium shadow-md 
                           hover:shadow-lg transition-all duration-300 hover:bg-[#1E4630]
                           focus:outline-none focus:ring-2 focus:ring-[#2A5C3F] focus:ring-offset-2
-                          flex-grow sm:flex-grow-0 text-sm sm:text-base font-inter"
+                          flex-grow sm:flex-grow-0 text-sm sm:text-base font-inter cursor-pointer"
                 aria-label={t.tryNow}
               >
                 <span>{t.tryNow}</span>
                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
               </button>
             </div>
