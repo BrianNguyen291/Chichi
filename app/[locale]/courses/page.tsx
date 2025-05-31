@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { colors } from "@/lib/colors"
@@ -63,6 +64,88 @@ interface CoursePageProps {
 
 const translations: Translations = {
   "en": {
+    // ... existing translations ...
+    corporateCourses: {
+      A0: {
+        title: "Corporate A0",
+        objectives: [
+          "Establish Vietnamese pronunciation system foundation (tones/vowels/consonants)",
+          "Master survival-level conversation skills (self-introduction, basic Q&A)"
+        ],
+        content: [
+          "Phonetic system: 29 letter pronunciation rules + 6 tone training",
+          "Themed conversations: personal information, profession, daily items",
+          "Skill ratio: 70% listening/speaking | 30% reading/writing"
+        ]
+      },
+      A1: {
+        title: "Corporate A1",
+        achievements: [
+          "Understand slow-paced daily conversations (100 words/minute)",
+          "Complete basic transactional communication (negotiation margin ≤15%)"
+        ],
+        content: [
+          "City survival: public transportation, asking for directions",
+          "Business scenarios: market purchases, understanding simple contract terms"
+        ]
+      },
+      A2: {
+        title: "Corporate A2",
+        content: [
+          "Travel scenario simulation: hotel booking/ticketing/emergency response",
+          "Digital communication: social media phrases, online shopping dialogues"
+        ],
+        achievements: [
+          "Basic grammar accuracy reaches 80%",
+          "Can understand short daily life passages under 300 words"
+        ]
+      },
+      B1: {
+        title: "Corporate B1",
+        specialization: [
+          "Workplace applications: meeting minutes, work email composition",
+          "Academic foundation: chart description, basic data interpretation"
+        ],
+        achievements: [
+          "Can deliver 10-minute continuous topic presentations",
+          "Understand main messages in broadcast news (70%+ comprehension)"
+        ]
+      },
+      B2: {
+        title: "Corporate B2",
+        content: [
+          "Media analysis: identifying news report perspectives",
+          "Discursive writing: presenting pros and cons (within 500 characters)",
+          "Professional vocabulary: 200+ key terms in economics/society/education"
+        ],
+        materials: [
+          "Supplementary units from 'Practical Business Vietnamese'"
+        ]
+      },
+      C1: {
+        title: "Corporate C1",
+        objectives: [
+          "Intensive reading of academic papers (85%+ comprehension)",
+          "Professional presentation skills (including Q&A strategies)",
+          "Cross-cultural communication case studies"
+        ]
+      },
+      C2C3: {
+        title: "Corporate Mastery C2-C3",
+        subtitle: "Native Speaker Certification Standard",
+        hours: "36",
+        objectives: [
+          "Dialect recognition: Hanoi/Ho Chi Minh City accent differences",
+          "Literary analysis: interpreting modern poetry rhetoric",
+          "Advanced negotiation strategies: cross-cultural conflict management"
+        ],
+        customization: [
+          "Field specialization: legal/medical/engineering terminology",
+          "Artistic expression: film and TV script writing guidance"
+        ]
+      }
+    },
+    // ... rest of the English translations ...
     title: "Our Vietnamese Courses",
     subtitle: "Comprehensive learning paths for all levels",
     tabBeginner: "Beginner",
@@ -134,6 +217,10 @@ const translations: Translations = {
         content: [
           "Discussing news, current affairs, and cultural topics",
           "Writing personal letters, emails, and short reports"
+        ],
+        highlights: [
+          "Using 'Standard Vietnamese B1' textbook Units 1-8",
+          "Developing paragraph-level expression skills (e.g., describing experiences, explaining work processes)"
         ]
       },
       B2: {
@@ -145,6 +232,26 @@ const translations: Translations = {
         content: [
           "Debating, presenting arguments, and discussing abstract topics",
           "Understanding complex texts, including technical discussions in your field"
+        ],
+        focus: [
+          "Academic/workplace scenarios: meeting discussions, data interpretation, cultural difference analysis",
+          "Advanced grammar: relative clauses, subjunctive mood, formal letter structure"
+        ]
+      },
+      B3: {
+        title: "Advanced Intermediate",
+        objectives: [
+          "Express ideas fluently and spontaneously without much obvious searching for expressions",
+          "Use language flexibly and effectively for social, academic and professional purposes"
+        ],
+        content: [
+          "Understand a wide range of demanding, longer texts, and recognize implicit meaning",
+          "Produce clear, well-structured, detailed text on complex subjects"
+        ],
+        specialization: [
+          "Professional presentation and negotiation skills",
+          "Advanced academic writing and research methodologies",
+          "Cross-cultural communication strategies"
         ]
       },
       C1: {
@@ -168,10 +275,100 @@ const translations: Translations = {
           "Mastery of idiomatic expressions and colloquialisms",
           "Producing clear, well-structured, detailed text on complex subjects"
         ]
+      },
+      C3: {
+        title: "Expert Level",
+        objectives: ["Specialized mastery and advanced professional application"],
+        content: [
+          "Deepen knowledge in specific fields (e.g., audiovisual translation, diplomatic language)",
+          "Thesis writing guidance and interpretation techniques"
+        ]
       }
     }
   },
   "zh-Hant": {
+    // ... existing translations ...
+    corporateCourses: {
+      A0: {
+        title: "企業 A0",
+        objectives: [
+          "建立越南語發音系統基礎（聲調/母音/子音）",
+          "掌握生存級會話能力（自我介紹、基礎問答）"
+        ],
+        content: [
+          "發音系統：29個字母發音規則 + 6個聲調訓練",
+          "主題會話：個人資訊、職業、日常物品",
+          "技能比例：70% 聽力/口說 | 30% 閱讀/寫作"
+        ]
+      },
+      A1: {
+        title: "企業 A1",
+        achievements: [
+          "理解慢速日常對話（每分鐘100字）",
+          "完成基礎交易溝通（議價誤差≤15%）"
+        ],
+        content: [
+          "城市生存：大眾運輸、問路",
+          "商業場景：市場採購、理解簡單合約條款"
+        ]
+      },
+      A2: {
+        title: "企業 A2",
+        content: [
+          "旅遊情境模擬：飯店訂房/購票/緊急應對",
+          "數位溝通：社群用語、網購對話"
+        ],
+        achievements: [
+          "基礎文法準確度達80%",
+          "能理解300字以內日常生活短文"
+        ]
+      },
+      B1: {
+        title: "企業 B1",
+        specialization: [
+          "職場應用：會議記錄、工作郵件撰寫",
+          "學術基礎：圖表描述、基礎數據解讀"
+        ],
+        achievements: [
+          "能進行10分鐘連續主題發表",
+          "理解廣播新聞主要訊息（理解率70%以上）"
+        ]
+      },
+      B2: {
+        title: "企業 B2",
+        content: [
+          "媒體分析：辨識新聞報導觀點",
+          "論說文寫作：正反論述（500字內）",
+          "專業詞彙：200+個經社教領域關鍵術語"
+        ],
+        materials: [
+          "《實用商務越南語》補充單元"
+        ]
+      },
+      C1: {
+        title: "企業 C1",
+        objectives: [
+          "學術論文精讀（理解率85%以上）",
+          "專業簡報技巧（含Q&A策略）",
+          "跨文化溝通案例分析"
+        ]
+      },
+      C2C3: {
+        title: "企業精通級 C2-C3",
+        subtitle: "母語者認證標準",
+        hours: "36 小時",
+        objectives: [
+          "方言辨識：河內/胡志明市口音差異",
+          "文學分析：現代詩歌修辭解讀",
+          "高階談判策略：跨文化衝突管理"
+        ],
+        customization: [
+          "領域強化：法律/醫療/工程專業術語",
+          "藝術表達：影視劇本創作指導"
+        ]
+      }
+    },
+    // ... rest of the Traditional Chinese translations ...
     title: "越南語課程",
     subtitle: "為各級別提供全面的學習路徑",
     tabBeginner: "初級",
@@ -254,6 +451,26 @@ const translations: Translations = {
         content: [
           "辯論、提出論點、討論抽象話題",
           "理解複雜文本，包括專業領域的技術討論"
+        ],
+        focus: [
+          "學術/職場情境：會議討論、數據解讀、文化差異分析",
+          "進階語法：關係子句、假設語氣、正式書信結構"
+        ]
+      },
+      B3: {
+        title: "進階中級",
+        objectives: [
+          "流利表達想法，無需費力尋找詞語",
+          "靈活有效地將語言運用於社交、學術和專業場合"
+        ],
+        content: [
+          "理解各種高難度長篇文本，並能領會言外之意",
+          "就複雜主題寫出清晰、結構良好、詳細的文章"
+        ],
+        specialization: [
+          "專業簡報與談判技巧",
+          "進階學術寫作與研究方法",
+          "跨文化溝通策略"
         ]
       },
       C1: {
@@ -277,10 +494,99 @@ const translations: Translations = {
           "掌握慣用語和口語表達",
           "就複雜主題撰寫清晰、結構良好、詳細的文章"
         ]
+      },
+      C3: {
+        title: "專家級",
+        objectives: ["專業領域精熟與高階應用"],
+        content: [
+          "深化特定領域知識（如影視翻譯、外交用語等）",
+          "論文寫作指導與口譯技巧"
+        ]
       }
     }
   },
   "zh-Hans": {
+    // ... existing translations ...
+    corporateCourses: {
+      A0: {
+        title: "企业 A0",
+        objectives: [
+          "建立越南语发音系统基础（声调/元音/辅音）",
+          "掌握生存级会话能力（自我介绍、基础问答）"
+        ],
+        content: [
+          "发音系统：29个字母发音规则 + 6个声调训练",
+          "主题会话：个人信息、职业、日常物品",
+          "技能比例：70% 听力/口语 | 30% 阅读/写作"
+        ]
+      },
+      A1: {
+        title: "企业 A1",
+        achievements: [
+          "理解慢速日常对话（每分钟100字）",
+          "完成基础交易沟通（议价误差≤15%）"
+        ],
+        content: [
+          "城市生存：公共交通、问路",
+          "商业场景：市场采购、理解简单合同条款"
+        ]
+      },
+      A2: {
+        title: "企业 A2",
+        content: [
+          "旅游情境模拟：酒店订房/购票/紧急应对",
+          "数字沟通：社群用语、网购对话"
+        ],
+        achievements: [
+          "基础语法准确度达80%",
+          "能理解300字以内日常生活短文"
+        ]
+      },
+      B1: {
+        title: "企业 B1",
+        specialization: [
+          "职场应用：会议记录、工作邮件撰写",
+          "学术基础：图表描述、基础数据解读"
+        ],
+        achievements: [
+          "能进行10分钟连续主题发表",
+          "理解广播新闻主要讯息（理解率70%以上）"
+        ]
+      },
+      B2: {
+        title: "企业 B2",
+        content: [
+          "媒体分析：辨识新闻报导观点",
+          "论述文写作：正反论述（500字内）",
+          "专业词汇：200+个经社教领域关键术语"
+        ],
+        materials: [
+          "《实用商务越南语》补充单元"
+        ]
+      },
+      C1: {
+        title: "企业 C1",
+        objectives: [
+          "学术论文精读（理解率85%以上）",
+          "专业简报技巧（含Q&A策略）",
+          "跨文化沟通案例分析"
+        ]
+      },
+      C2C3: {
+        title: "企业精通级 C2-C3",
+        subtitle: "母语者认证标准",
+        hours: "36 小时",
+        objectives: [
+          "方言辨识：河内/胡志明市口音差异",
+          "文学分析：现代诗歌修辞解读",
+          "高阶谈判策略：跨文化冲突管理"
+        ],
+        customization: [
+          "领域强化：法律/医疗/工程专业术语",
+          "艺术表达：影视剧本创作指导"
+        ]
+      }
+    },
     title: "越南语课程",
     subtitle: "为各级别提供全面的学习路径",
     tabBeginner: "初级",
@@ -352,6 +658,10 @@ const translations: Translations = {
         content: [
           "讨论新闻、时事和文化话题",
           "撰写个人信件、电邮和简短报告"
+        ],
+        highlights: [
+          "使用《标准越南语B1》教材第1-8单元",
+          "发展段落表达能力（如描述经验、解释工作流程）"
         ]
       },
       B2: {
@@ -363,6 +673,26 @@ const translations: Translations = {
         content: [
           "辩论、提出论点、讨论抽象话题",
           "理解复杂文本，包括专业领域的技术讨论"
+        ],
+        focus: [
+          "学术/职场情境：会议讨论、数据解读、文化差异分析",
+          "进阶语法：关系从句、虚拟语气、正式书信结构"
+        ]
+      },
+      B3: {
+        title: "进阶中级",
+        objectives: [
+          "流利表达想法，无需费力寻找词语",
+          "灵活有效地将语言运用于社交、学术和专业场合"
+        ],
+        content: [
+          "理解各种高难度长篇文本，并能领会言外之意",
+          "就复杂主题写出清晰、结构良好、详细的文章"
+        ],
+        specialization: [
+          "专业简报与谈判技巧",
+          "进阶学术写作与研究方法",
+          "跨文化沟通策略"
         ]
       },
       C1: {
@@ -385,6 +715,14 @@ const translations: Translations = {
         content: [
           "掌握惯用语和口语表达",
           "就复杂主题撰写清晰、结构良好、详细的文章"
+        ]
+      },
+      C3: {
+        title: "专家级",
+        objectives: ["专业领域精熟与高阶应用"],
+        content: [
+          "深化特定领域知识（如影视翻译、外交用语等）",
+          "论文写作指导与口译技巧"
         ]
       }
     }
@@ -511,8 +849,8 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Describe experiences, events, dreams, and ambitions briefly"
                 ]}
                 highlights={t.courseDetails.B1?.highlights || [
-                  "Using 'Standard Vietnamese B1' textbook Units 1-8",
-                  "Developing paragraph-level expression skills (e.g., describing experiences, explaining work processes)"
+                  "使用《标准越南语B1》教材第1-8单元",
+                  "发展段落表达能力（如描述经验、解释工作流程）"
                 ]}
               />
               
@@ -550,10 +888,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Understand a wide range of demanding, longer texts, and recognize implicit meaning",
                   "Produce clear, well-structured, detailed text on complex subjects"
                 ]}
-                specialization={t.courseDetails.B3?.specialization || [
-                  "Intensive reading of various texts: contract terms, academic papers, policy reports",
-                  "Advanced writing training: argumentative essays, project proposal structure"
-                ]}
+                specialization={t.courseDetails.B3?.specialization}
               />
             </div>
           </TabsContent>
@@ -590,9 +925,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="C3" 
                 title={t.courseDetails.C3?.title || "Expert Level"}
                 hours="30"
-                customization={t.courseDetails.C3?.customization || [
+                objectives={t.courseDetails.C3?.objectives || ["Specialized mastery and advanced professional application"]}
+                content={t.courseDetails.C3?.content || [
                   "Deepen knowledge in specific fields (e.g., audiovisual translation, diplomatic language)",
-                  "Thesis writing guidance, interpretation techniques"
+                  "Thesis writing guidance and interpretation techniques"
                 ]}
               />
             </div>
@@ -616,15 +952,15 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate A0 */}
               <CourseCard 
                 level="A0" 
-                title={t.courseDetails.corporateA0?.title || "Corporate Beginner A0"}
+                title={t.corporateCourses?.A0?.title || t.tabCorporate + " A0"}
                 hours="24"
                 classSize="4-8"
-                subtitle={t.courseDetails.corporateA0?.subtitle || "Small Group"}
-                objectives={t.courseDetails.corporateA0?.objectives || [
+                subtitle={"Small Group"}
+                objectives={t.corporateCourses?.A0?.objectives || [
                   "Establish Vietnamese pronunciation system foundation (tones/vowels/consonants)",
                   "Master survival-level conversation skills (self-introduction, basic Q&A)"
                 ]}
-                content={t.courseDetails.corporateA0?.content || [
+                content={t.corporateCourses?.A0?.content || [
                   "Phonetic system: 29 letter pronunciation rules + 6 tone training",
                   "Themed conversations: personal information, profession, daily items",
                   "Skill ratio: 70% listening/speaking | 30% reading/writing"
@@ -634,13 +970,13 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate A1 */}
               <CourseCard 
                 level="A1" 
-                title={t.courseDetails.corporateA1?.title || "Corporate Beginner A1"}
+                title={t.corporateCourses?.A1?.title || t.tabCorporate + " A1"}
                 hours="24"
-                achievements={t.courseDetails.corporateA1?.achievements || [
+                achievements={t.corporateCourses?.A1?.achievements || [
                   "Understand slow-paced daily conversations (100 words/minute)",
                   "Complete basic transactional communication (negotiation margin ≤15%)"
                 ]}
-                content={t.courseDetails.corporateA1?.content || [
+                content={t.corporateCourses?.A1?.content || [
                   "City survival: public transportation, asking for directions",
                   "Business scenarios: market purchases, understanding simple contract terms"
                 ]}
@@ -649,13 +985,13 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate A2 */}
               <CourseCard 
                 level="A2" 
-                title={t.courseDetails.corporateA2?.title || "Corporate Elementary A2"}
+                title={t.corporateCourses?.A2?.title || t.tabCorporate + " A2"}
                 hours="24"
-                content={t.courseDetails.corporateA2?.content || [
+                content={t.corporateCourses?.A2?.content || [
                   "Travel scenario simulation: hotel booking/ticketing/emergency response",
                   "Digital communication: social media phrases, online shopping dialogues"
                 ]}
-                achievements={t.courseDetails.corporateA2?.achievements || [
+                achievements={t.corporateCourses?.A2?.achievements || [
                   "Basic grammar accuracy reaches 80%",
                   "Can understand short daily life passages under 300 words"
                 ]}
@@ -666,14 +1002,14 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate B1 */}
               <CourseCard 
                 level="B1" 
-                title={t.courseDetails.corporateB1?.title || "Corporate Intermediate B1"}
+                title={t.corporateCourses?.B1?.title || t.tabCorporate + " B1"}
                 hours="30"
-                subtitle={t.courseDetails.corporateB1?.subtitle || "Standard Vietnamese B1 Units 1-8"}
-                specialization={t.courseDetails.corporateB1?.specialization || [
+                subtitle={"Standard Vietnamese B1 Units 1-8"}
+                specialization={t.corporateCourses?.B1?.specialization || [
                   "Workplace applications: meeting minutes, work email composition",
                   "Academic foundation: chart description, basic data interpretation"
                 ]}
-                achievements={t.courseDetails.corporateB1?.achievements || [
+                achievements={t.corporateCourses?.B1?.achievements || [
                   "Can deliver 10-minute continuous topic presentations",
                   "Understand main messages in broadcast news (70%+ comprehension)"
                 ]}
@@ -682,14 +1018,14 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate B2 */}
               <CourseCard 
                 level="B2" 
-                title={t.courseDetails.corporateB2?.title || "Corporate Upper Intermediate B2"}
+                title={t.corporateCourses?.B2?.title || t.tabCorporate + " B2"}
                 hours="30"
-                content={t.courseDetails.corporateB2?.content || [
+                content={t.corporateCourses?.B2?.content || [
                   "Media analysis: identifying news report perspectives",
                   "Discursive writing: presenting pros and cons (within 500 characters)",
                   "Professional vocabulary: 200+ key terms in economics/society/education"
                 ]}
-                materials={t.courseDetails.corporateB2?.materials || [
+                materials={t.corporateCourses?.B2?.materials || [
                   "Supplementary units from 'Practical Business Vietnamese'"
                 ]}
               />
@@ -699,10 +1035,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate C1 */}
               <CourseCard 
                 level="C1" 
-                title={t.courseDetails.corporateC1?.title || "Corporate Advanced C1"}
+                title={t.corporateCourses?.C1?.title || t.tabCorporate + " C1"}
                 hours="36"
-                subtitle={t.courseDetails.corporateC1?.subtitle || "Expert Level Training"}
-                objectives={t.courseDetails.corporateC1?.objectives || [
+                subtitle={"Expert Level Training"}
+                objectives={t.corporateCourses?.C1?.objectives || [
                   "Intensive reading of academic papers (85%+ comprehension)",
                   "Professional presentation skills (including Q&A strategies)",
                   "Cross-cultural communication case studies"
@@ -712,17 +1048,17 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate C2-C3 */}
               <CourseCard 
                 level="C2-C3" 
-                title={t.courseDetails.corporateC2C3?.title || "Corporate Mastery C2-C3"}
-                hours="36"
-                subtitle={t.courseDetails.corporateC2C3?.subtitle || "Native Speaker Certification Standard"}
-                objectives={t.courseDetails.corporateC2C3?.objectives || [
+                title={t.corporateCourses?.C2C3?.title || t.tabCorporate + " Mastery C2-C3"}
+                hours={t.corporateCourses?.C2C3?.hours || "36"}
+                subtitle={t.corporateCourses?.C2C3?.subtitle || "Native Speaker Certification Standard"}
+                objectives={t.corporateCourses?.C2C3?.objectives || [
                   "Dialect recognition: Hanoi/Ho Chi Minh City accent differences",
                   "Literary analysis: interpreting modern poetry rhetoric",
                   "Advanced negotiation strategies: cross-cultural conflict management"
                 ]}
-                customization={[
-                  "領域強化：法律/醫療/工程專業術語",
-                  "藝術表達：影視劇本創作指導"
+                customization={t.corporateCourses?.C2C3?.customization || [
+                  "Field specialization: legal/medical/engineering terminology",
+                  "Artistic expression: film and TV script writing guidance"
                 ]}
               />
             </div>
@@ -796,8 +1132,10 @@ function CourseCard({
   specialization,
   customization
 }: CourseCardProps) {
+  // Use usePathname hook to get the current pathname
+  const pathname = usePathname();
   // Get current locale from URL
-  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'en';
+  const locale = pathname?.split('/')[1] || 'en';
   // Default to English if locale is not supported
   const t = translations[locale as keyof typeof translations] || translations['en'];
   return (
