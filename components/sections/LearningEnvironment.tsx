@@ -13,21 +13,21 @@ const translations = {
       {
         title: 'Lớp Luyện Thi Chứng Chỉ Tiếng Việt',
         description: 'Hệ thống ôn tập chuyên sâu cho các cấp độ A, B, C',
-        mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
+        mainImage: '/images/Course.jpg',
         gallery: [
-          '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
-          '/images/dd52bb68ee30a2f330ae132e6501b9e5.jpg',
-          '/images/731328e082bb7038e8ef26bf1ddc1a06.jpg',
+          '/images/Course_1.jpg',
+          '/images/Course_2.jpg',
+          '/images/Course_3.jpg',
         ]
       },
       {
         title: 'Lớp Doanh Nghiệp Tiếng Việt',
         description: 'Giải pháp đào tạo tiếng Việt thiết kế riêng cho doanh nghiệp',
-        mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
+        mainImage: '/images/Course_4.jpg',
         gallery: [
-          '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
-          '/images/ecbeef49cfc718c408753081eeb56f9b.jpg',
-          '/images/1c53ae24f71b7e4a060c194914790792.jpg',
+          '/images/Course_4.jpg',
+          '/images/Course_5.jpg',
+          '/images/Course_7.jpg',
         ]
       }
     ]
@@ -38,21 +38,21 @@ const translations = {
       {
         title: 'Vietnamese Certification Course',
         description: 'Systematic preparation for LEVEL A, B, and C certifications',
-        mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
+        mainImage: '/images/Course_1.jpg',
         gallery: [
-          '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
-          '/images/dd52bb68ee30a2f330ae132e6501b9e5.jpg',
-          '/images/731328e082bb7038e8ef26bf1ddc1a06.jpg',
+          '/images/Course_1.jpg',
+          '/images/Course_2.jpg',
+          '/images/Course_3.jpg',
         ]
       },
       {
         title: 'Business Vietnamese Solutions',
         description: 'Customized corporate training programs',
-        mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
+        mainImage: '/images/Course_4.jpg',
         gallery: [
-          '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
-          '/images/ecbeef49cfc718c408753081eeb56f9b.jpg',
-          '/images/1c53ae24f71b7e4a060c194914790792.jpg',
+          '/images/Course_4.jpg',
+          '/images/Course_5.jpg',
+          '/images/Course_7.jpg',
         ]
       }
     ]
@@ -65,21 +65,21 @@ const translations = {
       {
         title: '越南語檢定衝刺班',
         description: '系統備考 LEVEL A、LEVEL B、LEVEL C',
-        mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
+        mainImage: '/images/Course_1.jpg',
         gallery: [
-          '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
-          '/images/dd52bb68ee30a2f330ae132e6501b9e5.jpg',
-          '/images/731328e082bb7038e8ef26bf1ddc1a06.jpg',
+          '/images/Course_1.jpg',
+          '/images/Course_2.jpg',
+          '/images/Course_3.jpg',
         ]
       },
       {
         title: '越南語企業方案',
         description: '量身定制的企業培訓課程',
-        mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
+        mainImage: '/images/Course_4.jpg',
         gallery: [
-          '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
-          '/images/ecbeef49cfc718c408753081eeb56f9b.jpg',
-          '/images/1c53ae24f71b7e4a060c194914790792.jpg',
+          '/images/Course_4.jpg',
+          '/images/Course_5.jpg',
+          '/images/Course_7.jpg',
         ]
       }
     ]
@@ -92,21 +92,21 @@ const translations = {
       {
         title: '越南语检定冲刺班',
         description: '系统备考 LEVEL A、LEVEL B、LEVEL C',
-        mainImage: '/images/bc6f93456d5ab596f16d370666fc2505.jpg',
+        mainImage: '/images/Course_1.jpg',
         gallery: [
-          '/images/3ae8b397517ba03b8c1dec88320f9d74.jpg',
-          '/images/dd52bb68ee30a2f330ae132e6501b9e5.jpg',
-          '/images/731328e082bb7038e8ef26bf1ddc1a06.jpg',
+          '/images/Course_1.jpg',
+          '/images/Course_2.jpg',
+          '/images/Course_3.jpg',
         ]
       },
       {
         title: '越南语企业方案',
         description: '量身定制的企业培训课程',
-        mainImage: '/images/dcd2748ed0b35c4db1d9bc9913687cb7.jpg',
+        mainImage: '/images/Course_4.jpg',
         gallery: [
-          '/images/e21eb12c580c4af99dae01b7ce9b1130.jpg',
-          '/images/ecbeef49cfc718c408753081eeb56f9b.jpg',
-          '/images/1c53ae24f71b7e4a060c194914790792.jpg',
+          '/images/Course_4.jpg',
+          '/images/Course_5.jpg',
+          '/images/Course_7.jpg',
         ]
       }
     ]
