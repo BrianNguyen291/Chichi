@@ -44,7 +44,7 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     },
     contact: { 
       label: translate('contact', 'common'), 
-      href: '/contact' 
+      href: '/#contact' 
     }
   }
 

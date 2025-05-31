@@ -255,7 +255,8 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
       </section>
 
       <footer 
-        className="w-full py-16 relative"
+        id="contact"
+        className="w-full py-16 relative scroll-mt-20"
         style={{ backgroundColor: colors.darkOlive }}
         role="contentinfo"
       >
