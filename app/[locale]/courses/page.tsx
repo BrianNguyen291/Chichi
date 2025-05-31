@@ -1062,8 +1062,11 @@ export default function CoursesPage({ params }: CoursePageProps) {
               <h3 className="text-2xl font-bold mb-4" style={{ color: colors.darkOlive }}>{t.tabPrivate}</h3>
               <p className="text-lg mb-6">{t.privateMessage}</p>
               <p className="text-lg mb-8">{t.privateContact}</p>
-              <button className="px-6 py-3 rounded-lg font-medium transition-all duration-300" 
-                style={{ backgroundColor: colors.secondary, color: colors.lightCream }}>
+              <button 
+                onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true', '_blank')}
+                className="px-6 py-3 rounded-lg font-medium transition-all duration-300" 
+                style={{ backgroundColor: colors.secondary, color: colors.lightCream }}
+              >
                 {t.contactButton}
               </button>
             </div>
