@@ -1,465 +1,652 @@
-import { CourseCard } from '@/components/ui/course-card';
-import { Section } from '@/components/ui/section';
-import { Button } from '@/components/ui/button';
-import { ChevronRight, Users } from 'lucide-react';
-import Link from 'next/link';
-import { useEffect } from 'react';
+"use client"
+
+import { useState } from "react"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import { colors } from "@/lib/colors"
+import { Card } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 interface CoursePageProps {
   params: {
-    locale: string;
-  };
+    locale: string
+  }
 }
 
-const courses = {
-  en: [
-    {
-      id: 'beginner',
-      title: 'Beginner Vietnamese (A1-A2)',
-      description: 'Start your Vietnamese language journey with our comprehensive beginner course. Learn basic vocabulary, grammar, and essential phrases for everyday communication.',
-      features: [
-        'Basic pronunciation and tones',
-        'Essential vocabulary for daily life',
-        'Simple sentence structures',
-        'Introduction to Vietnamese culture'
-      ],
-      duration: '12 weeks',
-      level: 'Beginner',
-      price: 'NT$9,800',
-      image: '/images/courses/beginner.jpg'
-    },
-    {
-      id: 'intermediate',
-      title: 'Intermediate Vietnamese (B1-B2)',
-      description: 'Enhance your Vietnamese skills with our intermediate course. Focus on conversation, reading comprehension, and more complex grammar structures.',
-      features: [
-        'Conversational practice',
-        'Reading comprehension',
-        'Intermediate grammar',
-        'Cultural insights'
-      ],
-      duration: '16 weeks',
-      level: 'Intermediate',
-      price: 'NT$12,800',
-      image: '/images/courses/intermediate.jpg'
-    },
-    {
-      id: 'advanced',
-      title: 'Advanced Vietnamese (C1-C2)',
-      description: 'Master Vietnamese with our advanced course. Perfect for those who want to achieve fluency and understand native speakers with ease.',
-      features: [
-        'Advanced conversation',
-        'Business Vietnamese',
-        'News and media analysis',
-        'Academic writing'
-      ],
-      duration: '20 weeks',
-      level: 'Advanced',
-      price: 'NT$15,800',
-      image: '/images/courses/advanced.jpg'
-    },
-    {
-      id: 'business',
-      title: 'Business Vietnamese',
-      description: 'Specialized course focusing on business communication, professional vocabulary, and cultural etiquette in Vietnamese business settings.',
-      features: [
-        'Business communication',
-        'Professional vocabulary',
-        'Email and report writing',
-        'Business culture and etiquette'
-      ],
-      duration: '10 weeks',
-      level: 'Intermediate+',
-      price: 'NT$14,800',
-      image: '/images/courses/business.jpg'
-    },
-    {
-      id: 'conversation',
-      title: 'Conversation Practice',
-      description: 'Improve your speaking and listening skills through guided conversations with native speakers on various topics.',
-      features: [
-        'Daily conversation practice',
-        'Listening comprehension',
-        'Pronunciation correction',
-        'Idiomatic expressions'
-      ],
-      duration: '8 weeks',
-      level: 'All Levels',
-      price: 'NT$8,800',
-      image: '/images/courses/conversation.jpg'
-    },
-    {
-      id: 'hsk-preparation',
-      title: 'Vietnamese Proficiency Test Preparation',
-      description: 'Comprehensive preparation for the Vietnamese language proficiency tests with practice tests and test-taking strategies.',
-      features: [
-        'Test format review',
-        'Practice tests',
-        'Test-taking strategies',
-        'Time management'
-      ],
-      duration: '6 weeks',
-      level: 'All Levels',
-      price: 'NT$10,800',
-      image: '/images/courses/test-prep.jpg'
-    }
-  ],
-  'zh-Hant': [
-    {
-      id: 'beginner',
-      title: '初級越南語 (A1-A2)',
-      description: '開始您的越南語學習之旅。學習基礎詞彙、語法和日常交流必備短語。',
-      features: [
-        '基礎發音和聲調',
-        '日常生活必備詞彙',
-        '簡單句型結構',
-        '越南文化介紹'
-      ],
-      duration: '12 週',
-      level: '初級',
-      price: 'NT$9,800',
-      image: '/images/courses/beginner.jpg'
-    },
-    {
-      id: 'intermediate',
-      title: '中級越南語 (B1-B2)',
-      description: '提升您的越南語能力，專注於會話、閱讀理解和更複雜的語法結構。',
-      features: [
-        '會話練習',
-        '閱讀理解',
-        '中級語法',
-        '文化見解'
-      ],
-      duration: '16 週',
-      level: '中級',
-      price: 'NT$12,800',
-      image: '/images/courses/intermediate.jpg'
-    },
-    {
-      id: 'advanced',
-      title: '高級越南語 (C1-C2)',
-      description: '掌握越南語，輕鬆理解母語人士的對話和內容。',
-      features: [
-        '高級會話',
-        '商務越南語',
-        '新聞媒體分析',
-        '學術寫作'
-      ],
-      duration: '20 週',
-      level: '高級',
-      price: 'NT$15,800',
-      image: '/images/courses/advanced.jpg'
-    },
-    {
-      id: 'business',
-      title: '商務越南語',
-      description: '專注於商務溝通、專業詞彙和越南商務場合的文化禮儀。',
-      features: [
-        '商務溝通',
-        '專業詞彙',
-        '電子郵件和報告寫作',
-        '商務文化與禮儀'
-      ],
-      duration: '10 週',
-      level: '中級+',
-      price: 'NT$14,800',
-      image: '/images/courses/business.jpg'
-    },
-    {
-      id: 'conversation',
-      title: '會話練習',
-      description: '通過與母語人士的指導對話，提高您的口語和聽力技能。',
-      features: [
-        '日常會話練習',
-        '聽力理解',
-        '發音矯正',
-        '慣用表達'
-      ],
-      duration: '8 週',
-      level: '所有級別',
-      price: 'NT$8,800',
-      image: '/images/courses/conversation.jpg'
-    },
-    {
-      id: 'hsk-preparation',
-      title: '越南語能力考試準備',
-      description: '全面準備越南語能力考試，包括模擬試題和應試策略。',
-      features: [
-        '考試形式複習',
-        '模擬試題',
-        '應試策略',
-        '時間管理'
-      ],
-      duration: '6 週',
-      level: '所有級別',
-      price: 'NT$10,800',
-      image: '/images/courses/test-prep.jpg'
-    }
-  ],
-  'zh-Hans': [
-    {
-      id: 'beginner',
-      title: '初级越南语 (A1-A2)',
-      description: '开始您的越南语学习之旅。学习基础词汇、语法和日常交流必备短语。',
-      features: [
-        '基础发音和声调',
-        '日常生活必备词汇',
-        '简单句型结构',
-        '越南文化介绍'
-      ],
-      duration: '12 周',
-      level: '初级',
-      price: 'NT$9,800',
-      image: '/images/courses/beginner.jpg'
-    },
-    {
-      id: 'intermediate',
-      title: '中级越南语 (B1-B2)',
-      description: '提升您的越南语能力，专注于会话、阅读理解和更复杂的语法结构。',
-      features: [
-        '会话练习',
-        '阅读理解',
-        '中级语法',
-        '文化见解'
-      ],
-      duration: '16 周',
-      level: '中级',
-      price: 'NT$12,800',
-      image: '/images/courses/intermediate.jpg'
-    },
-    {
-      id: 'advanced',
-      title: '高级越南语 (C1-C2)',
-      description: '掌握越南语，轻松理解母语人士的对话和内容。',
-      features: [
-        '高级会话',
-        '商务越南语',
-        '新闻媒体分析',
-        '学术写作'
-      ],
-      duration: '20 周',
-      level: '高级',
-      price: 'NT$15,800',
-      image: '/images/courses/advanced.jpg'
-    },
-    {
-      id: 'business',
-      title: '商务越南语',
-      description: '专注于商务沟通、专业词汇和越南商务场合的文化礼仪。',
-      features: [
-        '商务沟通',
-        '专业词汇',
-        '电子邮件和报告写作',
-        '商务文化与礼仪'
-      ],
-      duration: '10 周',
-      level: '中级+',
-      price: 'NT$14,800',
-      image: '/images/courses/business.jpg'
-    },
-    {
-      id: 'conversation',
-      title: '会话练习',
-      description: '通过与母语人士的指导对话，提高您的口语和听力技能。',
-      features: [
-        '日常会话练习',
-        '听力理解',
-        '发音矫正',
-        '惯用表达'
-      ],
-      duration: '8 周',
-      level: '所有级别',
-      price: 'NT$8,800',
-      image: '/images/courses/conversation.jpg'
-    },
-    {
-      id: 'hsk-preparation',
-      title: '越南语能力考试准备',
-      description: '全面准备越南语能力考试，包括模拟试题和应试策略。',
-      features: [
-        '考试形式复习',
-        '模拟试题',
-        '应试策略',
-        '时间管理'
-      ],
-      duration: '6 周',
-      level: '所有级别',
-      price: 'NT$10,800',
-      image: '/images/courses/test-prep.jpg'
-    }
-  ]
-};
-
-// Translation fallbacks
 const translations = {
-  en: {
-    title: 'Our Vietnamese Language Courses',
-    subtitle: 'Choose the perfect course to start your Vietnamese language journey',
-    cta: {
-      title: 'Ready to start learning Vietnamese?',
-      description: 'Join our community of language learners and start speaking Vietnamese with confidence.',
-      button: 'Contact Us'
-    }
+  "en": {
+    title: "Our Vietnamese Courses",
+    subtitle: "Comprehensive learning paths for all levels",
+    tabBeginner: "Beginner",
+    tabIntermediate: "Intermediate",
+    tabAdvanced: "Advanced",
+    tabCertification: "Certification",
+    tabCorporate: "Corporate",
+    tabPrivate: "Private Lessons",
+    hours: "Hours",
+    classSize: "Class Size",
+    objectives: "Learning Objectives",
+    coreContent: "Core Content",
+    highlights: "Highlights",
+    focus: "Focus Areas",
+    materials: "Materials",
+    achievements: "Achievements",
+    specialization: "Specialization",
+    customization: "Customization",
+    contactButton: "Contact Us",
+    enrollButton: "Enroll Now",
+    moreButton: "Learn More",
+    ctaTitle: "Ready to start your Vietnamese learning journey?",
+    ctaSubtitle: "Whether you're a beginner or looking to enhance your existing language skills, we have courses suitable for you.",
+    certificationMessage: "Certification courses are currently being planned. Please contact us for more details.",
+    privateMessage: "We offer customized private lessons tailored to your needs and learning goals.",
+    privateContact: "Please contact us directly and we will arrange a dedicated consultant for a detailed consultation."
   },
-  'zh-Hant': {
-    title: '我們的越南語課程',
-    subtitle: '選擇適合您的課程，開始您的越南語學習之旅',
-    cta: {
-      title: '準備好開始學習越南語了嗎？',
-      description: '加入我們的語言學習社群，自信地說越南語。',
-      button: '聯繫我們'
-    }
+  "zh-Hant": {
+    title: "越南語課程",
+    subtitle: "為各級別提供全面的學習路徑",
+    tabBeginner: "初級",
+    tabIntermediate: "中級",
+    tabAdvanced: "高級",
+    tabCertification: "考證班",
+    tabCorporate: "企業班",
+    tabPrivate: "個人班",
+    hours: "課程時數",
+    classSize: "班級人數",
+    objectives: "學習目標",
+    coreContent: "核心內容",
+    highlights: "教學亮點",
+    focus: "強化領域",
+    materials: "教材延伸",
+    achievements: "達成指標",
+    specialization: "專業銜接",
+    customization: "客製化內容",
+    contactButton: "聯絡我們",
+    enrollButton: "立即報名",
+    moreButton: "了解更多",
+    ctaTitle: "準備好開始您的越南語學習之旅了嗎？",
+    ctaSubtitle: "無論您是初學者還是想提升現有語言能力，我們都有適合您的課程。",
+    certificationMessage: "考證班課程內容正在規劃中，請聯繫我們了解更多詳情。",
+    privateMessage: "我們提供客製化個人教學，根據您的需求和學習目標量身打造課程。",
+    privateContact: "請直接聯繫我們，我們將為您安排專屬顧問進行詳細諮詢。"
   },
-  'zh-Hans': {
-    title: '我们的越南语课程',
-    subtitle: '选择适合您的课程，开始您的越南语学习之旅',
-    cta: {
-      title: '准备好开始学习越南语了吗？',
-      description: '加入我们的语言学习社群，自信地说越南语。',
-      button: '联系我们'
-    }
+  "zh-Hans": {
+    title: "越南语课程",
+    subtitle: "为各级别提供全面的学习路径",
+    tabBeginner: "初级",
+    tabIntermediate: "中级",
+    tabAdvanced: "高级",
+    tabCertification: "考证班",
+    tabCorporate: "企业班",
+    tabPrivate: "个人班",
+    hours: "课程时数",
+    classSize: "班级人数",
+    objectives: "学习目标",
+    coreContent: "核心内容",
+    highlights: "教学亮点",
+    focus: "强化领域",
+    materials: "教材延伸",
+    achievements: "达成指标",
+    specialization: "专业衔接",
+    customization: "定制化内容",
+    contactButton: "联系我们",
+    enrollButton: "立即报名",
+    moreButton: "了解更多",
+    ctaTitle: "准备好开始您的越南语学习之旅了吗？",
+    ctaSubtitle: "无论您是初学者还是想提升现有语言能力，我们都有适合您的课程。",
+    certificationMessage: "考证班课程内容正在规划中，请联系我们了解更多详情。",
+    privateMessage: "我们提供定制化个人教学，根据您的需求和学习目标量身打造课程。",
+    privateContact: "请直接联系我们，我们将为您安排专属顾问进行详细咨询。"
   }
-};
+}
 
-export default function CoursesPage({ params: { locale } }: CoursePageProps) {
-  const currentLocale = (locale as 'en' | 'zh-Hant' | 'zh-Hans') || 'en';
-  const t = translations[currentLocale] || translations.en;
-  const courseList = courses[currentLocale] || courses.en;
+export default function CoursesPage({ params }: CoursePageProps) {
+  const locale = params.locale || "zh-Hant"
+  const t = translations[locale as keyof typeof translations] || translations["zh-Hant"]
+  const [activeTab, setActiveTab] = useState("beginner")
 
   return (
-    <div className="bg-white">
+    <main className="min-h-screen bg-[#f8f6f0]">
+      {/* Hero Section */}
+      <section className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 z-10"></div>
+        <Image 
+          src="/images/course-hero.jpg" 
+          alt="Vietnamese language courses" 
+          fill 
+          priority
+          className="object-cover"
+        />
+        <div className="relative z-20 container mx-auto h-full flex flex-col justify-center px-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.title}</h1>
+          <p className="text-xl text-white/90 max-w-2xl">{t.subtitle}</p>
+        </div>
+      </section>
 
-      {/* Courses Grid - Improved with section heading, filters and animations */}
-      <Section id="courses" className="py-20 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Explore Our Courses</h2>
-            <p className="text-lg text-gray-600 mb-8">Discover the perfect Vietnamese language course to match your learning goals and current proficiency level.</p>
-            <div className="inline-flex flex-wrap justify-center gap-2 p-1 bg-gray-100 rounded-lg">
-              <button className="px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-primary-700">All Levels</button>
-              <button className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200 transition-colors">Beginner</button>
-              <button className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200 transition-colors">Intermediate</button>
-              <button className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200 transition-colors">Advanced</button>
-              <button className="px-4 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-200 transition-colors">Specialized</button>
+      {/* Course Tabs */}
+      <section className="container mx-auto py-12 px-4">
+        <Tabs defaultValue="beginner" className="w-full" onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-3 md:grid-cols-6 gap-2 mb-8">
+            <TabsTrigger value="beginner" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+              {t.tabBeginner}
+            </TabsTrigger>
+            <TabsTrigger value="intermediate" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+              {t.tabIntermediate}
+            </TabsTrigger>
+            <TabsTrigger value="advanced" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+              {t.tabAdvanced}
+            </TabsTrigger>
+            <TabsTrigger value="certification" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+              {t.tabCertification}
+            </TabsTrigger>
+            <TabsTrigger value="corporate" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+              {t.tabCorporate}
+            </TabsTrigger>
+            <TabsTrigger value="private" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+              {t.tabPrivate}
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Beginner Level Content */}
+          <TabsContent value="beginner" className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* A0 Course */}
+              <CourseCard 
+                level="A0" 
+                title="初階入門"
+                hours="24"
+                classSize="3-6"
+                objectives={[
+                  "建立越南語發音系統基礎",
+                  "掌握日常基礎對話能力（自我介紹、個人興趣、生活場景）",
+                  "能理解並使用高頻實用短句"
+                ]}
+                content={[
+                  "母音/輔音發音規則、聲調辨識訓練",
+                  "主題式對話：姓名、國籍、職業、購物、時間表達",
+                  "聽力口說強化 + 基礎讀寫入門"
+                ]}
+              />
+              
+              {/* A1 Course */}
+              <CourseCard 
+                level="A1" 
+                title="初階基礎"
+                hours="24"
+                classSize="3-6"
+                objectives={[
+                  "聽懂簡短生活對話（如問路、交通、議價）",
+                  "學習「主動提問」與「關鍵資訊捕捉」技巧"
+                ]}
+                content={[
+                  "情境模擬：市集購物、餐廳點餐、交通工具搭乘",
+                  "商業場景基礎用語（詢價、預約、簡單洽談）"
+                ]}
+              />
+              
+              {/* A2 Course */}
+              <CourseCard 
+                level="A2" 
+                title="初階進階"
+                hours="24"
+                classSize="3-6"
+                objectives={[
+                  "流暢應對日常需求（訂房、票務、線上交易）",
+                  "閱讀簡單公告、菜單、行程說明"
+                ]}
+                content={[
+                  "旅遊規劃：酒店預訂、景點諮詢、緊急狀況處理",
+                  "數位生活：網購對話、社群媒體常用語"
+                ]}
+              />
             </div>
+          </TabsContent>
+          
+          {/* Intermediate Level Content */}
+          <TabsContent value="intermediate" className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* B1 Course */}
+              <CourseCard 
+                level="B1" 
+                title="中階"
+                hours="30"
+                highlights={[
+                  "使用《越南語B1標準教材》Unit 1-8",
+                  "培養「段落式表達」能力（如：描述經歷、說明工作流程）"
+                ]}
+                achievements={[
+                  "理解非專業性長文（部落格、簡易新聞）",
+                  "能用因果句、複合句陳述觀點"
+                ]}
+              />
+              
+              {/* B2 Course */}
+              <CourseCard 
+                level="B2" 
+                title="中階"
+                hours="30"
+                focus={[
+                  "學術/職場場景：會議討論、數據解讀、文化差異分析",
+                  "高階文法：關係子句、虛擬語氣、正式書信結構"
+                ]}
+                materials={[
+                  "補充《商業越南語》模組",
+                  "時事議題討論（經濟趨勢、社會現象）"
+                ]}
+              />
+              
+              {/* B3 Course */}
+              <CourseCard 
+                level="B3" 
+                title="中高階"
+                hours="30"
+                specialization={[
+                  "精讀各類文本：合約條款、學術論文、政策報導",
+                  "進階寫作訓練：論說文、企劃書架構"
+                ]}
+              />
+            </div>
+          </TabsContent>
+          
+          {/* Advanced Level Content */}
+          <TabsContent value="advanced" className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* C1 Course */}
+              <CourseCard 
+                level="C1" 
+                title="高階"
+                hours="30"
+                subtitle="專業人士適用"
+                objectives={[
+                  "參與專業研討會、進行技術性簡報",
+                  "分析專業領域文獻（如法律、醫療、工程）"
+                ]}
+              />
+              
+              {/* C2 Course */}
+              <CourseCard 
+                level="C2" 
+                title="精通級"
+                hours="30"
+                subtitle="母語級要求"
+                objectives={[
+                  "掌握方言/慣用語差異",
+                  "即興演說、文學作品賞析、跨文化談判"
+                ]}
+              />
+              
+              {/* C3 Course */}
+              <CourseCard 
+                level="C3" 
+                title="精通級"
+                hours="30"
+                customization={[
+                  "針對特定領域深化（如：影視翻譯、外交辭令）",
+                  "專題研究指導（論文寫作、口譯技巧）"
+                ]}
+              />
+            </div>
+          </TabsContent>
+          
+          {/* Certification Courses */}
+          <TabsContent value="certification" className="space-y-8">
+            <div className="p-8 bg-white rounded-lg shadow-md">
+              <h3 className="text-2xl font-bold mb-4" style={{ color: colors.darkOlive }}>{t.tabCertification}</h3>
+              <p className="text-lg mb-6">{t.certificationMessage}</p>
+              <button className="px-6 py-3 rounded-lg font-medium transition-all duration-300" 
+                style={{ backgroundColor: colors.secondary, color: colors.lightCream }}>
+                {t.contactButton}
+              </button>
+            </div>
+          </TabsContent>
+          
+          {/* Corporate Courses */}
+          <TabsContent value="corporate" className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Corporate A0 */}
+              <CourseCard 
+                level="A0" 
+                title="初級企業班"
+                hours="24"
+                classSize="4-8"
+                subtitle="精緻小班"
+                objectives={[
+                  "建立越南語發音系統基礎（聲調/母音/輔音精準辨識）",
+                  "掌握生存級會話能力（自我介紹、基礎問答）"
+                ]}
+                content={[
+                  "語音系統：29個字母發音規則+6種聲調訓練",
+                  "主題會話：個人資料、職業表述、日常用品指稱",
+                  "技能配比：聽說70%｜讀寫30%"
+                ]}
+              />
+              
+              {/* Corporate A1 */}
+              <CourseCard 
+                level="A1" 
+                title="初級企業班"
+                hours="24"
+                achievements={[
+                  "聽懂慢速生活對話（語速100字/分鐘）",
+                  "完成基礎交易溝通（議價誤差≤15%）"
+                ]}
+                content={[
+                  "都市生存：公共交通搭乘、方位問答",
+                  "商業場景：市場採購、簡易合約條款理解"
+                ]}
+              />
+              
+              {/* Corporate A2 */}
+              <CourseCard 
+                level="A2" 
+                title="初級企業班"
+                hours="24"
+                content={[
+                  "旅遊情境模擬：酒店預訂/票務處理/緊急狀況應對",
+                  "數位溝通：社交軟體常用語、線上購物對話"
+                ]}
+                achievements={[
+                  "基礎文法正確率達80%",
+                  "可理解300字內生活短文"
+                ]}
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+              {/* Corporate B1 */}
+              <CourseCard 
+                level="B1" 
+                title="中級企業班"
+                hours="30"
+                subtitle="《標準越南語B1》單元1-8"
+                specialization={[
+                  "職場應用：會議記錄摘要、工作郵件撰寫",
+                  "學術基礎：圖表描述、簡單數據解讀"
+                ]}
+                achievements={[
+                  "能進行10分鐘連續性主題陳述",
+                  "聽懂廣播新聞主要訊息（理解率70%+）"
+                ]}
+              />
+              
+              {/* Corporate B2 */}
+              <CourseCard 
+                level="B2" 
+                title="中級企業班"
+                hours="30"
+                content={[
+                  "媒體分析：新聞報導立場辨識",
+                  "論述寫作：正反觀點表述（500字內）",
+                  "專業詞彙：經濟/社會/教育領域200+關鍵詞"
+                ]}
+                materials={[
+                  "《商務越南語實戰》補充單元"
+                ]}
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+              {/* Corporate C1 */}
+              <CourseCard 
+                level="C1" 
+                title="高階企業班"
+                hours="36"
+                subtitle="專家級訓練"
+                objectives={[
+                  "學術論文精讀（抽樣率達85%）",
+                  "專業簡報技巧（含Q&A應對策略）",
+                  "跨文化溝通案例研討"
+                ]}
+              />
+              
+              {/* Corporate C2-C3 */}
+              <CourseCard 
+                level="C2-C3" 
+                title="高階企業班"
+                hours="36"
+                subtitle="母語者認證標準"
+                objectives={[
+                  "方言辨識：河內/胡志明市口音差異",
+                  "文學賞析：現代詩歌修辭解讀",
+                  "即席演說：無準備時間即興表達"
+                ]}
+                customization={[
+                  "領域強化：法律/醫療/工程專業術語",
+                  "藝術表達：影視劇本創作指導"
+                ]}
+              />
+            </div>
+          </TabsContent>
+          
+          {/* Private Lessons */}
+          <TabsContent value="private" className="space-y-8">
+            <div className="p-8 bg-white rounded-lg shadow-md text-center">
+              <h3 className="text-2xl font-bold mb-4" style={{ color: colors.darkOlive }}>{t.tabPrivate}</h3>
+              <p className="text-lg mb-6">{t.privateMessage}</p>
+              <p className="text-lg mb-8">{t.privateContact}</p>
+              <button className="px-6 py-3 rounded-lg font-medium transition-all duration-300" 
+                style={{ backgroundColor: colors.secondary, color: colors.lightCream }}>
+                {t.contactButton}
+              </button>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </section>
+      
+      {/* CTA Section */}
+      <section className="w-full py-16" style={{ backgroundColor: colors.primary }}>  
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6" style={{ color: colors.darkOlive }}>{t.ctaTitle}</h2>
+          <p className="text-lg mb-8 max-w-2xl mx-auto" style={{ color: colors.grayGreen }}>{t.ctaSubtitle}</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button className="px-8 py-3 rounded-lg font-medium transition-all duration-300" 
+              style={{ backgroundColor: colors.darkOlive, color: colors.lightCream }}>
+              {t.enrollButton}
+            </button>
+            <button className="px-8 py-3 rounded-lg font-medium transition-all duration-300 border-2" 
+              style={{ borderColor: colors.darkOlive, color: colors.darkOlive }}>
+              {t.contactButton}
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+// Course Card Component
+interface CourseCardProps {
+  level: string
+  title: string
+  hours: string
+  classSize?: string
+  subtitle?: string
+  objectives?: string[]
+  content?: string[]
+  highlights?: string[]
+  focus?: string[]
+  materials?: string[]
+  achievements?: string[]
+  specialization?: string[]
+  customization?: string[]
+}
+
+function CourseCard({
+  level,
+  title,
+  hours,
+  classSize,
+  subtitle,
+  objectives,
+  content,
+  highlights,
+  focus,
+  materials,
+  achievements,
+  specialization,
+  customization
+}: CourseCardProps) {
+  // Get current locale from URL
+  const locale = typeof window !== 'undefined' ? window.location.pathname.split('/')[1] : 'en';
+  // Default to English if locale is not supported
+  const t = translations[locale as keyof typeof translations] || translations['en'];
+  return (
+    <motion.div 
+      whileHover={{ y: -5 }} 
+      transition={{ type: "spring", stiffness: 300 }}
+      className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col"
+    >
+      <div className="p-6 flex-grow">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <h3 className="text-2xl font-bold" style={{ color: colors.darkOlive }}>{title}</h3>
+            {subtitle && <p className="text-sm mt-1" style={{ color: colors.grayGreen }}>{subtitle}</p>}
+          </div>
+          <span className="px-3 py-1 rounded-full text-sm font-semibold" 
+            style={{ backgroundColor: `${colors.secondary}30`, color: colors.secondary }}>
+            {level}
+          </span>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="flex space-x-4">
+            <div className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: colors.secondary }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{hours} {locale === 'en' ? 'Hours' : locale === 'zh-Hans' ? '小时' : '小時'}</span>
+            </div>
+            
+            {classSize && (
+              <div className="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: colors.secondary }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>{classSize} {locale === 'en' ? 'Students' : '人'}</span>
+              </div>
+            )}
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courseList.map((course, index) => (
-              <div key={course.id} className="transform transition-all duration-300 hover:translate-y-[-8px] opacity-0 animate-fade-in-up" style={{ animationDelay: `${index * 100}ms`, animationFillMode: 'forwards' }}>
-                <CourseCard course={course} locale={locale} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* Features Section - New section highlighting benefits */}
-      <Section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Why Learn With Us?</h2>
-            <p className="text-lg text-gray-600">Experience the benefits of our carefully designed Vietnamese language programs</p>
-          </div>
+          {objectives && objectives.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.objectives}</h4>
+              <ul className="space-y-1">
+                {objectives.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2 mt-1">✅</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-md transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Expert Teachers</h3>
-              <p className="text-gray-600">Learn from native Vietnamese speakers with years of teaching experience</p>
+          {content && content.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.coreContent}</h4>
+              <ul className="space-y-1">
+                {content.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">▸</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            
-            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-md transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Structured Curriculum</h3>
-              <p className="text-gray-600">Follow a well-designed learning path that ensures steady progress</p>
+          )}
+          
+          {highlights && highlights.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.highlights}</h4>
+              <ul className="space-y-1">
+                {highlights.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">🔹</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            
-            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-md transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Conversation Practice</h3>
-              <p className="text-gray-600">Regular speaking sessions to build your confidence in real-world situations</p>
+          )}
+          
+          {focus && focus.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.focus}</h4>
+              <ul className="space-y-1">
+                {focus.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">📍</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            
-            <div className="bg-gray-50 p-6 rounded-xl text-center hover:shadow-md transition-all duration-300">
-              <div className="w-16 h-16 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Flexible Schedule</h3>
-              <p className="text-gray-600">Choose from various time slots that fit your busy lifestyle</p>
+          )}
+          
+          {materials && materials.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.materials}</h4>
+              <ul className="space-y-1">
+                {materials.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">▸</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          )}
+          
+          {achievements && achievements.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.achievements}</h4>
+              <ul className="space-y-1">
+                {achievements.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">✔️</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          {specialization && specialization.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.specialization}</h4>
+              <ul className="space-y-1">
+                {specialization.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">✦</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          {customization && customization.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.customization}</h4>
+              <ul className="space-y-1">
+                {customization.map((item, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="inline-block mr-2">🌟</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      </Section>
-
-      {/* CTA Section - Improved with card design and better visual appeal */}
-      <Section className="py-20 bg-gradient-to-br from-primary-50 to-primary-100">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-1/2 relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary-600/90 to-primary-800/90 z-10"></div>
-                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/images/courses/cta-background.jpg")' }}></div>
-                <div className="relative z-20 p-10 h-full flex flex-col justify-center text-white">
-                  <h3 className="text-3xl font-bold mb-4">{t.cta.title}</h3>
-                  <p className="text-primary-50 mb-6">{t.cta.description}</p>
-                  <div className="flex space-x-3">
-                    <div className="flex -space-x-2">
-                      {[1, 2, 3, 4].map((i) => (
-                        <div key={i} className="w-8 h-8 rounded-full border-2 border-white overflow-hidden">
-                          <div className="w-full h-full bg-primary-300"></div>
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-sm">Join 500+ students already learning</p>
-                  </div>
-                </div>
-              </div>
-              <div className="md:w-1/2 p-10 flex flex-col justify-center">
-                <h4 className="text-2xl font-semibold mb-6 text-gray-900">Get Started Today</h4>
-                <div className="space-y-4 mb-6">
-                  <div className="flex items-center">
-                    <svg className="h-5 w-5 text-primary-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Flexible class schedules</span>
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="h-5 w-5 text-primary-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Small group sizes for personalized attention</span>
-                  </div>
-                  <div className="flex items-center">
-                    <svg className="h-5 w-5 text-primary-500 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span>Online and in-person options available</span>
-                  </div>
-                </div>
-                <Button asChild size="lg" className="bg-primary-600 hover:bg-primary-700 transition-all duration-300 w-full">
-                  <Link href={`/${locale}/contact`}>
-                    {t.cta.button}
-                    <ChevronRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-    </div>
-  );
+      </div>
+      
+      <div className="p-6 mt-auto border-t border-gray-100">
+        <button className="w-full py-2 rounded-lg font-medium transition-all duration-300" 
+          style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}>
+          {t.moreButton}
+        </button>
+      </div>
+    </motion.div>
+  )
 }
