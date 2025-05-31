@@ -37,22 +37,26 @@ const contactOptions = [
   { 
     type: 'line',
     icon: '/images/Line.png',
-    link: 'https://line.me/ti/p/your-line-id'
+    link: 'https://line.me/ti/p/hayleenguyen',
+    label: 'hayleenguyen'
   },
   {
     type: 'wechat',
     icon: '/images/Wechat.png',
-    link: 'weixin://dl/chat?your-wechat-id'
+    link: 'weixin://dl/chat?zhizhiyueyu',
+    label: 'zhizhiyueyu'
   },
   {
     type: 'zalo',
     icon: '/images/zalo.png',
-    link: 'https://zalo.me/your-zalo-id'
+    link: 'https://zalo.me/84966352690',
+    label: '+84 966 352 690'
   },
   {
-    type: 'phone',
-    icon: '/images/phone.png',
-    link: 'tel:+886123456789'
+    type: 'email',
+    icon: '/images/gmail.png',
+    link: 'mailto:chinestudylab@gmail.com',
+    label: 'chinestudylab@gmail.com'
   }
 ]
 
