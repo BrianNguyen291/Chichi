@@ -1070,24 +1070,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
           </TabsContent>
         </Tabs>
       </section>
-      
-      {/* CTA Section */}
-      <section className="w-full py-16" style={{ backgroundColor: colors.primary }}>  
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6" style={{ color: colors.darkOlive }}>{t.ctaTitle}</h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto" style={{ color: colors.grayGreen }}>{t.ctaSubtitle}</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 rounded-lg font-medium transition-all duration-300" 
-              style={{ backgroundColor: colors.darkOlive, color: colors.lightCream }}>
-              {t.enrollButton}
-            </button>
-            <button className="px-8 py-3 rounded-lg font-medium transition-all duration-300 border-2" 
-              style={{ borderColor: colors.darkOlive, color: colors.darkOlive }}>
-              {t.contactButton}
-            </button>
-          </div>
-        </div>
-      </section>
+
     </main>
   )
 }
@@ -1282,8 +1265,11 @@ function CourseCard({
       </div>
       
       <div className="p-6 mt-auto border-t border-gray-100">
-        <button className="w-full py-2 rounded-lg font-medium transition-all duration-300" 
-          style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}>
+        <button 
+          onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true&fbclid=IwY2xjawKnWNZleHRuA2FlbQIxMQABHvWzAKxujUd1LMx7v4j1ad_k4aSvD9HbnaPIjrQ7XNfxy9gTVIwzm5JLKuwZ_aem_P8fWn9-kke7Tp_UmPqcnpw', '_blank')}
+          className="w-full py-2 rounded-lg font-medium transition-all duration-300" 
+          style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}
+        >
           {t.moreButton}
         </button>
       </div>
