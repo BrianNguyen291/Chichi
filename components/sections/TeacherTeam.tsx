@@ -80,6 +80,26 @@ const translations = {
           'Specialized in Vietnamese for beginners',
           'Interactive learning approach specialist'
         ]
+      },
+      {
+        name: 'Teacher Mai Thi Huyen Trang',
+        image: '/images/teacher_team/梅氏玄莊.png',
+        experience: '3 Years Teaching Experience',
+        credentials: [
+          'Graduated from Kao Yuan University',
+          'Specialized in Vietnamese pronunciation and conversation',
+          'Vibrant and engaging teaching style'
+        ]
+      },
+      {
+        name: 'Teacher Luong Han Vinh',
+        image: '/images/teacher_team/梁漢榮.png',
+        experience: '5 Years Teaching Experience',
+        credentials: [
+          'Master\'s Degree from Wenzao Ursuline University',
+          'Specialized in Vietnamese grammar and writing',
+          'Systematic teaching methodology'
+        ]
       }
     ]
   },
@@ -154,6 +174,26 @@ const translations = {
           '專精初學者越南語教學',
           '互動學習方法專家'
         ]
+      },
+      {
+        name: '梅氏玄莊老師',
+        image: '/images/teacher_team/梅氏玄莊.png',
+        experience: '3年教學經驗',
+        credentials: [
+          '高苑科技大學',
+          '專精越南語發音與會話',
+          '生動活潑的教學風格'
+        ]
+      },
+      {
+        name: '梁漢榮老師',
+        image: '/images/teacher_team/梁漢榮.png',
+        experience: '5年教學經驗',
+        credentials: [
+          '文藻大學碩士畢業',
+          '專精越南語文法與寫作',
+          '系統化教學方法'
+        ]
       }
     ]
   },
@@ -227,6 +267,26 @@ const translations = {
           '上海大学硕士学位',
           '专精初学者越南语教学',
           '互动学习方法专家'
+        ]
+      },
+      {
+        name: '梅氏玄庄老师',
+        image: '/images/teacher_team/梅氏玄莊.png',
+        experience: '3年教学经验',
+        credentials: [
+          '高苑科技大学',
+          '专精越南语发音与会话',
+          '生动活泼的教学风格'
+        ]
+      },
+      {
+        name: '梁汉荣老师',
+        image: '/images/teacher_team/梁漢榮.png',
+        experience: '5年教学经验',
+        credentials: [
+          '文藻大学硕士毕业',
+          '专精越南语文法与写作',
+          '系统化教学方法'
         ]
       }
     ]
