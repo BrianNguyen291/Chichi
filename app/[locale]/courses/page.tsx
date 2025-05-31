@@ -7,13 +7,61 @@ import { colors } from "@/lib/colors"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-interface CoursePageProps {
-  params: {
-    locale: string
-  }
+interface CourseDetails {
+  [key: string]: {
+    title: string;
+    objectives: string[];
+    content: string[];
+  };
 }
 
-const translations = {
+interface TranslationBase {
+  title: string;
+  subtitle: string;
+  tabBeginner: string;
+  tabIntermediate: string;
+  tabAdvanced: string;
+  tabCertification: string;
+  tabCorporate: string;
+  tabPrivate: string;
+  hours: string;
+  classSize: string;
+  objectives: string;
+  coreContent: string;
+  highlights: string;
+  focus: string;
+  materials: string;
+  achievements: string;
+  specialization: string;
+  customization: string;
+  contactButton: string;
+  enrollButton: string;
+  moreButton: string;
+  ctaTitle: string;
+  ctaSubtitle: string;
+  certificationMessage: string;
+  privateMessage: string;
+  privateContact: string;
+  courseDetails: {
+    [key: string]: {
+      title: string;
+      objectives: string[];
+      content: string[];
+    };
+  };
+}
+
+interface Translations {
+  [key: string]: TranslationBase;
+}
+
+interface CoursePageProps {
+  params: {
+    locale: string;
+  };
+}
+
+const translations: Translations = {
   "en": {
     title: "Our Vietnamese Courses",
     subtitle: "Comprehensive learning paths for all levels",
@@ -40,7 +88,88 @@ const translations = {
     ctaSubtitle: "Whether you're a beginner or looking to enhance your existing language skills, we have courses suitable for you.",
     certificationMessage: "Certification courses are currently being planned. Please contact us for more details.",
     privateMessage: "We offer customized private lessons tailored to your needs and learning goals.",
-    privateContact: "Please contact us directly and we will arrange a dedicated consultant for a detailed consultation."
+    privateContact: "Please contact us directly and we will arrange a dedicated consultant for a detailed consultation.",
+    courseDetails: {
+      A0: {
+        title: "Starter Level",
+        objectives: [
+          "Establish Vietnamese pronunciation system foundation",
+          "Master basic daily conversation skills (self-introduction, personal interests, daily scenarios)",
+          "Understand and use high-frequency practical phrases"
+        ],
+        content: [
+          "Vowel/consonant pronunciation rules, tone recognition training",
+          "Themed conversations: name, nationality, occupation, shopping, time expression",
+          "Listening & speaking enhancement + basic reading/writing introduction"
+        ]
+      },
+      A1: {
+        title: "Beginner Foundation",
+        objectives: [
+          "Understand short daily conversations (e.g., asking for directions, transportation, bargaining)",
+          "Learn techniques for 'active questioning' and 'key information capturing'"
+        ],
+        content: [
+          "Scenario simulation: market shopping, ordering at restaurants, taking public transport",
+          "Basic business terms (inquiries, appointments, simple negotiations)"
+        ]
+      },
+      A2: {
+        title: "Elementary Level",
+        objectives: [
+          "Handle routine social interactions and simple transactions",
+          "Describe in simple terms aspects of background and immediate environment"
+        ],
+        content: [
+          "Expressing opinions, making comparisons, describing experiences",
+          "Handling travel arrangements, dealing with emergencies, basic workplace communication"
+        ]
+      },
+      B1: {
+        title: "Intermediate Level",
+        objectives: [
+          "Deal with most situations likely to arise while traveling in Vietnam",
+          "Produce simple connected text on familiar topics"
+        ],
+        content: [
+          "Discussing news, current affairs, and cultural topics",
+          "Writing personal letters, emails, and short reports"
+        ]
+      },
+      B2: {
+        title: "Upper Intermediate",
+        objectives: [
+          "Interact with a degree of fluency and spontaneity with native speakers",
+          "Produce clear, detailed text on a wide range of subjects"
+        ],
+        content: [
+          "Debating, presenting arguments, and discussing abstract topics",
+          "Understanding complex texts, including technical discussions in your field"
+        ]
+      },
+      C1: {
+        title: "Advanced Level",
+        objectives: [
+          "Express ideas fluently and spontaneously without much obvious searching for expressions",
+          "Use language flexibly and effectively for social, academic, and professional purposes"
+        ],
+        content: [
+          "Academic writing and presentations",
+          "Understanding implicit meaning and nuances in complex texts"
+        ]
+      },
+      C2: {
+        title: "Proficiency Level",
+        objectives: [
+          "Understand with ease virtually everything heard or read",
+          "Summarize information from different spoken and written sources"
+        ],
+        content: [
+          "Mastery of idiomatic expressions and colloquialisms",
+          "Producing clear, well-structured, detailed text on complex subjects"
+        ]
+      }
+    }
   },
   "zh-Hant": {
     title: "越南語課程",
@@ -68,7 +197,88 @@ const translations = {
     ctaSubtitle: "無論您是初學者還是想提升現有語言能力，我們都有適合您的課程。",
     certificationMessage: "考證班課程內容正在規劃中，請聯繫我們了解更多詳情。",
     privateMessage: "我們提供客製化個人教學，根據您的需求和學習目標量身打造課程。",
-    privateContact: "請直接聯繫我們，我們將為您安排專屬顧問進行詳細諮詢。"
+    privateContact: "請直接聯繫我們，我們將為您安排專屬顧問進行詳細諮詢。",
+    courseDetails: {
+      A0: {
+        title: "初階入門",
+        objectives: [
+          "建立越南語發音系統基礎",
+          "掌握日常基礎對話能力（自我介紹、個人興趣、生活場景）",
+          "能理解並使用高頻實用短句"
+        ],
+        content: [
+          "母音/輔音發音規則、聲調辨識訓練",
+          "主題式對話：姓名、國籍、職業、購物、時間表達",
+          "聽力口說強化 + 基礎讀寫入門"
+        ]
+      },
+      A1: {
+        title: "初階基礎",
+        objectives: [
+          "聽懂簡短生活對話（如問路、交通、議價）",
+          "學習「主動提問」與「關鍵資訊捕捉」技巧"
+        ],
+        content: [
+          "情境模擬：市集購物、餐廳點餐、交通工具搭乘",
+          "商業場景基礎用語（詢價、預約、簡單洽談）"
+        ]
+      },
+      A2: {
+        title: "初階進階",
+        objectives: [
+          "處理日常社交互動和簡單交易",
+          "用簡單的詞語描述背景和周圍環境"
+        ],
+        content: [
+          "表達意見、進行比較、描述經驗",
+          "安排旅行、處理緊急情況、基礎職場溝通"
+        ]
+      },
+      B1: {
+        title: "中級程度",
+        objectives: [
+          "應對越南旅行中可能遇到的大部分情況",
+          "就熟悉的話題撰寫連貫的短文"
+        ],
+        content: [
+          "討論新聞、時事和文化話題",
+          "撰寫個人信件、電郵和簡短報告"
+        ]
+      },
+      B2: {
+        title: "中高級程度",
+        objectives: [
+          "與母語者進行流暢自然的互動",
+          "就廣泛主題撰寫清晰詳細的文章"
+        ],
+        content: [
+          "辯論、提出論點、討論抽象話題",
+          "理解複雜文本，包括專業領域的技術討論"
+        ]
+      },
+      C1: {
+        title: "高級程度",
+        objectives: [
+          "流利表達想法，無需費力尋找詞語",
+          "靈活有效地將語言運用於社交、學術和專業場合"
+        ],
+        content: [
+          "學術寫作和演講",
+          "理解複雜文本中的隱含意義和細微差別"
+        ]
+      },
+      C2: {
+        title: "精通程度",
+        objectives: [
+          "輕鬆理解所見所聞的幾乎所有內容",
+          "總結不同口語和書面來源的資訊"
+        ],
+        content: [
+          "掌握慣用語和口語表達",
+          "就複雜主題撰寫清晰、結構良好、詳細的文章"
+        ]
+      }
+    }
   },
   "zh-Hans": {
     title: "越南语课程",
@@ -96,13 +306,94 @@ const translations = {
     ctaSubtitle: "无论您是初学者还是想提升现有语言能力，我们都有适合您的课程。",
     certificationMessage: "考证班课程内容正在规划中，请联系我们了解更多详情。",
     privateMessage: "我们提供定制化个人教学，根据您的需求和学习目标量身打造课程。",
-    privateContact: "请直接联系我们，我们将为您安排专属顾问进行详细咨询。"
+    privateContact: "请直接联系我们，我们将为您安排专属顾问进行详细咨询。",
+    courseDetails: {
+      A0: {
+        title: "初阶入门",
+        objectives: [
+          "建立越南语发音系统基础",
+          "掌握日常基础对话能力（自我介绍、个人兴趣、生活场景）",
+          "能理解并使用高频实用短句"
+        ],
+        content: [
+          "母音/辅音发音规则、声调辨识训练",
+          "主题式对话：姓名、国籍、职业、购物、时间表达",
+          "听力口说强化 + 基础读写入门"
+        ]
+      },
+      A1: {
+        title: "初阶基础",
+        objectives: [
+          "听懂简短生活对话（如问路、交通、议价）",
+          "学习「主动提问」与「关键信息捕捉」技巧"
+        ],
+        content: [
+          "情境模拟：市集购物、餐厅点餐、交通工具搭乘",
+          "商业场景基础用语（询价、预约、简单洽谈）"
+        ]
+      },
+      A2: {
+        title: "初阶进阶",
+        objectives: [
+          "处理日常社交互动和简单交易",
+          "用简单的词语描述背景和周围环境"
+        ],
+        content: [
+          "表达意见、进行比较、描述经验",
+          "安排旅行、处理紧急情况、基础职场沟通"
+        ]
+      },
+      B1: {
+        title: "中级程度",
+        objectives: [
+          "应对越南旅行中可能遇到的大部分情况",
+          "就熟悉的话题撰写连贯的短文"
+        ],
+        content: [
+          "讨论新闻、时事和文化话题",
+          "撰写个人信件、电邮和简短报告"
+        ]
+      },
+      B2: {
+        title: "中高级程度",
+        objectives: [
+          "与母语者进行流畅自然的互动",
+          "就广泛主题撰写清晰详细的文章"
+        ],
+        content: [
+          "辩论、提出论点、讨论抽象话题",
+          "理解复杂文本，包括专业领域的技术讨论"
+        ]
+      },
+      C1: {
+        title: "高级程度",
+        objectives: [
+          "流利表达想法，无需费力寻找词语",
+          "灵活有效地将语言运用于社交、学术和专业场合"
+        ],
+        content: [
+          "学术写作和演讲",
+          "理解复杂文本中的隐含意义和细微差别"
+        ]
+      },
+      C2: {
+        title: "精通程度",
+        objectives: [
+          "轻松理解所见所闻的几乎所有内容",
+          "总结不同口语和书面来源的信息"
+        ],
+        content: [
+          "掌握惯用语和口语表达",
+          "就复杂主题撰写清晰、结构良好、详细的文章"
+        ]
+      }
+    }
   }
 }
 
 export default function CoursesPage({ params }: CoursePageProps) {
-  const locale = params.locale || "zh-Hant"
-  const t = translations[locale as keyof typeof translations] || translations["zh-Hant"]
+  const locale = params.locale || "zh-Hant";
+  const t = (translations[locale as keyof typeof translations] || translations["zh-Hant"]) as unknown as TranslationBase;
   const [activeTab, setActiveTab] = useState("beginner")
 
   return (
@@ -153,50 +444,50 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* A0 Course */}
               <CourseCard 
                 level="A0" 
-                title="初階入門"
+                title={t.courseDetails.A0?.title || "Starter Level"}
                 hours="24"
                 classSize="3-6"
-                objectives={[
-                  "建立越南語發音系統基礎",
-                  "掌握日常基礎對話能力（自我介紹、個人興趣、生活場景）",
-                  "能理解並使用高頻實用短句"
+                objectives={t.courseDetails.A0?.objectives || [
+                  "Establish Vietnamese pronunciation system foundation",
+                  "Master basic daily conversation skills (self-introduction, personal interests, daily scenarios)",
+                  "Understand and use high-frequency practical phrases"
                 ]}
-                content={[
-                  "母音/輔音發音規則、聲調辨識訓練",
-                  "主題式對話：姓名、國籍、職業、購物、時間表達",
-                  "聽力口說強化 + 基礎讀寫入門"
+                content={t.courseDetails.A0?.content || [
+                  "Vowel/consonant pronunciation rules, tone recognition training",
+                  "Themed conversations: name, nationality, occupation, shopping, time expression",
+                  "Listening & speaking enhancement + basic reading/writing introduction"
                 ]}
               />
               
               {/* A1 Course */}
               <CourseCard 
                 level="A1" 
-                title="初階基礎"
+                title={t.courseDetails.A1?.title || "Beginner Foundation"}
                 hours="24"
                 classSize="3-6"
-                objectives={[
-                  "聽懂簡短生活對話（如問路、交通、議價）",
-                  "學習「主動提問」與「關鍵資訊捕捉」技巧"
+                objectives={t.courseDetails.A1?.objectives || [
+                  "Understand short daily conversations (e.g., asking for directions, transportation, bargaining)",
+                  "Learn techniques for 'active questioning' and 'key information capturing'"
                 ]}
-                content={[
-                  "情境模擬：市集購物、餐廳點餐、交通工具搭乘",
-                  "商業場景基礎用語（詢價、預約、簡單洽談）"
+                content={t.courseDetails.A1?.content || [
+                  "Scenario simulation: market shopping, ordering at restaurants, taking public transport",
+                  "Basic business terms (inquiries, appointments, simple negotiations)"
                 ]}
               />
               
               {/* A2 Course */}
               <CourseCard 
                 level="A2" 
-                title="初階進階"
+                title={t.courseDetails.A2?.title || "Elementary Level"}
                 hours="24"
                 classSize="3-6"
-                objectives={[
-                  "流暢應對日常需求（訂房、票務、線上交易）",
-                  "閱讀簡單公告、菜單、行程說明"
+                objectives={t.courseDetails.A2?.objectives || [
+                  "Handle routine social interactions and simple transactions",
+                  "Describe in simple terms aspects of background and immediate environment"
                 ]}
-                content={[
-                  "旅遊規劃：酒店預訂、景點諮詢、緊急狀況處理",
-                  "數位生活：網購對話、社群媒體常用語"
+                content={t.courseDetails.A2?.content || [
+                  "Expressing opinions, making comparisons, describing experiences",
+                  "Handling travel arrangements, dealing with emergencies, basic workplace communication"
                 ]}
               />
             </div>
@@ -208,41 +499,60 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* B1 Course */}
               <CourseCard 
                 level="B1" 
-                title="中階"
+                title={t.courseDetails.B1?.title || "Intermediate Level"}
                 hours="30"
-                highlights={[
-                  "使用《越南語B1標準教材》Unit 1-8",
-                  "培養「段落式表達」能力（如：描述經歷、說明工作流程）"
+                classSize="3-6"
+                objectives={t.courseDetails.B1?.objectives || [
+                  "Develop the ability to understand the main points of clear standard input on familiar matters",
+                  "Deal with most situations likely to arise while traveling in an area where the language is spoken"
                 ]}
-                achievements={[
-                  "理解非專業性長文（部落格、簡易新聞）",
-                  "能用因果句、複合句陳述觀點"
+                content={t.courseDetails.B1?.content || [
+                  "Produce simple connected text on familiar topics",
+                  "Describe experiences, events, dreams, and ambitions briefly"
+                ]}
+                highlights={t.courseDetails.B1?.highlights || [
+                  "Using 'Standard Vietnamese B1' textbook Units 1-8",
+                  "Developing paragraph-level expression skills (e.g., describing experiences, explaining work processes)"
                 ]}
               />
               
               {/* B2 Course */}
               <CourseCard 
                 level="B2" 
-                title="中階"
+                title={t.courseDetails.B2?.title || "Upper Intermediate"}
                 hours="30"
-                focus={[
-                  "學術/職場場景：會議討論、數據解讀、文化差異分析",
-                  "高階文法：關係子句、虛擬語氣、正式書信結構"
+                classSize="3-6"
+                objectives={t.courseDetails.B2?.objectives || [
+                  "Understand the main ideas of complex text on both concrete and abstract topics",
+                  "Interact with a degree of fluency and spontaneity that makes regular interaction with native speakers quite possible"
                 ]}
-                materials={[
-                  "補充《商業越南語》模組",
-                  "時事議題討論（經濟趨勢、社會現象）"
+                content={t.courseDetails.B2?.content || [
+                  "Produce clear, detailed text on a wide range of subjects",
+                  "Explain a viewpoint on a topical issue giving the advantages and disadvantages of various options"
+                ]}
+                focus={t.courseDetails.B2?.focus || [
+                  "Academic/workplace scenarios: meeting discussions, data interpretation, cultural difference analysis",
+                  "Advanced grammar: relative clauses, subjunctive mood, formal letter structure"
                 ]}
               />
               
               {/* B3 Course */}
               <CourseCard 
                 level="B3" 
-                title="中高階"
+                title={t.courseDetails.B3?.title || "Advanced Intermediate"}
                 hours="30"
-                specialization={[
-                  "精讀各類文本：合約條款、學術論文、政策報導",
-                  "進階寫作訓練：論說文、企劃書架構"
+                classSize="3-6"
+                objectives={t.courseDetails.B3?.objectives || [
+                  "Express ideas fluently and spontaneously without much obvious searching for expressions",
+                  "Use language flexibly and effectively for social, academic and professional purposes"
+                ]}
+                content={t.courseDetails.B3?.content || [
+                  "Understand a wide range of demanding, longer texts, and recognize implicit meaning",
+                  "Produce clear, well-structured, detailed text on complex subjects"
+                ]}
+                specialization={t.courseDetails.B3?.specialization || [
+                  "Intensive reading of various texts: contract terms, academic papers, policy reports",
+                  "Advanced writing training: argumentative essays, project proposal structure"
                 ]}
               />
             </div>
@@ -254,35 +564,35 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* C1 Course */}
               <CourseCard 
                 level="C1" 
-                title="高階"
+                title={t.courseDetails.C1?.title || "Advanced Level"}
                 hours="30"
-                subtitle="專業人士適用"
-                objectives={[
-                  "參與專業研討會、進行技術性簡報",
-                  "分析專業領域文獻（如法律、醫療、工程）"
+                subtitle={t.courseDetails.C1?.subtitle || "For Professionals"}
+                objectives={t.courseDetails.C1?.objectives || [
+                  "Participate in professional seminars and deliver technical presentations",
+                  "Analyze specialized literature (e.g., legal, medical, engineering)"
                 ]}
               />
               
               {/* C2 Course */}
               <CourseCard 
                 level="C2" 
-                title="精通級"
+                title={t.courseDetails.C2?.title || "Mastery Level"}
                 hours="30"
-                subtitle="母語級要求"
-                objectives={[
-                  "掌握方言/慣用語差異",
-                  "即興演說、文學作品賞析、跨文化談判"
+                subtitle={t.courseDetails.C2?.subtitle || "Native-like Proficiency"}
+                objectives={t.courseDetails.C2?.objectives || [
+                  "Master dialectal/idiomatic differences",
+                  "Impromptu speeches, literary analysis, cross-cultural negotiations"
                 ]}
               />
               
               {/* C3 Course */}
               <CourseCard 
                 level="C3" 
-                title="精通級"
+                title={t.courseDetails.C3?.title || "Expert Level"}
                 hours="30"
-                customization={[
-                  "針對特定領域深化（如：影視翻譯、外交辭令）",
-                  "專題研究指導（論文寫作、口譯技巧）"
+                customization={t.courseDetails.C3?.customization || [
+                  "Deepen knowledge in specific fields (e.g., audiovisual translation, diplomatic language)",
+                  "Thesis writing guidance, interpretation techniques"
                 ]}
               />
             </div>
@@ -306,48 +616,48 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate A0 */}
               <CourseCard 
                 level="A0" 
-                title="初級企業班"
+                title={t.courseDetails.corporateA0?.title || "Corporate Beginner A0"}
                 hours="24"
                 classSize="4-8"
-                subtitle="精緻小班"
-                objectives={[
-                  "建立越南語發音系統基礎（聲調/母音/輔音精準辨識）",
-                  "掌握生存級會話能力（自我介紹、基礎問答）"
+                subtitle={t.courseDetails.corporateA0?.subtitle || "Small Group"}
+                objectives={t.courseDetails.corporateA0?.objectives || [
+                  "Establish Vietnamese pronunciation system foundation (tones/vowels/consonants)",
+                  "Master survival-level conversation skills (self-introduction, basic Q&A)"
                 ]}
-                content={[
-                  "語音系統：29個字母發音規則+6種聲調訓練",
-                  "主題會話：個人資料、職業表述、日常用品指稱",
-                  "技能配比：聽說70%｜讀寫30%"
+                content={t.courseDetails.corporateA0?.content || [
+                  "Phonetic system: 29 letter pronunciation rules + 6 tone training",
+                  "Themed conversations: personal information, profession, daily items",
+                  "Skill ratio: 70% listening/speaking | 30% reading/writing"
                 ]}
               />
               
               {/* Corporate A1 */}
               <CourseCard 
                 level="A1" 
-                title="初級企業班"
+                title={t.courseDetails.corporateA1?.title || "Corporate Beginner A1"}
                 hours="24"
-                achievements={[
-                  "聽懂慢速生活對話（語速100字/分鐘）",
-                  "完成基礎交易溝通（議價誤差≤15%）"
+                achievements={t.courseDetails.corporateA1?.achievements || [
+                  "Understand slow-paced daily conversations (100 words/minute)",
+                  "Complete basic transactional communication (negotiation margin ≤15%)"
                 ]}
-                content={[
-                  "都市生存：公共交通搭乘、方位問答",
-                  "商業場景：市場採購、簡易合約條款理解"
+                content={t.courseDetails.corporateA1?.content || [
+                  "City survival: public transportation, asking for directions",
+                  "Business scenarios: market purchases, understanding simple contract terms"
                 ]}
               />
               
               {/* Corporate A2 */}
               <CourseCard 
                 level="A2" 
-                title="初級企業班"
+                title={t.courseDetails.corporateA2?.title || "Corporate Elementary A2"}
                 hours="24"
-                content={[
-                  "旅遊情境模擬：酒店預訂/票務處理/緊急狀況應對",
-                  "數位溝通：社交軟體常用語、線上購物對話"
+                content={t.courseDetails.corporateA2?.content || [
+                  "Travel scenario simulation: hotel booking/ticketing/emergency response",
+                  "Digital communication: social media phrases, online shopping dialogues"
                 ]}
-                achievements={[
-                  "基礎文法正確率達80%",
-                  "可理解300字內生活短文"
+                achievements={t.courseDetails.corporateA2?.achievements || [
+                  "Basic grammar accuracy reaches 80%",
+                  "Can understand short daily life passages under 300 words"
                 ]}
               />
             </div>
@@ -356,31 +666,31 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate B1 */}
               <CourseCard 
                 level="B1" 
-                title="中級企業班"
+                title={t.courseDetails.corporateB1?.title || "Corporate Intermediate B1"}
                 hours="30"
-                subtitle="《標準越南語B1》單元1-8"
-                specialization={[
-                  "職場應用：會議記錄摘要、工作郵件撰寫",
-                  "學術基礎：圖表描述、簡單數據解讀"
+                subtitle={t.courseDetails.corporateB1?.subtitle || "Standard Vietnamese B1 Units 1-8"}
+                specialization={t.courseDetails.corporateB1?.specialization || [
+                  "Workplace applications: meeting minutes, work email composition",
+                  "Academic foundation: chart description, basic data interpretation"
                 ]}
-                achievements={[
-                  "能進行10分鐘連續性主題陳述",
-                  "聽懂廣播新聞主要訊息（理解率70%+）"
+                achievements={t.courseDetails.corporateB1?.achievements || [
+                  "Can deliver 10-minute continuous topic presentations",
+                  "Understand main messages in broadcast news (70%+ comprehension)"
                 ]}
               />
               
               {/* Corporate B2 */}
               <CourseCard 
                 level="B2" 
-                title="中級企業班"
+                title={t.courseDetails.corporateB2?.title || "Corporate Upper Intermediate B2"}
                 hours="30"
-                content={[
-                  "媒體分析：新聞報導立場辨識",
-                  "論述寫作：正反觀點表述（500字內）",
-                  "專業詞彙：經濟/社會/教育領域200+關鍵詞"
+                content={t.courseDetails.corporateB2?.content || [
+                  "Media analysis: identifying news report perspectives",
+                  "Discursive writing: presenting pros and cons (within 500 characters)",
+                  "Professional vocabulary: 200+ key terms in economics/society/education"
                 ]}
-                materials={[
-                  "《商務越南語實戰》補充單元"
+                materials={t.courseDetails.corporateB2?.materials || [
+                  "Supplementary units from 'Practical Business Vietnamese'"
                 ]}
               />
             </div>
@@ -389,26 +699,26 @@ export default function CoursesPage({ params }: CoursePageProps) {
               {/* Corporate C1 */}
               <CourseCard 
                 level="C1" 
-                title="高階企業班"
+                title={t.courseDetails.corporateC1?.title || "Corporate Advanced C1"}
                 hours="36"
-                subtitle="專家級訓練"
-                objectives={[
-                  "學術論文精讀（抽樣率達85%）",
-                  "專業簡報技巧（含Q&A應對策略）",
-                  "跨文化溝通案例研討"
+                subtitle={t.courseDetails.corporateC1?.subtitle || "Expert Level Training"}
+                objectives={t.courseDetails.corporateC1?.objectives || [
+                  "Intensive reading of academic papers (85%+ comprehension)",
+                  "Professional presentation skills (including Q&A strategies)",
+                  "Cross-cultural communication case studies"
                 ]}
               />
               
               {/* Corporate C2-C3 */}
               <CourseCard 
                 level="C2-C3" 
-                title="高階企業班"
+                title={t.courseDetails.corporateC2C3?.title || "Corporate Mastery C2-C3"}
                 hours="36"
-                subtitle="母語者認證標準"
-                objectives={[
-                  "方言辨識：河內/胡志明市口音差異",
-                  "文學賞析：現代詩歌修辭解讀",
-                  "即席演說：無準備時間即興表達"
+                subtitle={t.courseDetails.corporateC2C3?.subtitle || "Native Speaker Certification Standard"}
+                objectives={t.courseDetails.corporateC2C3?.objectives || [
+                  "Dialect recognition: Hanoi/Ho Chi Minh City accent differences",
+                  "Literary analysis: interpreting modern poetry rhetoric",
+                  "Advanced negotiation strategies: cross-cultural conflict management"
                 ]}
                 customization={[
                   "領域強化：法律/醫療/工程專業術語",
