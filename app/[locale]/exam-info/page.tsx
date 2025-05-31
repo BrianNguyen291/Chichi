@@ -295,15 +295,7 @@ export default function ExamInfoPage({ params: { locale } }: ExamInfoPageProps) 
             <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
               <p className="mb-4">{t.locationDesc}</p>
               <h3 className="text-xl font-semibold mb-2">{t.locationName}</h3>
-              <p className="text-gray-700 mb-4">{t.locationAddress}</p>
-              <div className="relative h-64 w-full rounded-lg overflow-hidden mb-4">
-                <Image 
-                  src="/images/exam/university-map.jpg" 
-                  alt="University Map" 
-                  fill
-                  className="object-cover"
-                />
-              </div>
+              <p className="text-gray-700">{t.locationAddress}</p>
               <p className="text-sm text-gray-600 italic">{t.locationNote}</p>
             </div>
           </div>
