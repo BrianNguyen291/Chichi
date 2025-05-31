@@ -172,7 +172,7 @@ export const CourseFeatures = ({ locale }: CourseFeaturesProps) => {
           {t.features.map((feature, index) => (
             <Card 
               key={index} 
-              className="overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1"
+              className="overflow-hidden"
               style={{ backgroundColor: colors.primary }}
             >
               <div className="relative h-48 w-full overflow-hidden">
@@ -180,10 +180,10 @@ export const CourseFeatures = ({ locale }: CourseFeaturesProps) => {
                   src={feature.image}
                   alt={feature.title}
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
+                  className="object-cover"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-                <div className="absolute inset-0 bg-black bg-opacity-20 hover:bg-opacity-0 transition-opacity" />
+         
               </div>
               
               <div className="p-6">

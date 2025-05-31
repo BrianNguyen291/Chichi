@@ -146,7 +146,7 @@ export const LearningEnvironment = ({ locale }: LearningEnvironmentProps) => {
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                   <div 
-                    className="absolute inset-0 bg-black bg-opacity-30"
+                //    className="absolute inset-0 bg-black bg-opacity-30"
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-4">
@@ -160,7 +160,7 @@ export const LearningEnvironment = ({ locale }: LearningEnvironmentProps) => {
                         sizes="(max-width: 768px) 33vw, 16vw"
                       />
                       <div 
-                        className="absolute inset-0 bg-black bg-opacity-20"
+                      //  className="absolute inset-0 bg-black bg-opacity-20"
                       />
                     </div>
                   ))}
