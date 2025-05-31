@@ -45,7 +45,7 @@ export function CTAPopup({ locale }: CTAPopupProps) {
 
   const handleConsultClick = () => {
     // Replace with your Google Form URL
-    window.open('https://forms.gle/your-form-url', '_blank')
+    window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true&fbclid=IwY2xjawKnWNZleHRuA2FlbQIxMQABHvWzAKxujUd1LMx7v4j1ad_k4aSvD9HbnaPIjrQ7XNfxy9gTVIwzm5JLKuwZ_aem_P8fWn9-kke7Tp_UmPqcnpw', '_blank')
   }
 
   return (
