@@ -736,21 +736,13 @@ export default function CoursesPage({ params }: CoursePageProps) {
 
   return (
     <main className="min-h-screen bg-[#f8f6f0]">
-      {/* Hero Section */}
-      <section className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30 z-10"></div>
-        <Image 
-          src="/images/course-hero.jpg" 
-          alt="Vietnamese language courses" 
-          fill 
-          priority
-          className="object-cover"
-        />
-        <div className="relative z-20 container mx-auto h-full flex flex-col justify-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">{t.title}</h1>
+      {/* Page Header */}
+      <div className="bg-[#a4a78b] text-white py-12">
+        <div className="container mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
           <p className="text-xl text-white/90 max-w-2xl">{t.subtitle}</p>
         </div>
-      </section>
+      </div>
 
       {/* Course Tabs */}
       <section className="container mx-auto py-12 px-4">
