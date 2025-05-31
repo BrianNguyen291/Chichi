@@ -108,62 +108,100 @@ export const LanguageLevels = ({ locale }: LanguageLevelsProps) => {
   return (
     <section className="w-full py-16" style={{ backgroundColor: colors.primary }}>
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12" style={{ color: colors.darkOlive }}>
+        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 relative" style={{ color: colors.darkOlive }}>
           {t.title}
+          <span className="block w-20 h-1 bg-secondary mx-auto mt-4" style={{ backgroundColor: colors.secondary }}></span>
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {t.levels.map((level, index) => (
-            <Card 
+            <div 
               key={index} 
-              className="p-6 hover:shadow-lg transition-shadow"
-              style={{ backgroundColor: colors.lightCream }}
+              className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2"
             >
-              <div className="space-y-4">
-                <div className="text-center">
-                  <span 
-                    className="text-3xl font-bold"
-                    style={{ color: colors.secondary }}
-                  >
-                    {level.level}
-                  </span>
+              <div className="relative h-48 w-full overflow-hidden">
+                <Image
+                  src={level.image}
+                  alt={`${level.title} Level`}
+                  fill
+                  className="object-cover transition-transform duration-500 hover:scale-110"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-70" />
+                <div className="absolute top-4 left-4 bg-white/90 rounded-full px-4 py-1 text-sm font-bold" style={{ color: colors.secondary }}>
+                  {level.level}
                 </div>
-                <div className="relative h-48 w-full overflow-hidden rounded-lg">
-                  <Image
-                    src={level.image}
-                    alt={`${level.title} Level`}
-                    fill
-                    className="object-cover hover:scale-105 transition-transform duration-300"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-black bg-opacity-20 hover:bg-opacity-0 transition-opacity" />
-                </div>
+              </div>
+              
+              <div className="p-6">
                 <h3 
-                  className="text-xl font-semibold text-center"
+                  className="text-2xl font-bold mb-3"
                   style={{ color: colors.darkOlive }}
                 >
                   {level.title}
                 </h3>
                 <p 
-                  className="text-center"
+                  className="mb-6 text-base"
                   style={{ color: colors.grayGreen }}
                 >
                   {level.description}
                 </p>
-                <Link href={`/${locale}/courses`} className="block">
-                  <button
-                    className="w-full py-2 px-4 rounded-lg mt-4 transition-colors hover:opacity-90"
+                
+                <div className="mt-auto">
+                  <Link 
+                    href={`/${locale}/courses`} 
+                    className="inline-block w-full text-center py-3 px-6 rounded-lg font-medium transition-all duration-300"
                     style={{ 
                       backgroundColor: colors.secondary,
-                      color: colors.lightCream
+                      color: colors.lightCream,
+                      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
                     }}
                   >
                     {level.buttonText}
-                  </button>
-                </Link>
+                  </Link>
+                </div>
               </div>
-            </Card>
+            </div>
           ))}
+        </div>
+        
+        {/* Added feature highlights */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          <div className="bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md flex items-center space-x-4">
+            <div className="rounded-full p-3" style={{ backgroundColor: `${colors.secondary}20` }}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: colors.secondary }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <div>
+              <h4 className="font-semibold" style={{ color: colors.darkOlive }}>专业教材</h4>
+              <p className="text-sm" style={{ color: colors.grayGreen }}>精心设计的课程材料</p>
+            </div>
+          </div>
+          
+          <div className="bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md flex items-center space-x-4">
+            <div className="rounded-full p-3" style={{ backgroundColor: `${colors.secondary}20` }}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: colors.secondary }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </div>
+            <div>
+              <h4 className="font-semibold" style={{ color: colors.darkOlive }}>灵活课程安排</h4>
+              <p className="text-sm" style={{ color: colors.grayGreen }}>适应您的个人时间表</p>
+            </div>
+          </div>
+          
+          <div className="bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md flex items-center space-x-4">
+            <div className="rounded-full p-3" style={{ backgroundColor: `${colors.secondary}20` }}>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: colors.secondary }}>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+              </svg>
+            </div>
+            <div>
+              <h4 className="font-semibold" style={{ color: colors.darkOlive }}>实用会话练习</h4>
+              <p className="text-sm" style={{ color: colors.grayGreen }}>提高实际交流能力</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
