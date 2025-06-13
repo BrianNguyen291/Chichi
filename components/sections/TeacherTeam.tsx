@@ -32,7 +32,7 @@ const translations = {
         ]
       },
       {
-        name: 'Teacher Xu Biye',
+        name: 'Teacher Tu Bich Diep',
         image: '/images/teacher_team/徐碧葉老師.jpeg',
         experience: '8 Years Teaching Experience',
         credentials: [
@@ -42,7 +42,7 @@ const translations = {
         ]
       },
       {
-        name: 'Teacher Li Baozhu',
+        name: 'Teacher Ly Bao Chau',
         image: '/images/teacher_team/黎寶珠老師.jpeg',
         experience: '10 Years Teaching Experience',
         credentials: [
@@ -52,7 +52,7 @@ const translations = {
         ]
       },
       {
-        name: 'Teacher Ruan Qingxiang',
+        name: 'Teacher Nguyen Thanh Huong',
         image: '/images/teacher_team/阮清香老師.jpeg',
         experience: '10 Years Teaching Experience',
         credentials: [
@@ -62,7 +62,7 @@ const translations = {
         ]
       },
       {
-        name: 'Teacher Wu Chuiying',
+        name: 'Teacher Vo Thuy Anh',
         image: '/images/teacher_team/武垂英老師.jpeg',
         experience: '5 Years Teaching Experience',
         credentials: [
@@ -72,7 +72,7 @@ const translations = {
         ]
       },
       {
-        name: 'Teacher Yin Yicao',
+        name: 'Teacher Doan Y Thao',
         image: '/images/teacher_team/尹伊草.jpeg',
         experience: '5 Years Teaching Experience',
         credentials: [
