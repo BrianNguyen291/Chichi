@@ -31,8 +31,8 @@ export function WordPressNav({ locale }: WordPressNavProps) {
       href: '/#courses' // Updated to point to the courses section
     },
     teacherTeam: {
-      label: translate('teacherTeam', 'common') || 'Teacher Team',
-      href: '/#teacher-team'
+      label: translate('Coach Team', 'common') || 'Coach Team',
+      href: '/teacher-team'
     },
     course: {
       label: translate('courses', 'common') || 'Courses',

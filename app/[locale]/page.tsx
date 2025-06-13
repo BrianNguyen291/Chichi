@@ -21,9 +21,11 @@ export default function HomePage({ params: { locale } }: HomePageProps) {
       <HeroSection locale={locale} />
       <TeacherTeam locale={locale} />
       <CourseFeatures locale={locale} />
-       <TestimonialsSection locale={locale} />
-      <LearningEnvironment locale={locale} />
       <LanguageLevels locale={locale} />
+      <LearningEnvironment locale={locale} />
+      <TestimonialsSection locale={locale} />
+      
+      
       <PartnersAndFooter locale={locale} />
     </div>
   )

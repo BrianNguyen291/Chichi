@@ -10,7 +10,7 @@ interface TeacherTeamProps {
 
 const translations = {
   en: {
-    title: 'Elite Teaching Team',
+    title: 'Elite Coach Team',
     cta: {
       text: 'Learn from the best Vietnamese language experts',
       button: 'Join Our Classes'

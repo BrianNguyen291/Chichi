@@ -50,9 +50,9 @@ export const categoryTranslations = {
     "zh-Hans": "语法集"
   },
   "study-materials": {
-    "en": "Study Materials",
-    "zh-Hant": "學習資料",
-    "zh-Hans": "学习资料"
+    "en": "Vietnamese Test Collections",
+    "zh-Hant": "越南語考試集",
+    "zh-Hans": "越南语考试集"
   },
   "vocabulary-collections": {
     "en": "Vocabulary Collections",
