@@ -75,7 +75,21 @@ export const categoryTranslations = {
     "en": "Test Materials",
     "zh-Hant": "考試資料",
     "zh-Hans": "考试资料"
+  },
+  "Culture": {
+    "en": "Cultural knowledge",
+    "zh-Hant": "文化知識",
+    "zh-Hans": "文化知识"
+  },
+  "experiences": {
+    "en": "Experiential activities",
+    "zh-Hant": "體驗活動",
+    "zh-Hans": "体验活动"
+  },
+  "Outstanding": {
+    "en": "Outstanding Examples",
+    "zh-Hant": "優秀例子",
+    "zh-Hans": "优秀例子"
   }
-
 
 }; 

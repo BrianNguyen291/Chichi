@@ -8,52 +8,57 @@ import { colors } from "@/lib/colors"
 import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+interface CourseInfo {
+  title: string
+  subtitle?: string
+  hours?: string
+  objectives?: string[]
+  content?: string[]
+  highlights?: string[]
+  focus?: string[]
+  materials?: string[]
+  achievements?: string[]
+  specialization?: string[]
+  customization?: string[]
+}
+
 interface CourseDetails {
-  [key: string]: {
-    title: string;
-    objectives: string[];
-    content: string[];
-  };
+  [key: string]: CourseInfo
 }
 
 interface TranslationBase {
-  title: string;
-  subtitle: string;
-  tabBeginner: string;
-  tabIntermediate: string;
-  tabAdvanced: string;
-  tabCertification: string;
-  tabCorporate: string;
-  tabPrivate: string;
-  hours: string;
-  classSize: string;
-  objectives: string;
-  coreContent: string;
-  highlights: string;
-  focus: string;
-  materials: string;
-  achievements: string;
-  specialization: string;
-  customization: string;
-  contactButton: string;
-  enrollButton: string;
-  moreButton: string;
-  ctaTitle: string;
-  ctaSubtitle: string;
-  certificationMessage: string;
-  privateMessage: string;
-  privateContact: string;
-  courseDetails: {
-    [key: string]: {
-      title: string;
-      objectives: string[];
-      content: string[];
-    };
-  };
+  title: string
+  subtitle: string
+  tabBeginner: string
+  tabIntermediate: string
+  tabAdvanced: string
+  tabCertification: string
+  tabCorporate: string
+  tabPrivate: string
+  hours: string
+  classSize: string
+  objectives: string
+  coreContent: string
+  highlights: string
+  focus: string
+  materials: string
+  achievements: string
+  specialization: string
+  customization: string
+  contactButton: string
+  enrollButton: string
+  moreButton: string
+  ctaTitle: string
+  ctaSubtitle: string
+  certificationMessage: string
+  privateMessage: string
+  privateContact: string
+  courseDetails: CourseDetails
+  corporateCourses?: CourseDetails
 }
 
 interface Translations {
-  [key: string]: TranslationBase;
+  [key: string]: TranslationBase
 }
 
 interface CoursePageProps {
@@ -440,6 +445,10 @@ const translations: Translations = {
         content: [
           "討論新聞、時事和文化話題",
           "撰寫個人信件、電郵和簡短報告"
+        ],
+        highlights: [
+          "使用《標準越南語B1》教材第1-8單元",
+          "發展段落表達能力（如描述經驗、解釋工作流程）"
         ]
       },
       B2: {
@@ -454,7 +463,7 @@ const translations: Translations = {
         ],
         focus: [
           "學術/職場情境：會議討論、數據解讀、文化差異分析",
-          "進階語法：關係子句、假設語氣、正式書信結構"
+          "進階語法：關係從句、假設語氣、正式書信結構"
         ]
       },
       B3: {
@@ -1269,7 +1278,7 @@ function CourseCard({
       
       <div className="p-6 mt-auto border-t border-gray-100">
         <button 
-          onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true&fbclid=IwY2xjawKnWNZleHRuA2FlbQIxMQABHvWzAKxujUd1LMx7v4j1ad_k4aSvD9HbnaPIjrQ7XNfxy9gTVIwzm5JLKuwZ_aem_P8fWn9-kke7Tp_UmPqcnpw', '_blank')}
+          onClick={() => window.open('https://www.facebook.com/chichivietnamese', '_blank')}
           className="w-full py-2 rounded-lg font-medium transition-all duration-300" 
           style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}
         >
