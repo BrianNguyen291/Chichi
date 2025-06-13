@@ -7,31 +7,7 @@ interface LearningEnvironmentProps {
 }
 
 const translations = {
-  vi: {
-    title: 'Môi Trường Học Tập',
-    environments: [
-      {
-        title: 'Lớp Luyện Thi Chứng Chỉ Tiếng Việt',
-        description: 'Hệ thống ôn tập chuyên sâu cho các cấp độ A, B, C',
-        mainImage: '/images/Course.jpg',
-        gallery: [
-          '/images/Course_1.jpg',
-          '/images/Course_2.jpg',
-          '/images/Course_3.jpg',
-        ]
-      },
-      {
-        title: 'Lớp Doanh Nghiệp Tiếng Việt',
-        description: 'Giải pháp đào tạo tiếng Việt thiết kế riêng cho doanh nghiệp',
-        mainImage: '/images/Course_4.jpg',
-        gallery: [
-          '/images/Course_4.jpg',
-          '/images/Course_5.jpg',
-          '/images/Course_7.jpg',
-        ]
-      }
-    ]
-  },
+  
   en: {
     title: 'Learning Environment',
     environments: [
@@ -48,11 +24,11 @@ const translations = {
       {
         title: 'Business Vietnamese Solutions',
         description: 'Customized corporate training programs',
-        mainImage: '/images/Course_4.jpg',
+        mainImage: '/images/courses/learn4.png',
         gallery: [
-          '/images/Course_4.jpg',
-          '/images/Course_5.jpg',
-          '/images/Course_7.jpg',
+            '/images/courses/learn1.png',
+            '/images/courses/learn2.png',
+            '/images/courses/learn3.png',
         ]
       }
     ]
@@ -75,11 +51,11 @@ const translations = {
       {
         title: '越南語企業方案',
         description: '量身定制的企業培訓課程',
-        mainImage: '/images/Course_4.jpg',
+        mainImage: '/images/courses/learn4.png',
         gallery: [
-          '/images/Course_4.jpg',
-          '/images/Course_5.jpg',
-          '/images/Course_7.jpg',
+          '/images/courses/learn1.png',
+          '/images/courses/learn2.png',
+          '/images/courses/learn3.png',
         ]
       }
     ]
@@ -102,11 +78,11 @@ const translations = {
       {
         title: '越南语企业方案',
         description: '量身定制的企业培训课程',
-        mainImage: '/images/Course_4.jpg',
+        mainImage: '/images/courses/learn3.png',
         gallery: [
-          '/images/Course_4.jpg',
-          '/images/Course_5.jpg',
-          '/images/Course_7.jpg',
+          '/images/courses/learn1.png',
+          '/images/courses/learn2.png',
+          '/images/courses/learn4.png',
         ]
       }
     ]

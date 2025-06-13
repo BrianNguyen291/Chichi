@@ -746,10 +746,17 @@ export default function CoursesPage({ params }: CoursePageProps) {
   return (
     <main className="min-h-screen bg-[#f8f6f0]">
       {/* Page Header */}
-      <div className="bg-[#a4a78b] text-white py-12">
-        <div className="container mx-auto px-4">
+      <div className="relative text-white py-24">
+        <Image
+          src="/images/Course_2.jpg"
+          alt="Courses banner"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-xl text-white/90 max-w-2xl">{t.subtitle}</p>
+          <p className="text-xl text-white/90 max-w-2xl mx-auto">{t.subtitle}</p>
         </div>
       </div>
 
@@ -766,9 +773,9 @@ export default function CoursesPage({ params }: CoursePageProps) {
             <TabsTrigger value="advanced" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
               {t.tabAdvanced}
             </TabsTrigger>
-            <TabsTrigger value="certification" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
+            {/* <TabsTrigger value="certification" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
               {t.tabCertification}
-            </TabsTrigger>
+            </TabsTrigger> */}
             <TabsTrigger value="corporate" className="data-[state=active]:bg-[#a4a78b] data-[state=active]:text-white">
               {t.tabCorporate}
             </TabsTrigger>
@@ -902,6 +909,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="C1" 
                 title={t.courseDetails.C1?.title || "Advanced Level"}
                 hours="30"
+                 classSize="3-6"
                 subtitle={t.courseDetails.C1?.subtitle || "For Professionals"}
                 objectives={t.courseDetails.C1?.objectives || [
                   "Participate in professional seminars and deliver technical presentations",
@@ -914,6 +922,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="C2" 
                 title={t.courseDetails.C2?.title || "Mastery Level"}
                 hours="30"
+                 classSize="3-6"
                 subtitle={t.courseDetails.C2?.subtitle || "Native-like Proficiency"}
                 objectives={t.courseDetails.C2?.objectives || [
                   "Master dialectal/idiomatic differences",
@@ -926,6 +935,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="C3" 
                 title={t.courseDetails.C3?.title || "Expert Level"}
                 hours="30"
+                 classSize="3-6"
                 objectives={t.courseDetails.C3?.objectives || ["Specialized mastery and advanced professional application"]}
                 content={t.courseDetails.C3?.content || [
                   "Deepen knowledge in specific fields (e.g., audiovisual translation, diplomatic language)",
@@ -936,7 +946,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
           </TabsContent>
           
           {/* Certification Courses */}
-          <TabsContent value="certification" className="space-y-8">
+          {/* <TabsContent value="certification" className="space-y-8">
             <div className="p-8 bg-white rounded-lg shadow-md">
               <h3 className="text-2xl font-bold mb-4" style={{ color: colors.darkOlive }}>{t.tabCertification}</h3>
               <p className="text-lg mb-6">{t.certificationMessage}</p>
@@ -945,7 +955,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 {t.contactButton}
               </button>
             </div>
-          </TabsContent>
+          </TabsContent> */}
           
           {/* Corporate Courses */}
           <TabsContent value="corporate" className="space-y-8">
@@ -973,6 +983,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="A1" 
                 title={t.corporateCourses?.A1?.title || t.tabCorporate + " A1"}
                 hours="24"
+                classSize="4-8"
                 achievements={t.corporateCourses?.A1?.achievements || [
                   "Understand slow-paced daily conversations (100 words/minute)",
                   "Complete basic transactional communication (negotiation margin ≤15%)"
@@ -988,6 +999,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="A2" 
                 title={t.corporateCourses?.A2?.title || t.tabCorporate + " A2"}
                 hours="24"
+                classSize="4-8"
                 content={t.corporateCourses?.A2?.content || [
                   "Travel scenario simulation: hotel booking/ticketing/emergency response",
                   "Digital communication: social media phrases, online shopping dialogues"
@@ -1005,6 +1017,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="B1" 
                 title={t.corporateCourses?.B1?.title || t.tabCorporate + " B1"}
                 hours="30"
+                classSize="4-8"
                 subtitle={"Standard Vietnamese B1 Units 1-8"}
                 specialization={t.corporateCourses?.B1?.specialization || [
                   "Workplace applications: meeting minutes, work email composition",
@@ -1021,6 +1034,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="B2" 
                 title={t.corporateCourses?.B2?.title || t.tabCorporate + " B2"}
                 hours="30"
+                classSize="4-8"
                 content={t.corporateCourses?.B2?.content || [
                   "Media analysis: identifying news report perspectives",
                   "Discursive writing: presenting pros and cons (within 500 characters)",
@@ -1038,6 +1052,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="C1" 
                 title={t.corporateCourses?.C1?.title || t.tabCorporate + " C1"}
                 hours="36"
+                classSize="4-8"
                 subtitle={"Expert Level Training"}
                 objectives={t.corporateCourses?.C1?.objectives || [
                   "Intensive reading of academic papers (85%+ comprehension)",
@@ -1051,6 +1066,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 level="C2-C3" 
                 title={t.corporateCourses?.C2C3?.title || t.tabCorporate + " Mastery C2-C3"}
                 hours={t.corporateCourses?.C2C3?.hours || "36"}
+                classSize="4-8"
                 subtitle={t.corporateCourses?.C2C3?.subtitle || "Native Speaker Certification Standard"}
                 objectives={t.corporateCourses?.C2C3?.objectives || [
                   "Dialect recognition: Hanoi/Ho Chi Minh City accent differences",
