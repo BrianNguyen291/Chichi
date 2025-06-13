@@ -300,7 +300,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
   const [isPaused, setIsPaused] = useState(false);
 
   // Calculate the number of slides needed based on 3 teachers per slide
-  const teachersPerSlide = 3;
+  const teachersPerSlide = 4;
   const totalSlides = Math.ceil(t.teachers.length / teachersPerSlide);
 
   // Auto slide functionality
@@ -347,7 +347,7 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
             {Array.from({ length: totalSlides }).map((_, slideIndex) => (
               <div 
                 key={slideIndex}
-                className="w-full flex-shrink-0 px-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                className="w-full flex-shrink-0 px-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
               >
                 {t.teachers
                   .slice(slideIndex * teachersPerSlide, (slideIndex + 1) * teachersPerSlide)
