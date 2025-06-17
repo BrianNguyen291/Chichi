@@ -76,7 +76,7 @@ export const categoryTranslations = {
     "zh-Hant": "考試資料",
     "zh-Hans": "考试资料"
   },
-  "Culture": {
+  "culture": {
     "en": "Cultural knowledge",
     "zh-Hant": "文化知識",
     "zh-Hans": "文化知识"
@@ -86,7 +86,7 @@ export const categoryTranslations = {
     "zh-Hant": "體驗活動",
     "zh-Hans": "体验活动"
   },
-  "Outstanding": {
+  "outstanding": {
     "en": "Outstanding Examples",
     "zh-Hant": "優秀例子",
     "zh-Hans": "优秀例子"
