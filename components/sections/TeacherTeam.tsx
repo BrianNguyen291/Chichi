@@ -6,6 +6,7 @@ import { colors } from '@/lib/colors';
 
 interface TeacherTeamProps {
   locale: string;
+  showAllTeachers?: boolean;
 }
 
 const translations = {
@@ -293,7 +294,7 @@ const translations = {
   }
 }
 
-export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
+export const TeacherTeam = ({ locale, showAllTeachers = false }: TeacherTeamProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -305,19 +306,73 @@ export const TeacherTeam = ({ locale }: TeacherTeamProps) => {
 
   // Auto slide functionality
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || showAllTeachers) return;
     
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-  }, [isPaused, totalSlides]);
+  }, [isPaused, totalSlides, showAllTeachers]);
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
   };
 
+  // If showAllTeachers is true, render all teachers in a grid
+  if (showAllTeachers) {
+    return (
+      <section id="teacher-team" className="py-12 md:py-16 bg-[#f9f5f0] overflow-hidden">
+        <div className="container mx-auto px-4 md:px-6">
+          {/* Section Header */}
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold text-[#b17f4a] mb-4 leading-tight">
+              {t.title}
+            </h2>
+            <div className="space-y-3 text-gray-700 text-sm md:text-base leading-relaxed">
+              {t.description.map((paragraph, i) => (
+                <p key={i} className="text-sm">{paragraph}</p>
+              ))}
+            </div>
+          </div>
+
+          {/* Grid for all teachers */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+            {t.teachers.map((teacher, index) => (
+              <div key={index} className="w-full">
+                <div className="bg-white rounded-lg overflow-hidden shadow-md h-full">
+                  <div className="relative h-80 w-full">
+                    <div className="absolute inset-0 bg-black bg-opacity-10 z-10"></div>
+                    <Image
+                      src={teacher.image}
+                      alt={teacher.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-gray-800 mb-1">{teacher.name}</h3>
+                    <p className="text-[#b17f4a] text-sm font-medium mb-2">{teacher.experience}</p>
+                    <ul className="space-y-1">
+                      {teacher.credentials.map((credential, i) => (
+                        <li key={i} className="flex items-start">
+                          <span className="text-[#b17f4a] text-xs mr-1">•</span>
+                          <span className="text-gray-600 text-xs">{credential}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  // Original carousel code for non-teacher-team pages
   return (
     <section id="teacher-team" className="py-12 md:py-16 bg-[#f9f5f0] overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">

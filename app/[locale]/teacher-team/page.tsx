@@ -9,7 +9,7 @@ interface TeacherTeamPageProps {
 export default function TeacherTeamPage({ params: { locale } }: TeacherTeamPageProps) {
   return (
     <main>
-      <TeacherTeam locale={locale} />
+      <TeacherTeam locale={locale} showAllTeachers={true} />
     </main>
   )
 } 
