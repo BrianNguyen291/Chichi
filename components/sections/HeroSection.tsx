@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Playfair_Display, Inter } from 'next/font/google'
 import { translations } from '@/lib/translations/hero'
 import { colors } from '@/lib/theme/colors'
+import { useEffect, useState } from 'react'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -24,6 +25,25 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ locale }: HeroSectionProps) => {
   const t = translations[locale as keyof typeof translations] || translations.en
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    // Check if window is defined (client-side)
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768)
+      }
+      
+      // Set initial value
+      handleResize()
+      
+      // Add event listener
+      window.addEventListener('resize', handleResize)
+      
+      // Clean up
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   return (
     <section 
@@ -31,24 +51,44 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
       aria-label="Hero section"
     >
       {/* Background Image */}
-      <Image
-        src="/images/hero pictuture right handside.png"
-        alt="A person learning Vietnamese"
-        fill
-        loading="eager"
-        className="object-cover"
-        priority
-        quality={100}
-      />
-      {/* Lighter Overlay */}
-      <div className="absolute inset-0 bg-black/5 z-10"></div>
+      <div className="absolute inset-0 overflow-hidden">
+        {isMobile ? (
+          <div className="relative w-full h-full">
+            <Image
+              src="/images/image.png"
+              alt="A person learning Vietnamese"
+              priority
+              quality={100}
+              className="object-cover h-full w-full"
+              fill
+              sizes="100vw"
+              style={{
+                objectPosition: 'center center'
+              }}
+            />
+          </div>
+        ) : (
+          <Image
+            src="/images/hero pictuture right handside.png"
+            alt="A person learning Vietnamese"
+            fill
+            loading="eager"
+            className="object-cover object-center"
+            priority
+            quality={100}
+            sizes="100vw"
+          />
+        )}
+      </div>
+      {/* Darker Overlay for better text contrast */}
+      <div className="absolute inset-0 bg-black/20 z-10"></div>
 
       {/* Content */}
-      <div className="relative z-20 container mx-auto px-4">
-        {/* <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight font-playfair mb-4 animate-fade-in-up text-[#2A5C3F]">
+      <div className="relative z-20 container mx-auto px-4 py-8">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-playfair mb-6 animate-fade-in-up text-white drop-shadow-lg">
           Learn Vietnamese Easily
-        </h1> */}
-        <p className="text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto font-inter mb-3 animate-fade-in-up [animation-delay:200ms] text-[#3A3A3A]">
+        </h1>
+        <p className="text-xl sm:text-2xl md:text-3xl max-w-3xl mx-auto font-inter mb-8 animate-fade-in-up [animation-delay:200ms] text-white font-semibold drop-shadow-lg">
           Your journey to fluency starts here.
         </p>
         <Link
