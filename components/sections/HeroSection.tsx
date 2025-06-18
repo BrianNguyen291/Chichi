@@ -53,17 +53,18 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
       {/* Background Image */}
       <div className="absolute inset-0 overflow-hidden">
         {isMobile ? (
-          <div className="relative w-full h-full">
+          <div className="relative w-full h-full flex items-center justify-center">
             <Image
-              src="/images/image.png"
+              src="/images/image_copy.png"
               alt="A person learning Vietnamese"
               priority
               quality={100}
-              className="object-cover h-full w-full"
-              fill
-              sizes="100vw"
+              className="w-full h-auto max-h-full object-contain"
+              width={400}
+              height={1000}
               style={{
-                objectPosition: 'center center'
+                maxWidth: '100%',
+                maxHeight: '95vh'
               }}
             />
           </div>
@@ -84,7 +85,7 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
       <div className="absolute inset-0 bg-black/20 z-10"></div>
 
       {/* Content */}
-      <div className="relative z-20 container mx-auto px-4 py-8">
+      <div className="relative z-20 container mx-auto px-4">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-playfair mb-6 animate-fade-in-up text-white drop-shadow-lg">
           Learn Vietnamese Easily
         </h1>
