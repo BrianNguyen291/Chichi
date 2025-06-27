@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { colors } from '@/lib/colors'
 import Link from 'next/link'
@@ -63,15 +63,19 @@ export function CTAPopup({ locale }: CTAPopupProps) {
 
         <div className="p-6 space-y-6">
           <div className="text-center space-y-2">
-            <h2 
-              className="text-2xl font-bold"
-              style={{ color: colors.darkOlive }}
-            >
-              {t.title}
-            </h2>
-            <p className="text-sm text-gray-600">
-              {t.description}
-            </p>
+            <DialogTitle asChild>
+              <h2 
+                className="text-2xl font-bold"
+                style={{ color: colors.darkOlive }}
+              >
+                {t.title}
+              </h2>
+            </DialogTitle>
+            <DialogDescription asChild>
+              <p className="text-sm text-gray-600">
+                {t.description}
+              </p>
+            </DialogDescription>
           </div>
 
           <div className="space-y-3">

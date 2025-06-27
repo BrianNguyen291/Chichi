@@ -23,22 +23,13 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children, params: { locale } }: RootLayoutProps) {
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="flex min-h-screen flex-col overflow-x-hidden">
-            <Header locale={locale as Locale} />
-            <main className="flex-1 pb-16 md:pb-0 pt-14 sm:pt-16">{children}</main>
-            <ScrollToTop />
-            <QuickContact locale={locale} />
-          </div>
-        </ThemeProvider>
-      </body>
-    </html>
+    <>
+      <div className="flex min-h-screen flex-col overflow-x-hidden">
+        <Header locale={locale as Locale} />
+        <main className="flex-1 pb-16 md:pb-0 pt-14 sm:pt-16">{children}</main>
+        <ScrollToTop />
+        <QuickContact locale={locale} />
+      </div>
+    </>
   )
 } 
