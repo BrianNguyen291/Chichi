@@ -52,8 +52,8 @@ export function MobileNav({ locale }: MobileNavProps) {
       scroll: true
     },
     {
-      href: '/#teacher-team',
-      label: translate('teacherTeam', 'common') || 'Teacher Team',
+      href: '/teacher-team',
+      label: translate('coachTeam', 'common') || 'Coach Team',
       icon: GraduationCap,
       scroll: true
     },
@@ -115,9 +115,18 @@ export function MobileNav({ locale }: MobileNavProps) {
         
         if (!isMounted) return;
         
-        // Organize categories into main categories and subcategories
-        const mainCategories = categories.filter(cat => cat.parent === 0);
-        const subCategories = categories.reduce((acc, cat) => {
+        // 5. Đội ngũ giáo viên (Teacher Team)
+        // 6. Blog
+        // 7. Liên hệ (Contact)
+        const topLevelSlugs = [
+          'course',
+          'library',
+          'vietnamese-tests',
+          'blogs'
+        ];
+
+        const allCategories = categories;
+        const subCategoriesByParent = allCategories.reduce((acc, cat) => {
           if (cat.parent !== 0) {
             if (!acc[cat.parent]) {
               acc[cat.parent] = [];
@@ -126,58 +135,62 @@ export function MobileNav({ locale }: MobileNavProps) {
           }
           return acc;
         }, {} as { [key: number]: TranslatedCategory[] });
+        
+        const courseSubItems = [
+            { slug: 'beginner', defaultLabel: '初級' },
+            { slug: 'intermediate', defaultLabel: '中級' },
+            { slug: 'advanced', defaultLabel: '高級' },
+            { slug: 'certification', defaultLabel: '考證班' },
+            { slug: 'corporate', defaultLabel: '企業班' },
+            { slug: 'individual', defaultLabel: '個人班' },
+        ].map(item => ({
+            label: translate(item.slug, 'common') || item.defaultLabel,
+            href: `/${locale}/courses?level=${item.slug}`
+        }));
 
-        // Define the order of top-level categories
-        const topLevelCategories = [
-          'course',
-          'library',
-          'vietnamese-tests',
-          'blogs'
-        ];
-
-        // Filter and sort main categories
-        const filteredMainCategories = mainCategories
-          .filter(cat => topLevelCategories.includes(cat.slug))
-          .sort((a, b) => {
-            const aIndex = topLevelCategories.indexOf(a.slug);
-            const bIndex = topLevelCategories.indexOf(b.slug);
-            return aIndex - bIndex;
-          });
-
-        // Convert WordPress categories to menu items
-        const wpMenuItems = filteredMainCategories.map(cat => {
-          const categoryChildren = subCategories[cat.id] || [];
+        const wpMenuItems = topLevelSlugs.map(slug => {
+          const category = allCategories.find(c => c.slug === slug);
           
-          // Use /courses for the course category, others keep using /category/slug
-          const href = cat.slug === 'course' 
-            ? `/${locale}/courses`
-            : `/${locale}/category/${cat.slug}`;
-          
+          let href = `/${locale}/category/${slug}`;
+          if (slug === 'course') href = `/${locale}/courses`;
+          if (slug === 'vietnamese-tests') href = `/${locale}/exam-info`;
+
+          if (!category) {
+            if (slug === 'course') {
+              return {
+                label: translate('courses', 'common') || 'Courses',
+                href: href,
+                icon: getIconForCategory(slug),
+                children: courseSubItems
+              };
+            }
+            if (slug === 'vietnamese-tests') {
+              return {
+                label: translate('vietnameseExam', 'common') || 'Vietnamese Exam',
+                href: href,
+                icon: getIconForCategory(slug),
+              };
+            }
+            return null;
+          }
+
+          const children = (subCategoriesByParent[category.id] || []).map(subCat => ({
+            label: subCat.translatedName || subCat.name,
+            href: `/${locale}/category/${subCat.slug}`,
+          }));
+
           return {
-            label: cat.translatedName || cat.name,
+            label: category.translatedName || category.name,
             href,
-            icon: getIconForCategory(cat.slug),
-            children: categoryChildren.map(subCat => ({
-              label: subCat.translatedName || subCat.name,
-              href: `/${locale}/category/${subCat.slug}`,
-            }))
+            icon: getIconForCategory(slug),
+            children: slug === 'course' ? courseSubItems : (children.length > 0 ? children : undefined),
           };
-        });
+        }).filter(Boolean) as NavMenuItem[];
 
-        if (!isMounted) return;
-
-        // Create the complete navigation items in the desired order:
-        // 1. About Us
-        // 2. Khoá học (Courses)
-        // 3. Thư viện (Library)
-        // 4. Kỳ thi năng lực tiếng Việt (Vietnamese Tests)
-        // 5. Đội ngũ giáo viên (Teacher Team)
-        // 6. Blog
-        // 7. Liên hệ (Contact)
-        const completeNavItems = [
+        const completeNavItems: NavMenuItem[] = [
           { ...staticNavItems[1], href: `/${locale}/#courses` }, // About Us
-          ...wpMenuItems, // This includes Courses, Library, Vietnamese Tests, Blog in order
-          { ...staticNavItems[2], href: `/${locale}/#teacher-team` }, // Teacher Team
+          ...wpMenuItems,
+          { ...staticNavItems[2], href: `/${locale}/teacher-team` }, // Teacher Team
           { ...staticNavItems[3], href: `/${locale}/contact` }, // Contact
         ];
 
@@ -199,9 +212,14 @@ export function MobileNav({ locale }: MobileNavProps) {
             label: translate('courses', 'common') || 'Khoá học', 
             icon: BookOpen 
           },
+          {
+            href: `/${locale}/exam-info`,
+            label: translate('vietnameseExam', 'common') || 'Vietnamese Exam',
+            icon: Newspaper,
+          },
           { 
-            href: `/${locale}/#teacher-team`, 
-            label: translate('teacherTeam', 'common') || 'Đội ngũ giáo viên', 
+            href: `/${locale}/teacher-team`, 
+            label: translate('coachTeam', 'common') || 'Đội ngũ giáo viên', 
             icon: GraduationCap 
           },
           { 
@@ -217,7 +235,11 @@ export function MobileNav({ locale }: MobileNavProps) {
           const fallbackItems = [
             { ...staticNavItems[0], href: `/${locale}` }, // Home
             { ...staticNavItems[1], href: `/${locale}/#courses` }, // About
-            { ...staticNavItems[2], href: `/${locale}/#teacher-team` }, // Teacher Team
+            { label: translate('courses', 'common') || 'Courses', href: `/${locale}/courses`, icon: BookOpen },
+            { label: translate('library', 'common') || 'Library', href: `/${locale}/category/library`, icon: Library },
+            { label: translate('vietnameseExam', 'common') || 'Vietnamese Exam', href: `/${locale}/exam-info`, icon: Newspaper },
+            { label: translate('blog', 'common') || 'Blog', href: `/${locale}/category/blogs`, icon: BookOpen },
+            { ...staticNavItems[2], href: `/${locale}/teacher-team` }, // Teacher Team
             { ...staticNavItems[3], href: `/${locale}/contact` } // Contact
           ];
           setNavItems(fallbackItems);
@@ -398,44 +420,25 @@ export function MobileNav({ locale }: MobileNavProps) {
   // Bottom navigation content
   const bottomNav = React.useMemo(() => {
     // Get the current path without the locale prefix for comparison
-    const currentPath = pathname ? `/${pathname.split('/').slice(2).join('/')}` : '/';
+    const currentPath = pathname || '/';
     
     return (
-      <div className="grid grid-cols-4 h-16 font-medium">
+      <div className="grid grid-cols-5 h-16 font-medium">
         {mainNavItems.map((item) => {
           const Icon = item.icon;
           // Check if the current path matches the item's href (ignoring hash and query params)
           const isActive = currentPath === item.href.replace(/#.*$/, '').split('?')[0];
-          const isTeacherTeamLink = item.href.includes('teacher-team');
           
           return (
             <div key={item.label} className="flex flex-col items-center justify-center">
-              {isTeacherTeamLink ? (
-                <a
-                  href="#teacher-team"
-                  className={`flex flex-col items-center justify-center w-full h-full px-2 text-center ${isActive ? 'text-[#b17f4a]' : 'text-gray-700'}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const element = document.getElementById('teacher-team');
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth' });
-                    }
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  {Icon && <Icon className="h-5 w-5 mx-auto mb-1" />}
-                  <span className="text-xs">{item.label}</span>
-                </a>
-              ) : (
-                <Link
-                  href={item.href}
-                  className={`flex flex-col items-center justify-center w-full h-full px-2 text-center ${isActive ? 'text-[#b17f4a]' : 'text-gray-700'}`}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {Icon && <Icon className="h-5 w-5 mx-auto mb-1" />}
-                  <span className="text-xs">{item.label}</span>
-                </Link>
-              )}
+              <Link
+                href={item.href}
+                className={`flex flex-col items-center justify-center w-full h-full px-2 text-center ${isActive ? 'text-[#b17f4a]' : 'text-gray-700'}`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {Icon && <Icon className="h-5 w-5 mx-auto mb-1" />}
+                <span className="text-xs">{item.label}</span>
+              </Link>
             </div>
           );
         })}
@@ -540,12 +543,12 @@ export function MobileNav({ locale }: MobileNavProps) {
             <div className="mt-2 flex space-x-2">
               {Object.entries({
                 'en': 'Eng',
-                'zh-Hant': 'Traditional',
+                'zh-Hant': 'Chinese Traditional',
                 'zh-Hans': 'Chinese Simplified'
               }).map(([key, label]) => (
                 <Link
                   key={key}
-                  href={`/${key}${pathname.replace(/^\/[a-z]{2}(-[A-Za-z]{2,4})?/, '') || '/'}`}
+                  href={`/${key}${pathname ? pathname.replace(/^\/[a-z]{2}(-[A-Za-z]{2,4})?/, '') : '/'}`}
                   className={`px-3 py-1.5 rounded-md text-sm font-medium ${
                     key === locale 
                       ? 'bg-[#b17f4a] text-white' 
