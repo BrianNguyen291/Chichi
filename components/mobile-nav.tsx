@@ -539,9 +539,9 @@ export function MobileNav({ locale }: MobileNavProps) {
             </div>
             <div className="mt-2 flex space-x-2">
               {Object.entries({
-                'en': 'English',
-                'zh-Hant': '繁體中文',
-                'zh-Hans': '简体中文'
+                'en': 'Eng',
+                'zh-Hant': 'Traditional',
+                'zh-Hans': 'Chinese Simplified'
               }).map(([key, label]) => (
                 <Link
                   key={key}
@@ -556,7 +556,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                     document.dispatchEvent(new Event('menu-close'));
                   }}
                 >
-                  {key.toUpperCase()}
+                  {label}
                 </Link>
               ))}
             </div>
