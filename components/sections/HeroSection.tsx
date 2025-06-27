@@ -87,19 +87,19 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
       {/* Content */}
       <div className="relative z-20 container mx-auto px-4">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-playfair mb-6 animate-fade-in-up text-white drop-shadow-lg">
-          Learn Vietnamese Easily
+          {t.title}
         </h1>
         <p className="text-xl sm:text-2xl md:text-3xl max-w-3xl mx-auto font-inter mb-8 animate-fade-in-up [animation-delay:200ms] text-white font-semibold drop-shadow-lg">
-          Your journey to fluency starts here.
+          {t.subtitle}
         </p>
         <Link
           href="/courses"
           className="inline-block px-8 py-4 bg-white text-[#2A5C3F] rounded-full font-bold text-lg
                     hover:bg-opacity-90 transition-all duration-300 shadow-lg hover:shadow-xl
                     transform hover:scale-105 font-inter animate-fade-in-up [animation-delay:400ms]"
-          aria-label="Explore Courses"
+          aria-label={t.exploreCourses}
         >
-          Explore Courses
+          {t.exploreCourses}
         </Link>
       </div>
     </section>
