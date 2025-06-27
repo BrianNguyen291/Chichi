@@ -4,6 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .numbered-list-item {
+    @apply flex items-center;
+  }
+  .numbered-list-item .number {
+    @apply inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 flex-shrink-0;
+  }
+  .numbered-list-item .content {
+    @apply flex-1;
+  }
+}
+
 @layer utilities {
   @keyframes scroll {
     0% {

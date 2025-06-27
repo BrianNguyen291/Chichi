@@ -313,13 +313,13 @@ export default function ExamInfoPage({ params: { locale } }: ExamInfoPageProps) 
             
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
               <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">1</span>
-                  <span>{t.feeRegular}</span>
+                <li className="numbered-list-item">
+                  <span className="number">1</span>
+                  <span className="content">{t.feeRegular}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">2</span>
-                  <span>{t.feeStudent}</span>
+                <li className="numbered-list-item">
+                  <span className="number">2</span>
+                  <span className="content">{t.feeStudent}</span>
                 </li>
               </ul>
               <p className="mt-4 text-sm text-gray-600 italic">{t.feeNote}</p>
@@ -340,21 +340,21 @@ export default function ExamInfoPage({ params: { locale } }: ExamInfoPageProps) 
             <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
               <p className="mb-4">{t.applicationDesc}</p>
               <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">1</span>
-                  <span>{t.applicationItem1}</span>
+                <li className="numbered-list-item">
+                  <span className="number">1</span>
+                  <span className="content">{t.applicationItem1}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">2</span>
-                  <span>{t.applicationItem2}</span>
+                <li className="numbered-list-item">
+                  <span className="number">2</span>
+                  <span className="content">{t.applicationItem2}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">3</span>
-                  <span>{t.applicationItem3}</span>
+                <li className="numbered-list-item">
+                  <span className="number">3</span>
+                  <span className="content">{t.applicationItem3}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">4</span>
-                  <span>{t.applicationItem4}</span>
+                <li className="numbered-list-item">
+                  <span className="number">4</span>
+                  <span className="content">{t.applicationItem4}</span>
                 </li>
               </ul>
             </div>
@@ -374,17 +374,17 @@ export default function ExamInfoPage({ params: { locale } }: ExamInfoPageProps) 
             <div className="bg-gray-50 p-6 rounded-lg mb-6">
               <p className="mb-4">{t.submissionDesc}</p>
               <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">1</span>
-                  <span>{t.submissionPlace1}</span>
+                <li className="numbered-list-item">
+                  <span className="number">1</span>
+                  <span className="content">{t.submissionPlace1}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">2</span>
-                  <span>{t.submissionPlace2}</span>
+                <li className="numbered-list-item">
+                  <span className="number">2</span>
+                  <span className="content">{t.submissionPlace2}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">3</span>
-                  <span>{t.submissionPlace3}</span>
+                <li className="numbered-list-item">
+                  <span className="number">3</span>
+                  <span className="content">{t.submissionPlace3}</span>
                 </li>
               </ul>
               <p className="mt-4 text-gray-700">{t.submissionTime}</p>
@@ -404,17 +404,17 @@ export default function ExamInfoPage({ params: { locale } }: ExamInfoPageProps) 
             
             <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
               <ul className="space-y-4">
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">1</span>
-                  <span>{t.examFormatItem1}</span>
+                <li className="numbered-list-item">
+                  <span className="number">1</span>
+                  <span className="content">{t.examFormatItem1}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">2</span>
-                  <span>{t.examFormatItem2}</span>
+                <li className="numbered-list-item">
+                  <span className="number">2</span>
+                  <span className="content">{t.examFormatItem2}</span>
                 </li>
-                <li className="flex items-start">
-                  <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 mt-0.5">3</span>
-                  <span>{t.examFormatItem3}</span>
+                <li className="numbered-list-item">
+                  <span className="number">3</span>
+                  <span className="content">{t.examFormatItem3}</span>
                 </li>
               </ul>
             </div>
