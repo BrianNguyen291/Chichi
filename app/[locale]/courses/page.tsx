@@ -1294,7 +1294,7 @@ function CourseCard({
       
       <div className="p-6 mt-auto border-t border-gray-100">
         <button 
-          onClick={() => window.open('https://www.facebook.com/chichivietnamese', '_blank')}
+          onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true', '_blank')}
           className="w-full py-2 rounded-lg font-medium transition-all duration-300" 
           style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}
         >
