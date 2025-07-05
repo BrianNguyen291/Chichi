@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 // List of supported locales
 export const locales = ['en', 'zh-Hant', 'zh-Hans'] as const
 export type Locale = typeof locales[number]
-export const defaultLocale = 'en'
+export const defaultLocale = 'zh-Hant'
 
 // Validate if a string is a supported locale
 function isValidLocale(locale: string): locale is Locale {

@@ -48,7 +48,7 @@ export const WP_CONFIG = {
   } as const,
   
   // Default Language
-  defaultLanguage: 'en',
+  defaultLanguage: 'zh-Hant',
   
   // Cache Settings
   cache: {
