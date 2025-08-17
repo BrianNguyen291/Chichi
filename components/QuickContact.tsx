@@ -34,7 +34,7 @@ const translations = {
 }
 
 const contactOptions = [
-  { 
+  {
     type: 'line',
     icon: '/images/Line.png',
     link: 'https://line.me/ti/p/hayleenguyen',
@@ -57,6 +57,12 @@ const contactOptions = [
     icon: '/images/gmail.png',
     link: 'mailto:chinestudylab@gmail.com',
     label: 'chinestudylab@gmail.com'
+  },
+  {
+    type: 'messenger',
+    icon: '/images/messenger.png',
+    link: 'http://m.me/chichivietnamese',
+    label: 'chichivietnamese'
   }
 ]
 
@@ -69,13 +75,13 @@ export function QuickContact({ locale }: QuickContactProps) {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    
+
     // Initial check
     checkMobile()
-    
+
     // Add event listener
     window.addEventListener('resize', checkMobile)
-    
+
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
@@ -85,7 +91,7 @@ export function QuickContact({ locale }: QuickContactProps) {
       {isExpanded && (
         <div className="flex flex-col items-end space-y-2 mb-2">
           {contactOptions.map((option) => (
-            <Link 
+            <Link
               key={option.type}
               href={option.link}
               target="_blank"
@@ -106,7 +112,7 @@ export function QuickContact({ locale }: QuickContactProps) {
       <Button
         onClick={() => setIsExpanded(!isExpanded)}
         className="rounded-full w-12 h-12 shadow-lg"
-        style={{ 
+        style={{
           backgroundColor: colors.secondary,
           color: colors.lightCream
         }}

@@ -6,6 +6,7 @@ import { Header } from '@/components/header'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import { QuickContact } from '@/components/QuickContact'
 import type { Locale } from '@/lib/i18n'
+import LocaleAttribute from '@/components/LocaleAttribute'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children, params: { locale } }: RootLayoutP
   return (
     <>
       <div className="flex min-h-screen flex-col overflow-x-hidden">
+        <LocaleAttribute locale={locale} />
         <Header locale={locale as Locale} />
         <main className="flex-1 pb-16 md:pb-0 pt-14 sm:pt-16">{children}</main>
         <ScrollToTop />

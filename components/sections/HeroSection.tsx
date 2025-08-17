@@ -14,7 +14,7 @@ const playfair = Playfair_Display({
 })
 
 const inter = Inter({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext', 'vietnamese'],
   variable: '--font-inter',
   display: 'swap'
 })
@@ -33,20 +33,20 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
       const handleResize = () => {
         setIsMobile(window.innerWidth < 768)
       }
-      
+
       // Set initial value
       handleResize()
-      
+
       // Add event listener
       window.addEventListener('resize', handleResize)
-      
+
       // Clean up
       return () => window.removeEventListener('resize', handleResize)
     }
   }, [])
 
   return (
-    <section 
+    <section
       className={`relative w-full min-h-[calc(100vh-80px)] flex items-center justify-center text-center ${playfair.variable} ${inter.variable}`}
       aria-label="Hero section"
     >
@@ -86,9 +86,11 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
 
       {/* Content */}
       <div className="relative z-20 container mx-auto px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-playfair mb-6 animate-fade-in-up text-white drop-shadow-lg">
-          {t.title}
-        </h1>
+        {/*{t.title ? (
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight font-playfair mb-6 animate-fade-in-up text-white drop-shadow-lg">
+            {t.title}
+          </h1>
+        ) : null} */}
         <p className="text-xl sm:text-2xl md:text-3xl max-w-3xl mx-auto font-inter mb-8 animate-fade-in-up [animation-delay:200ms] text-white font-semibold drop-shadow-lg">
           {t.subtitle}
         </p>
