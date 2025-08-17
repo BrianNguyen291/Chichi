@@ -8,9 +8,11 @@
   .numbered-list-item {
     @apply flex items-center;
   }
+
   .numbered-list-item .number {
     @apply inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#a4a78b] text-white text-sm mr-3 flex-shrink-0;
   }
+
   .numbered-list-item .content {
     @apply flex-1;
   }
@@ -21,8 +23,10 @@
     0% {
       transform: translateX(0);
     }
+
     100% {
-      transform: translateX(calc(-200px * 5)); /* Width of 5 logos */
+      transform: translateX(calc(-200px * 5));
+      /* Width of 5 logos */
     }
   }
 
@@ -31,6 +35,7 @@
       opacity: 0;
       transform: translateY(20px);
     }
+
     100% {
       opacity: 1;
       transform: translateY(0);
@@ -41,6 +46,7 @@
     0% {
       opacity: 0;
     }
+
     100% {
       opacity: 1;
     }
@@ -48,6 +54,7 @@
 
   .animate-scroll {
     animation: scroll 20s linear infinite;
+
     &:hover {
       animation-play-state: paused;
     }
@@ -152,7 +159,9 @@
     font-family: 'MoonStarsKaiT-Regular', system-ui, -apple-system, sans-serif;
   }
 
-  [data-locale="zh-Hant"] {
+  /* Apply Chinese font to the whole page when locale is zh-Hant or zh-Hans */
+  [data-locale="zh-Hant"] body,
+  [data-locale="zh-Hans"] body {
     font-family: 'MoonStarsKaiT-Regular', system-ui, -apple-system, sans-serif;
   }
 }
@@ -161,6 +170,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -174,4 +184,3 @@ html {
 body {
   font-family: "Inter", sans-serif;
 }
-

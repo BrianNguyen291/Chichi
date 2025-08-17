@@ -15,4 +15,5 @@ const socialMedia = [
   { name: 'TikTok', icon: '/images/tiktok.png', link: '#' },
   { name: 'YouTube', icon: '/images/youtobe.png', link: '#' },
   { name: 'Xiaohongshu', icon: '/images/小紅書.png', link: '#' },
+  { name: 'Messenger', icon: '/images/messenger.png', link: '#' },
 ]; 
