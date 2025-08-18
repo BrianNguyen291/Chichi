@@ -8,36 +8,36 @@ interface PartnersAndFooterProps {
 }
 
 const partners = [
-  { 
-    name: 'Eva Air', 
+  {
+    name: 'Eva Air',
     logo: '/images/EvaAir.png',
     href: 'https://www.evaair.com/your-affiliate-link',
     width: 130,
     height: 20
   },
-  { 
-    name: 'Cathay Pacific', 
+  {
+    name: 'Cathay Pacific',
     logo: '/images/Cathay.jpg',
     href: 'https://www.cathaypacific.com',
     width: 200,
     height: 1000
   },
-  { 
-    name: 'First Bank', 
+  {
+    name: 'First Bank',
     logo: '/images/First Bank.png',
     href: 'https://www.firstbank.com.tw',
     width: 160,
     height: 70
   },
-  { 
-    name: 'CTBC Bank', 
+  {
+    name: 'CTBC Bank',
     logo: '/images/CTBC.png',
     href: 'https://www.ctbcbank.com',
     width: 170,
     height: 60
   },
-  { 
-    name: 'Amazon', 
+  {
+    name: 'Amazon',
     logo: '/images/Amazon.png',
     href: 'https://www.amazon.com',
     width: 150,
@@ -46,42 +46,42 @@ const partners = [
 ];
 
 const socialLinks = [
-  { 
-    name: 'Facebook', 
-    icon: '/images/Facebook.png', 
-    href: 'https://www.facebook.com/chichivietnamese', 
+  {
+    name: 'Facebook',
+    icon: '/images/Facebook.png',
+    href: 'https://www.facebook.com/chichivietnamese',
     ariaLabel: 'Visit our Facebook page',
     width: 40,
     height: 40
   },
-  { 
-    name: 'Instagram', 
-    icon: '/images/IG.png', 
-    href: 'https://www.instagram.com/zhizhi_yuenanyu', 
+  {
+    name: 'Instagram',
+    icon: '/images/IG.png',
+    href: 'https://www.instagram.com/zhizhi_yuenanyu',
     ariaLabel: 'Follow our Instagram',
     width: 40,
     height: 40
   },
-  { 
-    name: 'Threads', 
-    icon: '/images/Threads.png', 
-    href: 'https://www.threads.com/@zhizhi_yuenanyu', 
+  {
+    name: 'Threads',
+    icon: '/images/Threads.png',
+    href: 'https://www.threads.com/@zhizhi_yuenanyu',
     ariaLabel: 'Follow us on Threads',
     width: 40,
     height: 40
   },
-  { 
-    name: 'Xiaohongshu', 
-    icon: '/images/小紅書.png', 
-    href: 'https://www.xiaohongshu.com/user/profile/5fe16ee4000000000100af07', 
+  {
+    name: 'Xiaohongshu',
+    icon: '/images/小紅書.png',
+    href: 'https://www.xiaohongshu.com/user/profile/5fe16ee4000000000100af07',
     ariaLabel: 'Follow us on Xiaohongshu',
     width: 40,
     height: 40
   },
-  { 
-    name: 'TikTok', 
+  {
+    name: 'TikTok',
     icon: '/images/tiktok.png',
-    href: 'https://www.tiktok.com/@zhizhiyuenanyu', 
+    href: 'https://www.tiktok.com/@zhizhiyuenanyu',
     ariaLabel: 'Follow us on TikTok',
     width: 40,
     height: 40
@@ -89,31 +89,31 @@ const socialLinks = [
 ];
 
 const contactInfo = [
-  { 
+  {
     icon: '/images/zalo.png',
     text: 'Zalo: +84966352690',
     component: 'zalo',
     href: 'https://zalo.me/84966352690'
   },
-  { 
+  {
     icon: '/images/Line.png',
     text: 'Line: hayleenguyen',
     component: 'line',
     href: 'https://line.me/ti/p/hayleenguyen'
   },
-  { 
+  {
     icon: '/images/Wechat.png',
     text: 'WeChat: zhizhiyueyu',
     component: 'wechat',
     href: 'weixin://dl/chat?zhizhiyueyu'
   },
-  { 
+  {
     icon: '/images/gmail.png',
     text: 'Gmail: chinestudylab@gmail.com',
     component: 'email',
     href: 'mailto:chinestudylab@gmail.com'
   },
-  { 
+  {
     icon: '/images/Location.png',
     text: 'Văn phòng: Hà Nội, Việt Nam',
     component: 'address',
@@ -176,8 +176,8 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
         />
       </div>
       {contact.href ? (
-        <a 
-          href={contact.href} 
+        <a
+          href={contact.href}
           className="text-white text-base md:text-lg font-medium transition-all duration-200 hover:text-primary-200 hover:translate-x-1"
           target={contact.component === 'email' ? '_self' : '_blank'}
           rel="noopener noreferrer"
@@ -194,14 +194,14 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
 
   return (
     <>
-      <section 
-        id="partners" 
+      <section
+        id="partners"
         className="w-full py-20 overflow-hidden"
         style={{ backgroundColor: colors.primary }}
         aria-labelledby="partners-heading"
       >
         <div className="container mx-auto px-4">
-          <h2 
+          <h2
             id="partners-heading"
             className="text-4xl md:text-5xl font-bold text-center mb-16 scroll-mt-16 font-serif relative"
             style={{ color: colors.darkOlive }}
@@ -209,14 +209,14 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
             {t.partnersTitle}
             <span className="block w-24 h-1.5 mx-auto mt-6" style={{ backgroundColor: colors.secondary }}></span>
           </h2>
-          <div 
+          <div
             className="relative w-full overflow-hidden max-w-7xl mx-auto"
-            role="region" 
+            role="region"
             aria-label="Partner logos"
           >
             <div className="flex animate-scroll hover:animation-paused">
               {[...partners, ...partners].map((partner, index) => (
-                <div 
+                <div
                   key={`partner-${index}`}
                   className="flex-none px-6 transition-transform duration-300 hover:scale-105"
                 >
@@ -244,7 +244,7 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
         </div>
       </section>
 
-      <footer 
+      <footer
         id="contact"
         className="w-full py-20 relative scroll-mt-20"
         style={{ backgroundColor: colors.darkOlive }}
@@ -297,9 +297,9 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
               {t.copyright.replace('2024', `${currentYear}`)}
             </p>
             <p className="text-gray-200 text-base mt-3">
-              <a 
-                href="https://texmate.com" 
-                target="_blank" 
+              <a
+                href="https://tecxmate.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-200 hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-300"
                 aria-label="Visit tecxmate.com website"
@@ -309,8 +309,8 @@ export const PartnersAndFooter = ({ locale }: PartnersAndFooterProps) => {
             </p>
           </div>
         </div>
-        
-        <div 
+
+        <div
           className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-15 pointer-events-none"
           aria-hidden="true"
         />

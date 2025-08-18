@@ -32,6 +32,7 @@ export interface WPPost {
     rendered: string
   }
   categories: number[]
+  tags?: number[]
   featured_media: number
   jetpack_featured_media_url?: string // WordPress.com specific
   _embedded?: {
@@ -39,6 +40,14 @@ export interface WPPost {
       source_url: string
     }>
   }
+}
+
+export interface WPTag {
+  id: number
+  name: string
+  slug: string
+  description: string
+  count: number
 }
 
 async function fetchFromWordPress(endpoint: string, params: Record<string, any> = {}) {
@@ -161,6 +170,7 @@ export async function getPosts(
     page?: number
     perPage?: number
     categories?: number[]
+    tags?: number[]
     search?: string
   } = {}
 ): Promise<WPPost[]> {
@@ -169,19 +179,17 @@ export async function getPosts(
     page = 1,
     perPage = 10,
     categories,
+    tags,
     search,
   } = params
 
   try {
-    // First, get all categories to identify the "Uncategorized" category ID
-    const allCategories = await getCategories(locale)
-    const uncategorizedId = 1 // Default WordPress uncategorized category ID
-
     // Fetch posts
     const data = await fetchFromWordPress('posts', {
       per_page: perPage,
       page,
       categories: categories?.join(','),
+      tags: tags?.join(','),
       search,
       lang: locale,
       _embed: true
@@ -192,16 +200,53 @@ export async function getPosts(
       return []
     }
 
-    // Filter out posts that are only in the "Uncategorized" category
-    const filteredPosts = data.filter(post => {
-      // If the post has multiple categories and one is uncategorized, keep it
-      // Only filter out posts that are ONLY in uncategorized
-      return !(post.categories.length === 1 && post.categories[0] === uncategorizedId)
-    })
+    // If localized query returns very few posts, try a fallback without locale (show more posts)
+    if (Array.isArray(data) && data.length <= 1 && locale) {
+      try {
+        const fallback = await fetchFromWordPress('posts', {
+          per_page: perPage,
+          page,
+          categories: categories?.join(','),
+          search,
+          _embed: true
+        })
+        if (Array.isArray(fallback) && fallback.length > data.length) {
+          return fallback
+        }
+      } catch (e) {
+        // ignore fallback errors
+      }
+    }
 
-    return filteredPosts
+    return data
   } catch (error) {
     console.error('❌ Error fetching posts:', error)
+    return []
+  }
+}
+
+export async function getTags(params: {
+  locale?: string
+  perPage?: number
+  search?: string
+} = {}): Promise<WPTag[]> {
+  const { locale, perPage = 100, search } = params
+  try {
+    const data = await fetchFromWordPress('tags', {
+      per_page: perPage,
+      lang: locale,
+      search,
+      _fields: 'id,name,slug,description,count'
+    })
+
+    if (!Array.isArray(data)) {
+      console.error('❌ Invalid tags data:', data)
+      return []
+    }
+
+    return data
+  } catch (error) {
+    console.error('❌ Error fetching tags:', error)
     return []
   }
 }

@@ -1,6 +1,7 @@
 import { fetchPost, fetchPosts } from '@/lib/wordpress/api';
 import { formatDate } from '@/lib/wordpress/utils';
 import { Metadata } from 'next';
+import ConsultationForm from '@/components/consultation-form';
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -56,6 +57,21 @@ const translations = {
     'vi': 'Đăng ký để nhận các tài liệu giáo dục, phương pháp học tập và kinh nghiệm giảng dạy mới nhất.',
     'en': 'Subscribe to learn about new educational resources, learning methods, and teaching insights.',
   },
+  tags: {
+    'zh-Hant': '主題標籤',
+    'vi': 'Hashtag',
+    'en': 'Tags',
+  },
+  previous: {
+    'zh-Hant': '上一篇',
+    'vi': 'Bài trước',
+    'en': 'Previous',
+  },
+  next: {
+    'zh-Hant': '下一篇',
+    'vi': 'Bài sau',
+    'en': 'Next',
+  },
 };
 
 const t = (key: keyof typeof translations, locale: string): string => {
@@ -67,7 +83,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   // Decode the URL-encoded slug
   const decodedSlug = decodeURIComponent(params.slug);
   const post = await fetchPost(decodedSlug);
-  
+
   if (!post) {
     return {
       title: t('blog', params.locale),
@@ -108,8 +124,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     notFound();
   }
 
-  // Fetch related posts (you'll need to implement this based on your needs)
-  const relatedPosts = await fetchPosts({ per_page: 3 });
+  // Fetch similar posts by first category and exclude current post
+  const rawRelated = await fetchPosts({ per_page: 6, categories: post.categories?.[0] || undefined });
+  const relatedPosts = rawRelated.filter(p => p.slug !== post.slug).slice(0, 3);
+
+  // Previous / Next posts by date
+  const allForPrevNext = await fetchPosts({ per_page: 20 });
+  const sorted = allForPrevNext.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const currentIndex = sorted.findIndex(p => p.slug === post.slug);
+  const previousPost = currentIndex > 0 ? sorted[currentIndex - 1] : null;
+  const nextPost = currentIndex >= 0 && currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
 
   return (
     <div className="min-h-screen bg-white">
@@ -118,7 +142,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-20">
           {/* Breadcrumb */}
           <nav className="flex items-center space-x-2 text-sm mb-8">
-            <Link 
+            <Link
               href={`/${params.locale}`}
               className={clsx(
                 "text-gray-500 hover:text-[#C4A86D] transition-colors",
@@ -142,7 +166,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Article Header */}
           <header className="text-center">
             <div className="flex items-center justify-center space-x-4 mb-6">
-              <time 
+              <time
                 className={clsx(
                   "text-sm text-gray-500",
                   (isChineseLocale || isVietnameseLocale) && "chinese-font"
@@ -160,7 +184,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </span>
             </div>
 
-            <h1 
+            <h1
               className={clsx(
                 "text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight",
                 (isChineseLocale || isVietnameseLocale) && "chinese-font"
@@ -168,9 +192,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               dangerouslySetInnerHTML={{ __html: post.title.rendered }}
             />
 
-            {/* Tags */}
+            {/* Categories */}
             {post.categories && post.categories.length > 0 && (
-              <div className="flex items-center justify-center flex-wrap gap-2 mb-8">
+              <div className="flex items-center justify-center flex-wrap gap-2 mb-6">
                 {post.categories.map((category) => (
                   <Link
                     key={category}
@@ -185,12 +209,26 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 ))}
               </div>
             )}
+            {/* Tags (hashtags) */}
+            {(post as any).tagNames && (post as any).tagNames.length > 0 && (
+              <div className="flex items-center justify-center flex-wrap gap-2 mb-8">
+                {(post as any).tagNames.map((tag: string, idx: number) => (
+                  <Link
+                    key={`${tag}-${idx}`}
+                    href={`/${params.locale}/blog?tag=${encodeURIComponent(tag)}`}
+                    className="px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                  >
+                    #{tag}
+                  </Link>
+                ))}
+              </div>
+            )}
           </header>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         {/* Featured Image */}
         {post.featured_media && (
           <div className="mb-12 rounded-2xl overflow-hidden shadow-lg">
@@ -202,34 +240,61 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         )}
 
-        {/* Article Content */}
-        <article className={clsx(
-          "prose prose-lg max-w-none",
-          (isChineseLocale || isVietnameseLocale) && "chinese-font",
-          "prose-headings:text-gray-900 prose-headings:font-bold",
-          "prose-p:text-gray-700 prose-p:leading-relaxed",
-          "prose-a:text-[#C4A86D] prose-a:no-underline hover:prose-a:underline",
-          "prose-strong:text-gray-900 prose-strong:font-semibold",
-          "prose-ul:list-disc prose-ol:list-decimal",
-          "prose-blockquote:border-l-4 prose-blockquote:border-[#C4A86D] prose-blockquote:pl-4 prose-blockquote:italic"
-        )}>
-          <div
-            dangerouslySetInnerHTML={{ __html: post.content.rendered }}
-          />
-        </article>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-8">
+            {/* Article Content */}
+            <article className={clsx(
+              "prose prose-lg max-w-none",
+              (isChineseLocale || isVietnameseLocale) && "chinese-font",
+              "prose-headings:text-gray-900 prose-headings:font-bold",
+              "prose-p:text-gray-700 prose-p:leading-relaxed",
+              "prose-a:text-[#C4A86D] prose-a:no-underline hover:prose-a:underline",
+              "prose-strong:text-gray-900 prose-strong:font-semibold",
+              "prose-ul:list-disc prose-ol:list-decimal",
+              "prose-blockquote:border-l-4 prose-blockquote:border-[#C4A86D] prose-blockquote:pl-4 prose-blockquote:italic"
+            )}>
+              <div
+                dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+              />
+            </article>
 
-        {/* Share Section */}
-        <div className="border-t border-gray-100 mt-12 pt-8">
-          <h3 className={clsx(
-            "text-lg font-semibold text-gray-900 mb-4",
-            (isChineseLocale || isVietnameseLocale) && "chinese-font"
-          )}>
-            {t('shareTitle', params.locale)}
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            <ShareButton platform="facebook" url={`${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/blog/${post.slug}`} title={post.title.rendered} />
-            <ShareButton platform="twitter" url={`${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/blog/${post.slug}`} title={post.title.rendered} />
-            <ShareButton platform="line" url={`${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/blog/${post.slug}`} title={post.title.rendered} />
+            {/* Share Section */}
+            <div className="border-t border-gray-100 mt-12 pt-8">
+              <h3 className={clsx(
+                "text-lg font-semibold text-gray-900 mb-4",
+                (isChineseLocale || isVietnameseLocale) && "chinese-font"
+              )}>
+                {t('shareTitle', params.locale)}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                <ShareButton platform="facebook" url={`${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/blog/${post.slug}`} title={post.title.rendered} />
+                <ShareButton platform="twitter" url={`${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/blog/${post.slug}`} title={post.title.rendered} />
+                <ShareButton platform="line" url={`${process.env.NEXT_PUBLIC_SITE_URL}/${params.locale}/blog/${post.slug}`} title={post.title.rendered} />
+              </div>
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <aside className="lg:col-span-4 lg:sticky lg:top-24 h-fit">
+            <ConsultationForm locale={params.locale} />
+          </aside>
+        </div>
+
+        {/* Previous / Next Navigation */}
+        <div className="border-t border-gray-100 mt-12 pt-8 flex justify-between gap-4">
+          <div>
+            {previousPost && (
+              <Link href={`/${params.locale}/blog/${previousPost.slug}`} className="text-[#C4A86D] hover:underline">
+                ← {t('previous', params.locale)}
+              </Link>
+            )}
+          </div>
+          <div>
+            {nextPost && (
+              <Link href={`/${params.locale}/blog/${nextPost.slug}`} className="text-[#C4A86D] hover:underline">
+                {t('next', params.locale)} →
+              </Link>
+            )}
           </div>
         </div>
 
@@ -255,7 +320,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <h3 
+                <h3
                   className={clsx(
                     "text-lg font-semibold text-gray-900 group-hover:text-[#C4A86D] transition-colors line-clamp-2",
                     (isChineseLocale || isVietnameseLocale) && "chinese-font"
@@ -319,17 +384,17 @@ function ShareButton({ platform, url, title }: { platform: string; url: string; 
   const platformIcons = {
     facebook: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.378 14.192 5 15.115 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z"/>
+        <path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.378 14.192 5 15.115 5H18V0h-3.808C10.596 0 9 1.583 9 4.615V8z" />
       </svg>
     ),
     twitter: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
       </svg>
     ),
     line: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M19.365 9.863c.349 0 .63.285.631.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+        <path d="M19.365 9.863c.349 0 .63.285.631.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
       </svg>
     ),
   };

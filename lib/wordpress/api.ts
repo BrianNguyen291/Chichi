@@ -89,6 +89,7 @@ export async function fetchPosts(params: {
   page?: number;
   per_page?: number;
   categories?: string[] | string | number;
+  tags?: string[] | string | number;
   search?: string;
   lang?: string;
 } = {}): Promise<Post[]> {
@@ -104,6 +105,8 @@ export async function fetchPosts(params: {
   if (params.page) searchParams.append('page', params.page.toString());
   if (params.search) searchParams.append('search', params.search);
   if (params.lang) searchParams.append('lang', params.lang);
+  // Note: WP.com API posts endpoint doesn't filter by tags directly using this helper
+  // We will filter by tags client-side after fetching when params.tags is provided.
 
   try {
     const requestUrl = `${API_BASE}/posts?${searchParams}`;
@@ -137,6 +140,7 @@ export async function fetchPosts(params: {
       featured_image?: string;
       featured_media?: { source_url: string };
       categories: Record<string, { ID: number; name: string }>;
+      tags?: Record<string, { ID: number; name: string }>;
       sticky?: boolean;
     }) => {
       // Handle categories from WordPress.com API response
@@ -150,6 +154,19 @@ export async function fetchPosts(params: {
           if (category && typeof category === 'object') {
             categoryIds.push(category.ID?.toString() || '');
             categoryNames.push(category.name || '');
+          }
+        });
+      }
+
+      // Process tags if present
+      const postTags = (post as any).tags || {};
+      let tagIds: string[] = [];
+      let tagNames: string[] = [];
+      if (typeof postTags === 'object') {
+        Object.values(postTags).forEach((tag: any) => {
+          if (tag && typeof tag === 'object') {
+            tagIds.push(tag.ID?.toString() || '');
+            tagNames.push(tag.name || '');
           }
         });
       }
@@ -170,6 +187,8 @@ export async function fetchPosts(params: {
         featured_media: featuredImage,
         categories: categoryIds,
         categoryNames,
+        tags: tagIds,
+        tagNames,
         featured: post.sticky || false
       };
     });
@@ -192,6 +211,19 @@ export async function fetchPosts(params: {
       });
       
       console.log('Posts after category filtering:', posts.length);
+    }
+
+    // Filter posts by tag if specified
+    if (params.tags) {
+      const tagInput = Array.isArray(params.tags)
+        ? params.tags[0].toString()
+        : params.tags.toString();
+      posts = posts.filter(post => {
+        const hasTag = (post as any).tags?.some((t: string) => t === tagInput) ||
+          (post as any).tagNames?.some((name: string) => name.toLowerCase() === tagInput.toLowerCase());
+        return hasTag;
+      });
+      console.log('Posts after tag filtering:', posts.length);
     }
 
     setCache(cacheKey, posts);
@@ -402,6 +434,17 @@ export async function fetchPost(slug: string): Promise<Post | null> {
     const categories = Object.keys(post.categories || {}).map(key => post.categories[key].ID.toString());
     const categoryNames = Object.values(post.categories || {}).map((cat: any) => cat.name);
 
+    // Extract tags and tag names if present (WordPress.com API returns an object)
+    const tagsObj = post.tags || {};
+    const tags = Object.keys(tagsObj || {}).map((key: any) => {
+      try {
+        return (tagsObj as any)[key].ID.toString();
+      } catch {
+        return '';
+      }
+    }).filter(Boolean);
+    const tagNames = Object.values(tagsObj || {}).map((t: any) => t?.name).filter(Boolean);
+
     const formattedPost = {
       id: post.ID,
       title: { rendered: post.title },
@@ -412,6 +455,8 @@ export async function fetchPost(slug: string): Promise<Post | null> {
       featured_media: post.featured_image || WP_CONFIG.defaultImage,
       categories,
       categoryNames,
+      tags,
+      tagNames,
       featured: post.sticky || false
     };
 
