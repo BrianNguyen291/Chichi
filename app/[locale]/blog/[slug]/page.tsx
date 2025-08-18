@@ -1,7 +1,7 @@
 import { fetchPost, fetchPosts } from '@/lib/wordpress/api';
 import { formatDate } from '@/lib/wordpress/utils';
 import { Metadata } from 'next';
-import ConsultationForm from '@/components/consultation-form';
+// Removed ConsultationForm
 import { notFound } from 'next/navigation';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -275,9 +275,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           {/* Sidebar */}
-          <aside className="lg:col-span-4 lg:sticky lg:top-24 h-fit">
-            <ConsultationForm locale={params.locale} />
-          </aside>
+          {/* Sidebar removed: consultation form */}
         </div>
 
         {/* Previous / Next Navigation */}

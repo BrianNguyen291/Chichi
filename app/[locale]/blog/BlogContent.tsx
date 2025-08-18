@@ -6,7 +6,7 @@ import { CategoryGrid } from '@/components/category/CategoryGrid'
 import { colors } from '@/lib/colors'
 import { useDebounce } from '@/hooks/useDebounce'
 import { Skeleton } from '@/components/ui/skeleton'
-import ConsultationForm from '@/components/consultation-form'
+// Removed ConsultationForm
 
 interface BlogContentProps {
   params: {
@@ -305,9 +305,7 @@ export default function BlogContent({ params }: BlogContentProps) {
           )}
         </div>
 
-        <aside className="lg:col-span-4 lg:sticky lg:top-24 h-fit space-y-6">
-          <ConsultationForm locale={params.locale} />
-        </aside>
+        {/* Sidebar removed: consultation form */}
       </div>
 
       {isLoading && (
