@@ -13,6 +13,8 @@ export interface Post {
   featured_media: string;
   categories: string[];
   categoryNames: string[];
+  tags?: string[];
+  tagNames?: string[];
   author?: {
     name: string;
     avatar?: string;
