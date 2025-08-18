@@ -29,7 +29,7 @@ export function MobileNav({ locale }: MobileNavProps) {
   const [navItems, setNavItems] = React.useState<NavMenuItem[]>([])
   const [isLoading, setIsLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
-  
+
   // Cache for categories
   const categoriesCache = React.useRef<{
     [key: string]: {
@@ -40,13 +40,13 @@ export function MobileNav({ locale }: MobileNavProps) {
 
   // Get translated static items
   const staticNavItems = React.useMemo(() => [
-    { 
-      href: '/', 
+    {
+      href: '/',
       label: translate('home', 'common'),
-      icon: Home 
+      icon: Home
     },
-    { 
-      href: '/#courses', 
+    {
+      href: '/#courses',
       label: translate('about', 'common'),
       icon: Home,
       scroll: true
@@ -57,15 +57,15 @@ export function MobileNav({ locale }: MobileNavProps) {
       icon: GraduationCap,
       scroll: true
     },
-    { 
-      href: '/contact', 
+    {
+      href: '/contact',
       label: translate('contact', 'common'),
-      icon: Phone 
+      icon: Phone
     },
   ], [translate])
 
   // Initialize mainNavItems state
-  const [mainNavItems, setMainNavItems] = React.useState(() => 
+  const [mainNavItems, setMainNavItems] = React.useState(() =>
     staticNavItems.map(item => {
       // Special handling for teacher-team link to preserve the hash
       if (item.href.includes('#')) {
@@ -112,9 +112,9 @@ export function MobileNav({ locale }: MobileNavProps) {
         setError(null);
         console.log('🔄 Fetching categories for locale:', locale);
         const categories = await getCategories(locale);
-        
+
         if (!isMounted) return;
-        
+
         // 5. Đội ngũ giáo viên (Teacher Team)
         // 6. Blog
         // 7. Liên hệ (Contact)
@@ -135,22 +135,22 @@ export function MobileNav({ locale }: MobileNavProps) {
           }
           return acc;
         }, {} as { [key: number]: TranslatedCategory[] });
-        
+
         const courseSubItems = [
-            { slug: 'beginner', defaultLabel: '初級' },
-            { slug: 'intermediate', defaultLabel: '中級' },
-            { slug: 'advanced', defaultLabel: '高級' },
-            { slug: 'certification', defaultLabel: '考證班' },
-            { slug: 'corporate', defaultLabel: '企業班' },
-            { slug: 'individual', defaultLabel: '個人班' },
+          { slug: 'beginner', defaultLabel: '初級' },
+          { slug: 'intermediate', defaultLabel: '中級' },
+          { slug: 'advanced', defaultLabel: '高級' },
+          { slug: 'certification', defaultLabel: '考證班' },
+          { slug: 'corporate', defaultLabel: '企業班' },
+          { slug: 'individual', defaultLabel: '個人班' },
         ].map(item => ({
-            label: translate(item.slug, 'common') || item.defaultLabel,
-            href: `/${locale}/courses?level=${item.slug}`
+          label: translate(item.slug, 'common') || item.defaultLabel,
+          href: `/${locale}/courses?level=${item.slug}`
         }));
 
         const wpMenuItems = topLevelSlugs.map(slug => {
           const category = allCategories.find(c => c.slug === slug);
-          
+
           let href = `/${locale}/category/${slug}`;
           if (slug === 'course') href = `/${locale}/courses`;
           if (slug === 'vietnamese-tests') href = `/${locale}/exam-info`;
@@ -207,25 +207,25 @@ export function MobileNav({ locale }: MobileNavProps) {
         // Only show essential items in bottom nav: Home, Courses, Teacher Team, Contact
         setMainNavItems([
           { href: `/${locale}`, label: translate('home', 'common'), icon: Home },
-          { 
-            href: `/${locale}/courses`, 
-            label: translate('courses', 'common') || 'Khoá học', 
-            icon: BookOpen 
+          {
+            href: `/${locale}/courses`,
+            label: translate('courses', 'common') || 'Khoá học',
+            icon: BookOpen
           },
           {
             href: `/${locale}/exam-info`,
             label: translate('vietnameseExam', 'common') || 'Vietnamese Exam',
             icon: Newspaper,
           },
-          { 
-            href: `/${locale}/teacher-team`, 
-            label: translate('coachTeam', 'common') || 'Đội ngũ giáo viên', 
-            icon: GraduationCap 
+          {
+            href: `/${locale}/teacher-team`,
+            label: translate('coachTeam', 'common') || 'Đội ngũ giáo viên',
+            icon: GraduationCap
           },
-          { 
-            href: `/${locale}/contact`, 
-            label: translate('contact', 'common') || 'Liên hệ', 
-            icon: Phone 
+          {
+            href: `/${locale}/contact`,
+            label: translate('contact', 'common') || 'Liên hệ',
+            icon: Phone
           },
         ]);
 
@@ -281,6 +281,14 @@ export function MobileNav({ locale }: MobileNavProps) {
     setActiveSubmenu(null)
   }, [locale])
 
+  // Ensure body scroll is restored on route changes (e.g., navigating to blog detail on mobile)
+  React.useEffect(() => {
+    // Close menu and clear any overflow lock when the path changes
+    setIsMenuOpen(false)
+    setActiveSubmenu(null)
+    document.body.style.overflow = ''
+  }, [pathname])
+
   // Log menu state changes
   React.useEffect(() => {
     console.log('📱 Menu state changed:', isMenuOpen ? 'OPEN' : 'CLOSED');
@@ -323,7 +331,7 @@ export function MobileNav({ locale }: MobileNavProps) {
       const target = event.target as HTMLElement
       const menuContent = target.closest('[data-menu-content]')
       const menuButton = target.closest('button')
-      
+
       if (isMenuOpen && !menuContent && !menuButton?.onclick?.toString().includes('toggleMenu')) {
         toggleMenu(false)
       }
@@ -355,7 +363,7 @@ export function MobileNav({ locale }: MobileNavProps) {
           const isActive = safePath.startsWith(item.href);
           const isSubmenuOpen = activeSubmenu === item.label;
           const hasChildren = item.children && item.children.length > 0;
-          
+
           return (
             <div key={item.label} className="border-b last:border-b-0" style={{ borderColor: colors.secondary }}>
               {/* Parent menu item */}
@@ -368,9 +376,8 @@ export function MobileNav({ locale }: MobileNavProps) {
                     setIsMenuOpen(false);
                   }
                 }}
-                className={`w-full flex items-center justify-between py-3 px-4 ${
-                  isActive ? 'text-[#b17f4a]' : ''
-                }`}
+                className={`w-full flex items-center justify-between py-3 px-4 ${isActive ? 'text-[#b17f4a]' : ''
+                  }`}
                 style={{ color: isActive ? colors.primary : colors.darkOlive }}
               >
                 <div className="flex items-center space-x-3">
@@ -379,28 +386,25 @@ export function MobileNav({ locale }: MobileNavProps) {
                 </div>
                 {hasChildren && (
                   <ChevronRight
-                    className={`h-5 w-5 transition-transform duration-200 ${
-                      isSubmenuOpen ? 'rotate-90' : ''
-                    }`}
+                    className={`h-5 w-5 transition-transform duration-200 ${isSubmenuOpen ? 'rotate-90' : ''
+                      }`}
                   />
                 )}
               </button>
 
               {/* Submenu */}
               {hasChildren && (
-                <div 
-                  className={`bg-gray-50 transition-all duration-300 ease-in-out ${
-                    isSubmenuOpen ? 'max-h-screen py-2' : 'max-h-0'
-                  } overflow-hidden`}
+                <div
+                  className={`bg-gray-50 transition-all duration-300 ease-in-out ${isSubmenuOpen ? 'max-h-screen py-2' : 'max-h-0'
+                    } overflow-hidden`}
                 >
                   {item.children?.map((child) => (
                     <Link
                       key={child.label}
                       href={child.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`block w-full px-8 py-2 text-base hover:bg-gray-100 ${
-                        safePath.startsWith(child.href) ? 'text-[#b17f4a]' : ''
-                      }`}
+                      className={`block w-full px-8 py-2 text-base hover:bg-gray-100 ${safePath.startsWith(child.href) ? 'text-[#b17f4a]' : ''
+                        }`}
                       style={{ color: safePath.startsWith(child.href) ? colors.primary : colors.darkOlive }}
                     >
                       {child.label}
@@ -408,7 +412,7 @@ export function MobileNav({ locale }: MobileNavProps) {
                   ))}
                 </div>
               )}
-              
+
               {/* Language selector has been moved to the header */}
             </div>
           );
@@ -421,14 +425,14 @@ export function MobileNav({ locale }: MobileNavProps) {
   const bottomNav = React.useMemo(() => {
     // Get the current path without the locale prefix for comparison
     const currentPath = pathname || '/';
-    
+
     return (
       <div className="grid grid-cols-5 h-16 font-medium">
         {mainNavItems.map((item) => {
           const Icon = item.icon;
           // Check if the current path matches the item's href (ignoring hash and query params)
           const isActive = currentPath === item.href.replace(/#.*$/, '').split('?')[0];
-          
+
           return (
             <div key={item.label} className="flex flex-col items-center justify-center">
               <Link
@@ -457,13 +461,13 @@ export function MobileNav({ locale }: MobileNavProps) {
         >
           <Menu className="h-6 w-6" />
         </button>
-        
+
         {/* Bottom Navigation */}
-        <nav 
+        <nav
           className="md:hidden fixed bottom-0 left-0 right-0 z-40 border-t"
-          style={{ 
+          style={{
             backgroundColor: colors.lightCream,
-            borderColor: colors.secondary 
+            borderColor: colors.secondary
           }}
         >
           {bottomNav}
@@ -494,7 +498,7 @@ export function MobileNav({ locale }: MobileNavProps) {
 
       {/* Overlay when menu is open */}
       {isMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40"
           onClick={() => toggleMenu(false)}
           style={{ pointerEvents: 'auto' }}
@@ -502,17 +506,16 @@ export function MobileNav({ locale }: MobileNavProps) {
       )}
 
       {/* Menu Panel */}
-      <div 
+      <div
         data-menu-content
-        className={`fixed top-0 right-0 bottom-0 z-50 transform transition-transform duration-300 ease-in-out ${
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 bottom-0 z-50 transform transition-transform duration-300 ease-in-out ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
         style={{ width: '100%', maxWidth: '400px', height: '80vh', overflowY: 'auto' }}
       >
         <div className="h-full bg-white flex flex-col shadow-lg">
           {/* Header */}
           <div className="sticky top-0 flex items-center justify-between px-4 py-3 border-b bg-white z-10"
-               style={{ borderColor: colors.secondary }}>
+            style={{ borderColor: colors.secondary }}>
             <div className="flex-1">
               <span className="text-lg font-medium" style={{ color: colors.darkOlive }}>
                 {translate('menu', 'common')}
@@ -549,11 +552,10 @@ export function MobileNav({ locale }: MobileNavProps) {
                 <Link
                   key={key}
                   href={`/${key}${pathname ? pathname.replace(/^\/[a-z]{2}(-[A-Za-z]{2,4})?/, '') : '/'}`}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                    key === locale 
-                      ? 'bg-[#b17f4a] text-white' 
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium ${key === locale
+                      ? 'bg-[#b17f4a] text-white'
                       : 'bg-gray-100 hover:bg-gray-200 text-gray-800'
-                  }`}
+                    }`}
                   onClick={() => {
                     setIsMenuOpen(false);
                     document.dispatchEvent(new Event('menu-close'));
@@ -571,7 +573,7 @@ export function MobileNav({ locale }: MobileNavProps) {
       </div>
 
       {/* Bottom Navigation */}
-      <nav 
+      <nav
         className="fixed bottom-0 left-0 right-0 z-40 border-t bg-white"
         style={{ borderColor: colors.secondary }}
       >
