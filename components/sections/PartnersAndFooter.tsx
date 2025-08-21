@@ -99,7 +99,7 @@ const contactInfo = [
     icon: '/images/Line.png',
     text: 'Line: hayleenguyen',
     component: 'line',
-    href: 'https://line.me/ti/p/hayleenguyen'
+    href: 'https://line.me/ti/p/cynCJgm3Xu'
   },
   {
     icon: '/images/Wechat.png',
