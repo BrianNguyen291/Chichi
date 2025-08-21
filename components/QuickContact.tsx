@@ -36,7 +36,7 @@ const contactOptions = [
   {
     type: 'line',
     icon: '/images/Line.png',
-    link: 'https://line.me/ti/p/hayleenguyen',
+    link: 'https://line.me/ti/p/cynCJgm3Xu',
     label: 'hayleenguyen'
   },
   {
