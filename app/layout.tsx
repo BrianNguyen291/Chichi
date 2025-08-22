@@ -14,8 +14,23 @@ const StagewiseToolbar = dynamic(
 const inter = Inter({ subsets: ['latin', 'latin-ext', 'vietnamese'] })
 
 export const metadata: Metadata = {
-  title: "越學越通 - 專業越南語教學",
-  description: "專業越南語教學，線上線下課程，量身打造學習計畫",
+  title: "芝芝越南語 - 專業越南語教學中心",
+  description: "專業越南語教學，線上線下課程，量身打造學習計畫。提供越南語、英語、中文課程，由經驗豐富的教師團隊授課。",
+  keywords: "越南語教學,越南語課程,越南語學習,越南語老師,河內越南語,線上越南語,越南語補習班,越南語會話,越南語發音,越南語文法",
+  authors: [{ name: '芝芝越南語' }],
+  creator: '芝芝越南語',
+  publisher: '芝芝越南語',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({
@@ -39,4 +54,3 @@ export default function RootLayout({
     </html>
   )
 }
-import './globals.css'
