@@ -1,10 +1,10 @@
 export const WP_CONFIG = {
   // WordPress API Configuration
-  siteId: 'zhiyuenanyu.wordpress.com',
-  apiBase: 'https://public-api.wordpress.com/rest/v1.1/sites/zhiyuenanyu.wordpress.com',
+  siteId: 'annenails1.wordpress.com',
+  apiBase: 'https://public-api.wordpress.com/rest/v1.1/sites/annenails1.wordpress.com',
   
   // Site Configuration
-  siteName: 'Zhiyue Nanyu',
+  siteName: 'Anne Nails',
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   
   // Content Settings
@@ -58,9 +58,9 @@ export const WP_CONFIG = {
   
   // Social Media
   social: {
-    facebook: 'https://facebook.com/chichivietnamese',
-    instagram: 'https://instagram.com/zhizhi_yuenanyu',
-    youtube: 'https://youtube.com/zhizhiyuenanyu',
+    facebook: 'https://facebook.com/annenails',
+    instagram: 'https://instagram.com/annenails',
+    youtube: 'https://youtube.com/annenails',
   },
   
   // Analytics

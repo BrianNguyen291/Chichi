@@ -11,7 +11,7 @@ import LocaleAttribute from '@/components/LocaleAttribute'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Chi Chi Language School',
+  title: '芝芝越南語',
   description: 'Learn Vietnamese, English, and Chinese at Chi Chi Language School',
 }
 
