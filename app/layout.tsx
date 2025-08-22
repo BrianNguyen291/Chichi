@@ -20,6 +20,28 @@ export const metadata: Metadata = {
   authors: [{ name: '芝芝越南語' }],
   creator: '芝芝越南語',
   publisher: '芝芝越南語',
+  metadataBase: new URL('https://chichivietnamese.com'),
+  icons: {
+    icon: '/Logo.png',
+    shortcut: '/Logo.png',
+    apple: '/Logo.png',
+  },
+  openGraph: {
+    type: 'website',
+    siteName: '芝芝越南語',
+    images: [
+      {
+        url: '/Logo.png',
+        width: 512,
+        height: 512,
+        alt: '芝芝越南語 Logo',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    images: ['/Logo.png'],
+  },
   robots: {
     index: true,
     follow: true,

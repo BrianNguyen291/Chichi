@@ -25,7 +25,7 @@ export default function HomePage({ params: { locale } }: HomePageProps) {
     "@context": "https://schema.org",
     "@type": "LanguageSchool",
     "name": "芝芝越南語",
-    "alternateName": "Chi Chi Vietnamese Language School",
+    "alternateName": "Chi Chi Vietnamese",
     "description": "Professional Vietnamese language teaching with online and offline courses",
     "url": baseUrl,
     "logo": `${baseUrl}/Logo.png`,
@@ -50,12 +50,33 @@ export default function HomePage({ params: { locale } }: HomePageProps) {
     }
   }
 
+  // Add Organization schema for logo
+  const organizationData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "芝芝越南語",
+    "alternateName": "Chi Chi Vietnamese",
+    "url": baseUrl,
+    "logo": `${baseUrl}/Logo.png`,
+    "image": `${baseUrl}/Logo.png`,
+    "description": "Professional Vietnamese language teaching with online and offline courses",
+    "sameAs": [
+      "https://www.facebook.com/chichivietnamese",
+      "https://www.instagram.com/chichivietnamese"
+    ]
+  }
+
   return (
     <>
       <Script
         id="structured-data"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <Script
+        id="organization-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationData) }}
       />
       <div className="flex flex-col min-h-screen">
         <CTAPopup locale={locale} />

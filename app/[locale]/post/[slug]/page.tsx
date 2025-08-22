@@ -197,8 +197,8 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
       title,
       description,
       images: featuredImage ? [featuredImage] : [],
-      creator: '@chichilanguageschool',
-      site: '@chichilanguageschool',
+      creator: '@chichivietnamese',
+      site: '@chichivietnamese',
     },
     robots: {
       index: true,
