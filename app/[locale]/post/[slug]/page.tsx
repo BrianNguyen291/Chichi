@@ -159,6 +159,7 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
     keywords: tagNames.join(', ') || 'Vietnamese language, learning, education',
     creator: '芝芝越南語',
     publisher: '芝芝越南語',
+    authors: [{ name: '芝芝越南語' }],
     formatDetection: {
       email: false,
       address: false,
@@ -181,6 +182,7 @@ export async function generateMetadata({ params: { locale, slug } }: PostPagePro
       locale: locale,
       type: 'article',
       publishedTime: post.date,
+      authors: ['芝芝越南語'],
       images: featuredImage ? [
         {
           url: featuredImage,
