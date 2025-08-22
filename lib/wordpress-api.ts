@@ -50,7 +50,19 @@ export interface WPTag {
   count: number
 }
 
+// Rate limiting
+let lastRequestTime = 0;
+const MIN_REQUEST_INTERVAL = 1000; // 1 second between requests
+
 async function fetchFromWordPress(endpoint: string, params: Record<string, any> = {}) {
+  // Rate limiting
+  const now = Date.now();
+  const timeSinceLastRequest = now - lastRequestTime;
+  if (timeSinceLastRequest < MIN_REQUEST_INTERVAL) {
+    await new Promise(resolve => setTimeout(resolve, MIN_REQUEST_INTERVAL - timeSinceLastRequest));
+  }
+  lastRequestTime = Date.now();
+
   // Build query string from params
   const queryString = Object.entries(params)
     .filter(([_, value]) => value !== undefined)
@@ -58,50 +70,37 @@ async function fetchFromWordPress(endpoint: string, params: Record<string, any> 
     .join('&')
 
   const url = `${WORDPRESS_API_URL}/${endpoint}${queryString ? `?${queryString}` : ''}`
-  console.log('🔍 Fetching from WordPress:', url)
 
   try {
     const res = await fetch(url, {
       headers: {
         'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (compatible; ZhiyueNanyu/1.0)',
       },
       next: {
-        revalidate: 60 // Cache for 60 seconds
+        revalidate: 300 // Cache for 5 minutes instead of 60 seconds
       }
     })
 
     if (!res.ok) {
-      const text = await res.text()
-      console.error('❌ WordPress API Error:', {
-        status: res.status,
-        statusText: res.statusText,
-        url,
-        response: text
-      })
+      if (res.status === 429) {
+        console.error('Rate limit exceeded, waiting 60 seconds...');
+        await new Promise(resolve => setTimeout(resolve, 60000));
+        return fetchFromWordPress(endpoint, params);
+      }
+      console.error('WordPress API Error:', res.status, res.statusText)
       throw new Error(`WordPress API Error: ${res.status} ${res.statusText}`)
     }
 
     const data = await res.json()
-    console.log('✅ WordPress API Response:', {
-      endpoint,
-      params,
-      dataLength: Array.isArray(data) ? data.length : 'single item',
-      data: data // Log the actual data for debugging
-    })
     return data
   } catch (error) {
-    console.error('❌ WordPress API Error:', {
-      error,
-      endpoint,
-      params,
-      url
-    })
+    console.error('WordPress API Error:', error)
     throw error
   }
 }
 
 export async function getCategories(locale: string = 'en'): Promise<TranslatedCategory[]> {
-  console.log('📁 Fetching categories for locale:', locale)
   try {
     const data = await fetchFromWordPress('categories', {
       per_page: 100,
@@ -111,7 +110,7 @@ export async function getCategories(locale: string = 'en'): Promise<TranslatedCa
     })
 
     if (!Array.isArray(data)) {
-      console.error('❌ Invalid categories data:', data)
+      console.error('Invalid categories data')
       return []
     }
 
@@ -121,45 +120,19 @@ export async function getCategories(locale: string = 'en'): Promise<TranslatedCa
         category.id !== 1 && category.slug !== 'uncategorized'
       )
 
-    console.log('📁 Categories before translation:', 
-      JSON.stringify(filteredCategories.map(c => ({
-        id: c.id,
-        name: c.name,
-        slug: c.slug
-      })), null, 2)
-    )
-
     // Add translations from categoryTranslations
     const translatedCategories = filteredCategories.map(category => {
       const translation = categoryTranslations[category.slug as keyof typeof categoryTranslations]
-      console.log('🔍 Translation lookup for:', JSON.stringify({
-        slug: category.slug,
-        locale: locale,
-        foundTranslation: !!translation,
-        availableTranslation: translation?.[locale as keyof typeof translation],
-        finalName: translation?.[locale as keyof typeof translation] || category.name,
-        allTranslations: translation,
-        categoryTranslationsKeys: Object.keys(categoryTranslations)
-      }, null, 2))
       
       return {
         ...category,
         translatedName: translation?.[locale as keyof typeof translation] || category.name
       }
     })
-
-    console.log('📁 Categories after translation:', 
-      JSON.stringify(translatedCategories.map(c => ({
-        id: c.id,
-        name: c.name,
-        translatedName: c.translatedName,
-        slug: c.slug
-      })), null, 2)
-    )
     
     return translatedCategories
   } catch (error) {
-    console.error('❌ Error fetching categories:', error)
+    console.error('Error fetching categories:', error)
     return []
   }
 }
