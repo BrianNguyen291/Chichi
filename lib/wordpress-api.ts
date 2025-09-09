@@ -263,6 +263,7 @@ export async function getTags(params: {
   }
 }
 
+<<<<<<< HEAD
 // Function to sanitize slug by removing invisible characters and normalizing
 function sanitizeSlug(slug: string): string {
   // Remove invisible characters and zero-width spaces, including specific problematic chars
@@ -278,10 +279,17 @@ async function findPostByPartialMatch(partialSlug: string, locale: string): Prom
     // Get recent posts to search through
     const posts = await fetchFromWordPress('posts', {
       per_page: 20, // Reduced to avoid API limits
+=======
+export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
+  try {
+    const data = await fetchFromWordPress('posts', {
+      slug,
+>>>>>>> parent of 897cc28 (Enhance WordPress API post retrieval with slug sanitization and decoding)
       lang: locale,
       _embed: true
     })
 
+<<<<<<< HEAD
     if (!Array.isArray(posts) || posts.length === 0) {
       return null
     }
@@ -334,6 +342,10 @@ export async function getPost(slug: string, locale: string = 'en'): Promise<WPPo
       if (partialMatch) {
         return partialMatch
       }
+=======
+    if (!Array.isArray(data) || data.length === 0) {
+      console.error('❌ Post not found:', slug)
+>>>>>>> parent of 897cc28 (Enhance WordPress API post retrieval with slug sanitization and decoding)
       return null
     }
 
