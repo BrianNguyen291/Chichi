@@ -15,6 +15,10 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params: { locale, slug } }: PostPageProps) {
+  console.log('📄 PostPage called with locale:', locale, 'slug:', slug, 'slug length:', slug.length)
+  console.log('📄 Slug representation:', JSON.stringify(slug))
+  console.log('📄 Slug characters:', [...slug].map(c => c.charCodeAt(0)))
+
   const post = await getPost(slug, locale)
 
   if (!post) {

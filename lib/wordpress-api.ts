@@ -273,67 +273,37 @@ function sanitizeSlug(slug: string): string {
 }
 
 export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
+  console.log('🔍 getPost called with slug:', slug, 'locale:', locale)
+
   try {
-    // First try with the original slug
-    let data = await fetchFromWordPress('posts', {
-      slug,
+    // Next.js automatically URL-decodes route parameters, so the slug parameter is already decoded
+    // We only need to sanitize invisible characters
+    const sanitizedSlug = sanitizeSlug(slug)
+
+    console.log('🔧 Original slug:', JSON.stringify(slug))
+    console.log('🔧 Sanitized slug:', JSON.stringify(sanitizedSlug))
+
+    // Always try with the sanitized slug first, as it's most likely to work
+    console.log('🔄 Trying with sanitized slug for API call')
+
+    // WordPress uses lowercase URL encoding, so we need to match that format
+    const wordpressEncodedSlug = encodeURIComponent(sanitizedSlug).toLowerCase()
+
+    console.log('🔧 WordPress encoded slug:', wordpressEncodedSlug)
+
+    const data = await fetchFromWordPress('posts', {
+      slug: wordpressEncodedSlug,
       lang: locale,
       _embed: true
     })
 
-    // If no post found, try with sanitized slug
     if (!Array.isArray(data) || data.length === 0) {
-      const sanitizedSlug = sanitizeSlug(slug)
-      if (sanitizedSlug !== slug) {
-        console.log('🔄 Trying with sanitized slug:', sanitizedSlug)
-        data = await fetchFromWordPress('posts', {
-          slug: sanitizedSlug,
-          lang: locale,
-          _embed: true
-        })
-      }
-    }
-
-    // If still no post found, try URL-decoding the slug (in case it's double-encoded)
-    if (!Array.isArray(data) || data.length === 0) {
-      try {
-        const decodedSlug = decodeURIComponent(slug)
-        if (decodedSlug !== slug) {
-          console.log('🔄 Trying with URL-decoded slug:', decodedSlug)
-          data = await fetchFromWordPress('posts', {
-            slug: decodedSlug,
-            lang: locale,
-            _embed: true
-          })
-        }
-      } catch (decodeError) {
-        // Ignore decode errors
-      }
-    }
-
-    // If still no post found, try with both sanitization and decoding
-    if (!Array.isArray(data) || data.length === 0) {
-      try {
-        const decodedSlug = decodeURIComponent(slug)
-        const sanitizedDecodedSlug = sanitizeSlug(decodedSlug)
-        if (sanitizedDecodedSlug !== slug && sanitizedDecodedSlug !== decodeURIComponent(slug)) {
-          console.log('🔄 Trying with sanitized and decoded slug:', sanitizedDecodedSlug)
-          data = await fetchFromWordPress('posts', {
-            slug: sanitizedDecodedSlug,
-            lang: locale,
-            _embed: true
-          })
-        }
-      } catch (decodeError) {
-        // Ignore decode errors
-      }
-    }
-
-    if (!Array.isArray(data) || data.length === 0) {
-      console.error('❌ Post not found after all attempts:', slug)
+      console.error('❌ Post not found with WordPress encoded slug:', wordpressEncodedSlug)
+      console.error('❌ Original sanitized slug:', JSON.stringify(sanitizedSlug))
       return null
     }
 
+    console.log('✅ Post found successfully with WordPress encoded slug!')
     return data[0]
   } catch (error) {
     console.error('❌ Error fetching post:', error)
