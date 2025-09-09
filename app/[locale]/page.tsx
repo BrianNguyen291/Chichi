@@ -29,7 +29,7 @@ export default function HomePage({ params: { locale } }: HomePageProps) {
     "description": "Professional Vietnamese language teaching with online and offline courses",
     "url": baseUrl,
     "logo": `${baseUrl}/Logo.png`,
-    "image": `${baseUrl}/images/hero.png`,
+    "image": `${baseUrl}/images/Cover dọc phần khoá học .png`,
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Hanoi",
@@ -58,7 +58,7 @@ export default function HomePage({ params: { locale } }: HomePageProps) {
     "alternateName": "Chi Chi Vietnamese",
     "url": baseUrl,
     "logo": `${baseUrl}/Logo.png`,
-    "image": `${baseUrl}/Logo.png`,
+    "image": `${baseUrl}/images/Cover dọc phần khoá học .png`,
     "description": "Professional Vietnamese language teaching with online and offline courses",
     "sameAs": [
       "https://www.facebook.com/chichivietnamese",
@@ -158,9 +158,9 @@ export async function generateMetadata({ params: { locale } }: HomePageProps): P
       type: 'website',
       images: [
         {
-          url: `${baseUrl}/images/hero.png`,
-          width: 1200,
-          height: 630,
+          url: `${baseUrl}/images/Cover dọc phần khoá học .png`,
+          width: 1080,
+          height: 1920,
           alt: content.title,
         }
       ],
@@ -169,7 +169,7 @@ export async function generateMetadata({ params: { locale } }: HomePageProps): P
       card: 'summary_large_image',
       title: content.title,
       description: content.description,
-      images: [`${baseUrl}/images/hero.png`],
+      images: [`${baseUrl}/images/Cover dọc phần khoá học .png`],
       creator: '@chichivietnamese',
       site: '@chichivietnamese',
     },
