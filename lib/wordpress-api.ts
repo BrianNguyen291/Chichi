@@ -263,7 +263,6 @@ export async function getTags(params: {
   }
 }
 
-<<<<<<< HEAD
 // Function to sanitize slug by removing invisible characters and normalizing
 function sanitizeSlug(slug: string): string {
   // Remove invisible characters and zero-width spaces, including specific problematic chars
@@ -273,24 +272,126 @@ function sanitizeSlug(slug: string): string {
     .trim()
 }
 
+// Function to create a WordPress-compatible slug from a title
+function createWordPressSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '') // Remove special characters except word chars, spaces, and hyphens
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .trim()
+}
+
+// Function to create a short English slug from Chinese title
+function createEnglishSlug(chineseTitle: string): string {
+  // Common Chinese to English translations for common terms
+  const translations: { [key: string]: string } = {
+    '越南': 'vietnam',
+    '語言': 'language',
+    '真相': 'truth',
+    '解密': 'decoded',
+    '法語': 'french',
+    '英語': 'english',
+    '其實': 'actually',
+    '我們': 'we',
+    '最愛': 'love',
+    '說': 'speak',
+    '學習': 'learn',
+    '課程': 'course',
+    '教學': 'teaching',
+    '老師': 'teacher',
+    '學生': 'student',
+    '文化': 'culture',
+    '歷史': 'history',
+    '傳統': 'traditional',
+    '現代': 'modern',
+    '技巧': 'skills',
+    '方法': 'method',
+    '經驗': 'experience',
+    '分享': 'share',
+    '指南': 'guide',
+    '秘訣': 'tips',
+    '建議': 'advice',
+    '推薦': 'recommend',
+    '最佳': 'best',
+    '重要': 'important',
+    '實用': 'practical',
+    '有效': 'effective',
+    '簡單': 'simple',
+    '容易': 'easy',
+    '困難': 'difficult',
+    '挑戰': 'challenge',
+    '成功': 'success',
+    '失敗': 'failure',
+    '進步': 'progress',
+    '改善': 'improve',
+    '提升': 'enhance',
+    '發展': 'develop',
+    '成長': 'grow',
+    '變化': 'change',
+    '創新': 'innovation',
+    '創意': 'creative',
+    '有趣': 'interesting',
+    '精彩': 'amazing',
+    '特別': 'special',
+    '獨特': 'unique',
+    '專業': 'professional',
+    '業餘': 'amateur',
+    '初級': 'beginner',
+    '中級': 'intermediate',
+    '高級': 'advanced',
+    '專家': 'expert',
+    '大師': 'master',
+    '新手': 'newbie',
+    '老手': 'veteran'
+  }
+
+  // Convert Chinese characters to English
+  let englishTitle = chineseTitle
+  for (const [chinese, english] of Object.entries(translations)) {
+    englishTitle = englishTitle.replace(new RegExp(chinese, 'g'), english)
+  }
+
+  // Remove remaining Chinese characters and special symbols
+  englishTitle = englishTitle
+    .replace(/[\u4e00-\u9fff]/g, '') // Remove remaining Chinese characters
+    .replace(/[｜？]/g, '-') // Replace pipe and question mark with hyphens
+    .replace(/[^\w\s-]/g, '') // Remove other special characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
+    .toLowerCase()
+    .trim()
+
+  // If no English content, create a generic slug
+  if (!englishTitle || englishTitle === '-') {
+    return 'chinese-article'
+  }
+
+  return englishTitle
+}
+
+// Function to create a numeric slug (shortest option)
+function createNumericSlug(originalSlug: string): string {
+  // Create a hash-based numeric slug
+  let hash = 0
+  for (let i = 0; i < originalSlug.length; i++) {
+    const char = originalSlug.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32-bit integer
+  }
+  return `post-${Math.abs(hash).toString(36)}` // Convert to base36 for shorter string
+}
+
 // Helper function to find posts by partial title match
 async function findPostByPartialMatch(partialSlug: string, locale: string): Promise<WPPost | null> {
   try {
     // Get recent posts to search through
     const posts = await fetchFromWordPress('posts', {
       per_page: 20, // Reduced to avoid API limits
-=======
-export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
-<<<<<<< HEAD
-  try {
-    const data = await fetchFromWordPress('posts', {
-      slug,
->>>>>>> parent of 897cc28 (Enhance WordPress API post retrieval with slug sanitization and decoding)
       lang: locale,
       _embed: true
     })
 
-<<<<<<< HEAD
     if (!Array.isArray(posts) || posts.length === 0) {
       return null
     }
@@ -324,46 +425,98 @@ export async function getPost(slug: string, locale: string = 'en'): Promise<WPPo
 
 export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
   try {
-    // Next.js automatically URL-decodes route parameters, so the slug parameter is already decoded
-    // We only need to sanitize invisible characters
-    const sanitizedSlug = sanitizeSlug(slug)
-
-    // WordPress uses lowercase URL encoding, so we need to match that format
-    const wordpressEncodedSlug = encodeURIComponent(sanitizedSlug).toLowerCase()
-
-    let data = await fetchFromWordPress('posts', {
-      slug: wordpressEncodedSlug,
-=======
-  try {
-    // First try with the original slug
+    console.log('🔍 getPost called with slug:', slug)
+    
+    // First try with the original slug (as received from Next.js)
     let data = await fetchFromWordPress('posts', {
       slug,
->>>>>>> parent of 0232653 (Improve post retrieval logging and slug handling in WordPress API)
       lang: locale,
       _embed: true
     })
 
+    console.log('🔍 First attempt result:', Array.isArray(data) ? data.length : 'not array')
+
     // If no post found, try with sanitized slug
     if (!Array.isArray(data) || data.length === 0) {
-<<<<<<< HEAD
-      // Try partial matching if exact slug fails
+      const sanitizedSlug = sanitizeSlug(slug)
+      console.log('🔄 Trying with sanitized slug:', sanitizedSlug)
+      
+      data = await fetchFromWordPress('posts', {
+        slug: sanitizedSlug,
+        lang: locale,
+        _embed: true
+      })
+    }
+
+    // If still no post found, try URL-encoding the slug (in case WordPress expects encoded format)
+    if (!Array.isArray(data) || data.length === 0) {
+      const encodedSlug = encodeURIComponent(slug)
+      console.log('🔄 Trying with URL-encoded slug:', encodedSlug)
+      
+      data = await fetchFromWordPress('posts', {
+        slug: encodedSlug,
+        lang: locale,
+        _embed: true
+      })
+    }
+
+    // If still no post found, try with sanitized and encoded slug
+    if (!Array.isArray(data) || data.length === 0) {
+      const sanitizedSlug = sanitizeSlug(slug)
+      const encodedSanitizedSlug = encodeURIComponent(sanitizedSlug)
+      console.log('🔄 Trying with sanitized and encoded slug:', encodedSanitizedSlug)
+      
+      data = await fetchFromWordPress('posts', {
+        slug: encodedSanitizedSlug,
+        lang: locale,
+        _embed: true
+      })
+    }
+
+    // If still no post found, try creating a WordPress-compatible slug
+    if (!Array.isArray(data) || data.length === 0) {
+      const wpCompatibleSlug = createWordPressSlug(slug)
+      console.log('🔄 Trying with WordPress-compatible slug:', wpCompatibleSlug)
+      
+      data = await fetchFromWordPress('posts', {
+        slug: wpCompatibleSlug,
+        lang: locale,
+        _embed: true
+      })
+    }
+
+    // If still no post found, try creating an English slug
+    if (!Array.isArray(data) || data.length === 0) {
+      const englishSlug = createEnglishSlug(slug)
+      console.log('🔄 Trying with English slug:', englishSlug)
+      
+      data = await fetchFromWordPress('posts', {
+        slug: englishSlug,
+        lang: locale,
+        _embed: true
+      })
+    }
+
+    // If still no post found, try creating a numeric slug
+    if (!Array.isArray(data) || data.length === 0) {
+      const numericSlug = createNumericSlug(slug)
+      console.log('🔄 Trying with numeric slug:', numericSlug)
+      
+      data = await fetchFromWordPress('posts', {
+        slug: numericSlug,
+        lang: locale,
+        _embed: true
+      })
+    }
+
+    // If still no post found, try partial matching
+    if (!Array.isArray(data) || data.length === 0) {
+      const sanitizedSlug = sanitizeSlug(slug)
+      console.log('🔄 Trying partial matching with:', sanitizedSlug)
+      
       const partialMatch = await findPostByPartialMatch(sanitizedSlug, locale)
       if (partialMatch) {
         return partialMatch
-      }
-=======
-    if (!Array.isArray(data) || data.length === 0) {
-      console.error('❌ Post not found:', slug)
->>>>>>> parent of 897cc28 (Enhance WordPress API post retrieval with slug sanitization and decoding)
-=======
-      const sanitizedSlug = sanitizeSlug(slug)
-      if (sanitizedSlug !== slug) {
-        console.log('🔄 Trying with sanitized slug:', sanitizedSlug)
-        data = await fetchFromWordPress('posts', {
-          slug: sanitizedSlug,
-          lang: locale,
-          _embed: true
-        })
       }
     }
 
@@ -404,7 +557,6 @@ export async function getPost(slug: string, locale: string = 'en'): Promise<WPPo
 
     if (!Array.isArray(data) || data.length === 0) {
       console.error('❌ Post not found after all attempts:', slug)
->>>>>>> parent of 0232653 (Improve post retrieval logging and slug handling in WordPress API)
       return null
     }
 
@@ -456,4 +608,52 @@ export function organizeCategories(categories: TranslatedCategory[]): {
   }, {} as { [parentId: number]: TranslatedCategory[] })
 
   return { mainCategories, subCategories }
+}
+
+// Utility function to generate better URLs from Chinese titles
+export function generateBetterSlug(originalSlug: string, options: {
+  type?: 'english' | 'numeric' | 'short' | 'auto'
+  maxLength?: number
+} = {}): string {
+  const { type = 'auto', maxLength = 50 } = options
+
+  switch (type) {
+    case 'english':
+      return createEnglishSlug(originalSlug)
+    
+    case 'numeric':
+      return createNumericSlug(originalSlug)
+    
+    case 'short':
+      const englishSlug = createEnglishSlug(originalSlug)
+      return englishSlug.length > maxLength 
+        ? englishSlug.substring(0, maxLength).replace(/-+$/, '') // Remove trailing hyphens
+        : englishSlug
+    
+    case 'auto':
+    default:
+      // Try English first, fallback to numeric if too long
+      const autoEnglishSlug = createEnglishSlug(originalSlug)
+      if (autoEnglishSlug.length <= maxLength && autoEnglishSlug !== 'chinese-article') {
+        return autoEnglishSlug
+      }
+      return createNumericSlug(originalSlug)
+  }
+}
+
+// Example usage function to show different slug options
+export function getSlugOptions(originalSlug: string): {
+  original: string
+  english: string
+  numeric: string
+  short: string
+  auto: string
+} {
+  return {
+    original: originalSlug,
+    english: createEnglishSlug(originalSlug),
+    numeric: createNumericSlug(originalSlug),
+    short: generateBetterSlug(originalSlug, { type: 'short', maxLength: 30 }),
+    auto: generateBetterSlug(originalSlug, { type: 'auto' })
+  }
 } 
