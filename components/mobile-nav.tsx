@@ -137,14 +137,14 @@ export function MobileNav({ locale }: MobileNavProps) {
         }, {} as { [key: number]: TranslatedCategory[] });
 
         const courseSubItems = [
-          { slug: 'beginner', defaultLabel: '初級' },
-          { slug: 'intermediate', defaultLabel: '中級' },
-          { slug: 'advanced', defaultLabel: '高級' },
-          { slug: 'certification', defaultLabel: '考證班' },
-          { slug: 'corporate', defaultLabel: '企業班' },
-          { slug: 'individual', defaultLabel: '個人班' },
+          { slug: 'beginner', key: 'beginner' },
+          { slug: 'intermediate', key: 'intermediate' },
+          { slug: 'advanced', key: 'advanced' },
+          { slug: 'certification', key: 'certification' },
+          { slug: 'corporate', key: 'corporate' },
+          { slug: 'individual', key: 'private' },
         ].map(item => ({
-          label: translate(item.slug, 'common') || item.defaultLabel,
+          label: translate(item.key, 'courseLevels') || translate(item.key, 'common') || item.slug,
           href: `/${locale}/courses?level=${item.slug}`
         }));
 
