@@ -91,9 +91,9 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
             {t.title}
           </h1>
         ) : null} */}
-        <p className="text-xl sm:text-2xl md:text-3xl max-w-3xl mx-auto font-inter mb-8 animate-fade-in-up [animation-delay:200ms] text-white font-semibold drop-shadow-lg">
+        {/* <p className="text-xl sm:text-2xl md:text-3xl max-w-3xl mx-auto font-inter mb-8 animate-fade-in-up [animation-delay:200ms] text-white font-semibold drop-shadow-lg">
           {t.subtitle}
-        </p>
+        </p> */}
         <Link
           href="/courses"
           className="inline-block px-8 py-4 bg-white text-[#2A5C3F] rounded-full font-bold text-lg

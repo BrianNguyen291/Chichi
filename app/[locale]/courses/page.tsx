@@ -748,7 +748,9 @@ export default function CoursesPage({ params }: CoursePageProps) {
       {/* Page Header */}
       <div className="relative text-white py-24">
         <Image
-          src="/images/Course_2.jpg"
+          // src="/images/Course_2.jpg"
+          src="/images/Cover dọc phần khoá học .png"
+          // src="/images/Cover ngang phần khoá học.png"
           alt="Courses banner"
           fill
           className="object-cover"
