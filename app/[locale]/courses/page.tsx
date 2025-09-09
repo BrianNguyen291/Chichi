@@ -793,6 +793,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.A0?.title || "Starter Level"}
                 hours="24"
                 classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.A0?.objectives || [
                   "Establish Vietnamese pronunciation system foundation",
                   "Master basic daily conversation skills (self-introduction, personal interests, daily scenarios)",
@@ -811,6 +812,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.A1?.title || "Beginner Foundation"}
                 hours="24"
                 classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.A1?.objectives || [
                   "Understand short daily conversations (e.g., asking for directions, transportation, bargaining)",
                   "Learn techniques for 'active questioning' and 'key information capturing'"
@@ -827,6 +829,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.A2?.title || "Elementary Level"}
                 hours="24"
                 classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.A2?.objectives || [
                   "Handle routine social interactions and simple transactions",
                   "Describe in simple terms aspects of background and immediate environment"
@@ -848,6 +851,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.B1?.title || "Intermediate Level"}
                 hours="30"
                 classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.B1?.objectives || [
                   "Develop the ability to understand the main points of clear standard input on familiar matters",
                   "Deal with most situations likely to arise while traveling in an area where the language is spoken"
@@ -868,6 +872,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.B2?.title || "Upper Intermediate"}
                 hours="30"
                 classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.B2?.objectives || [
                   "Understand the main ideas of complex text on both concrete and abstract topics",
                   "Interact with a degree of fluency and spontaneity that makes regular interaction with native speakers quite possible"
@@ -888,6 +893,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.B3?.title || "Advanced Intermediate"}
                 hours="30"
                 classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.B3?.objectives || [
                   "Express ideas fluently and spontaneously without much obvious searching for expressions",
                   "Use language flexibly and effectively for social, academic and professional purposes"
@@ -910,6 +916,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.C1?.title || "Advanced Level"}
                 hours="30"
                  classSize="3-6"
+                locale={locale}
                 subtitle={t.courseDetails.C1?.subtitle || "For Professionals"}
                 objectives={t.courseDetails.C1?.objectives || [
                   "Participate in professional seminars and deliver technical presentations",
@@ -923,6 +930,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.C2?.title || "Mastery Level"}
                 hours="30"
                  classSize="3-6"
+                locale={locale}
                 subtitle={t.courseDetails.C2?.subtitle || "Native-like Proficiency"}
                 objectives={t.courseDetails.C2?.objectives || [
                   "Master dialectal/idiomatic differences",
@@ -936,6 +944,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.courseDetails.C3?.title || "Expert Level"}
                 hours="30"
                  classSize="3-6"
+                locale={locale}
                 objectives={t.courseDetails.C3?.objectives || ["Specialized mastery and advanced professional application"]}
                 content={t.courseDetails.C3?.content || [
                   "Deepen knowledge in specific fields (e.g., audiovisual translation, diplomatic language)",
@@ -966,6 +975,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.A0?.title || t.tabCorporate + " A0"}
                 hours="24"
                 classSize="4-8"
+                locale={locale}
                 subtitle={"Small Group"}
                 objectives={t.corporateCourses?.A0?.objectives || [
                   "Establish Vietnamese pronunciation system foundation (tones/vowels/consonants)",
@@ -984,6 +994,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.A1?.title || t.tabCorporate + " A1"}
                 hours="24"
                 classSize="4-8"
+                locale={locale}
                 achievements={t.corporateCourses?.A1?.achievements || [
                   "Understand slow-paced daily conversations (100 words/minute)",
                   "Complete basic transactional communication (negotiation margin ≤15%)"
@@ -1000,6 +1011,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.A2?.title || t.tabCorporate + " A2"}
                 hours="24"
                 classSize="4-8"
+                locale={locale}
                 content={t.corporateCourses?.A2?.content || [
                   "Travel scenario simulation: hotel booking/ticketing/emergency response",
                   "Digital communication: social media phrases, online shopping dialogues"
@@ -1018,6 +1030,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.B1?.title || t.tabCorporate + " B1"}
                 hours="30"
                 classSize="4-8"
+                locale={locale}
                 subtitle={"Standard Vietnamese B1 Units 1-8"}
                 specialization={t.corporateCourses?.B1?.specialization || [
                   "Workplace applications: meeting minutes, work email composition",
@@ -1035,6 +1048,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.B2?.title || t.tabCorporate + " B2"}
                 hours="30"
                 classSize="4-8"
+                locale={locale}
                 content={t.corporateCourses?.B2?.content || [
                   "Media analysis: identifying news report perspectives",
                   "Discursive writing: presenting pros and cons (within 500 characters)",
@@ -1053,6 +1067,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.C1?.title || t.tabCorporate + " C1"}
                 hours="36"
                 classSize="4-8"
+                locale={locale}
                 subtitle={"Expert Level Training"}
                 objectives={t.corporateCourses?.C1?.objectives || [
                   "Intensive reading of academic papers (85%+ comprehension)",
@@ -1067,6 +1082,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 title={t.corporateCourses?.C2C3?.title || t.tabCorporate + " Mastery C2-C3"}
                 hours={t.corporateCourses?.C2C3?.hours || "36"}
                 classSize="4-8"
+                locale={locale}
                 subtitle={t.corporateCourses?.C2C3?.subtitle || "Native Speaker Certification Standard"}
                 objectives={t.corporateCourses?.C2C3?.objectives || [
                   "Dialect recognition: Hanoi/Ho Chi Minh City accent differences",
@@ -1133,13 +1149,10 @@ function CourseCard({
   materials,
   achievements,
   specialization,
-  customization
-}: CourseCardProps) {
-  // Use usePathname hook to get the current pathname
-  const pathname = usePathname();
-  // Get current locale from URL
-  const locale = pathname?.split('/')[1] || 'en';
-  // Default to English if locale is not supported
+  customization,
+  locale
+}: CourseCardProps & { locale: string }) {
+  // Use the locale passed from parent component
   const t = translations[locale as keyof typeof translations] || translations['en'];
   return (
     <motion.div 
