@@ -746,20 +746,15 @@ export default function CoursesPage({ params }: CoursePageProps) {
   return (
     <main className="min-h-screen bg-[#f8f6f0]">
       {/* Page Header */}
-      <div className="relative text-white py-24">
+      <div className="relative text-white py-12 md:py-24 min-h-[900vh] md:min-h-[90vh]">
         <Image
           // src="/images/Course_2.jpg"
           src="/images/Cover dọc phần khoá học .png"
           // src="/images/Cover ngang phần khoá học.png"
           alt="Courses banner"
           fill
-          className="object-cover"
+          className="object-contain md:object-cover scale-100 md:scale-70"
         />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="relative container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
-          <p className="text-xl text-white/90 max-w-2xl mx-auto">{t.subtitle}</p>
-        </div>
       </div>
 
       {/* Course Tabs */}
