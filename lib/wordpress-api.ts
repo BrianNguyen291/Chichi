@@ -272,41 +272,74 @@ function sanitizeSlug(slug: string): string {
     .trim()
 }
 
-export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
-  console.log('🔍 getPost called with slug:', slug, 'locale:', locale)
+// Helper function to find posts by partial title match
+async function findPostByPartialMatch(partialSlug: string, locale: string): Promise<WPPost | null> {
+  try {
+    // Get recent posts to search through
+    const posts = await fetchFromWordPress('posts', {
+      per_page: 20, // Reduced to avoid API limits
+      lang: locale,
+      _embed: true
+    })
 
+    if (!Array.isArray(posts) || posts.length === 0) {
+      return null
+    }
+
+    // Look for posts with titles that start with our partial slug
+    const partialSlugLower = partialSlug.toLowerCase()
+
+    for (const post of posts) {
+      if (!post.title?.rendered) continue
+
+      const title = post.title.rendered.toLowerCase()
+
+      // Check if the post title starts with our partial slug
+      if (title.startsWith(partialSlugLower)) {
+        return post
+      }
+
+      // Also check if partial slug matches the beginning of the title (before special characters)
+      const titleBeforeSpecial = title.split(/[｜？]/)[0]
+      if (titleBeforeSpecial === partialSlugLower) {
+        return post
+      }
+    }
+
+    return null
+  } catch (error) {
+    console.error('Error in partial matching:', error)
+    return null
+  }
+}
+
+export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
   try {
     // Next.js automatically URL-decodes route parameters, so the slug parameter is already decoded
     // We only need to sanitize invisible characters
     const sanitizedSlug = sanitizeSlug(slug)
 
-    console.log('🔧 Original slug:', JSON.stringify(slug))
-    console.log('🔧 Sanitized slug:', JSON.stringify(sanitizedSlug))
-
-    // Always try with the sanitized slug first, as it's most likely to work
-    console.log('🔄 Trying with sanitized slug for API call')
-
     // WordPress uses lowercase URL encoding, so we need to match that format
     const wordpressEncodedSlug = encodeURIComponent(sanitizedSlug).toLowerCase()
 
-    console.log('🔧 WordPress encoded slug:', wordpressEncodedSlug)
-
-    const data = await fetchFromWordPress('posts', {
+    let data = await fetchFromWordPress('posts', {
       slug: wordpressEncodedSlug,
       lang: locale,
       _embed: true
     })
 
     if (!Array.isArray(data) || data.length === 0) {
-      console.error('❌ Post not found with WordPress encoded slug:', wordpressEncodedSlug)
-      console.error('❌ Original sanitized slug:', JSON.stringify(sanitizedSlug))
+      // Try partial matching if exact slug fails
+      const partialMatch = await findPostByPartialMatch(sanitizedSlug, locale)
+      if (partialMatch) {
+        return partialMatch
+      }
       return null
     }
 
-    console.log('✅ Post found successfully with WordPress encoded slug!')
     return data[0]
   } catch (error) {
-    console.error('❌ Error fetching post:', error)
+    console.error('Error fetching post:', error)
     return null
   }
 }
