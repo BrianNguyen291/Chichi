@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { shouldRedirect, needsRewriting, generateCleanUrl } from './lib/url-rewriter'
 
 // List of supported locales
 export const locales = ['en', 'zh-Hant', 'zh-Hans'] as const
@@ -48,6 +49,13 @@ export function middleware(request: NextRequest) {
     pathname.includes('.')
   ) {
     return
+  }
+
+  // Check for URL rewriting needs (Chinese slugs, encoded URLs)
+  const redirectCheck = shouldRedirect(pathname)
+  if (redirectCheck.shouldRedirect && redirectCheck.redirectTo) {
+    console.log('🔄 Redirecting old URL:', pathname, '→', redirectCheck.redirectTo)
+    return NextResponse.redirect(new URL(redirectCheck.redirectTo, request.url))
   }
 
   // Get the segments and first potential locale

@@ -343,7 +343,109 @@ function createEnglishSlug(chineseTitle: string): string {
     '專家': 'expert',
     '大師': 'master',
     '新手': 'newbie',
-    '老手': 'veteran'
+    '老手': 'veteran',
+    // Add more specific terms for your content
+    '七夕節': 'qixi-festival',
+    '探索': 'explore',
+    '浪漫': 'romantic',
+    '傳說': 'legend',
+    '深意': 'meaning',
+    '節日': 'festival',
+    '愛情': 'love',
+    '故事': 'story',
+    '神話': 'myth',
+    '傳說': 'legend',
+    '傳統': 'tradition',
+    '慶祝': 'celebration',
+    '習俗': 'custom',
+    '儀式': 'ritual',
+    '節慶': 'celebration',
+    '活動': 'activity',
+    '慶典': 'celebration',
+    '紀念': 'memorial',
+    '意義': 'meaning',
+    '價值': 'value',
+    '精神': 'spirit',
+    '內涵': 'connotation',
+    '背景': 'background',
+    '起源': 'origin',
+    '歷史': 'history',
+    '演變': 'evolution',
+    '發展': 'development',
+    '影響': 'influence',
+    '作用': 'role',
+    '功能': 'function',
+    '特點': 'feature',
+    '特色': 'characteristic',
+    '風格': 'style',
+    '形式': 'form',
+    '內容': 'content',
+    '主題': 'theme',
+    '焦點': 'focus',
+    '重點': 'key-point',
+    '核心': 'core',
+    '本質': 'essence',
+    '精髓': 'essence',
+    '要點': 'key-point',
+    '亮點': 'highlight',
+    '看點': 'highlight',
+    '賣點': 'selling-point',
+    '優勢': 'advantage',
+    '好處': 'benefit',
+    '優點': 'advantage',
+    '長處': 'strength',
+    '強項': 'strength',
+    '特色': 'feature',
+    '特點': 'characteristic',
+    '個性': 'personality',
+    '風格': 'style',
+    '品味': 'taste',
+    '格調': 'style',
+    '氣質': 'temperament',
+    '魅力': 'charm',
+    '吸引力': 'appeal',
+    '誘惑力': 'appeal',
+    '感染力': 'appeal',
+    '影響力': 'influence',
+    '說服力': 'persuasion',
+    '震撼力': 'impact',
+    '衝擊力': 'impact',
+    '爆發力': 'explosive-power',
+    '潛力': 'potential',
+    '能力': 'ability',
+    '實力': 'strength',
+    '功力': 'skill',
+    '技巧': 'technique',
+    '技能': 'skill',
+    '才華': 'talent',
+    '天賦': 'gift',
+    '天分': 'talent',
+    '天資': 'talent',
+    '資質': 'aptitude',
+    '素質': 'quality',
+    '品質': 'quality',
+    '水準': 'level',
+    '水平': 'level',
+    '程度': 'degree',
+    '層次': 'level',
+    '等級': 'grade',
+    '級別': 'level',
+    '檔次': 'grade',
+    '品位': 'taste',
+    '格調': 'style',
+    '品味': 'taste',
+    '修養': 'cultivation',
+    '涵養': 'cultivation',
+    '素養': 'cultivation',
+    '教養': 'upbringing',
+    '修養': 'cultivation',
+    '涵養': 'cultivation',
+    '素養': 'cultivation',
+    '教養': 'upbringing',
+    '修養': 'cultivation',
+    '涵養': 'cultivation',
+    '素養': 'cultivation',
+    '教養': 'upbringing'
   }
 
   // Convert Chinese characters to English
@@ -352,6 +454,10 @@ function createEnglishSlug(chineseTitle: string): string {
     englishTitle = englishTitle.replace(new RegExp(chinese, 'g'), english)
   }
 
+  // Handle mixed content (Chinese + English) more intelligently
+  // Extract English words that are already in the title
+  const englishWords = englishTitle.match(/[a-zA-Z]+/g) || []
+  
   // Remove remaining Chinese characters and special symbols
   englishTitle = englishTitle
     .replace(/[\u4e00-\u9fff]/g, '') // Remove remaining Chinese characters
@@ -362,9 +468,27 @@ function createEnglishSlug(chineseTitle: string): string {
     .toLowerCase()
     .trim()
 
+  // If we have English words from the original title, prioritize them
+  if (englishWords.length > 0) {
+    const cleanEnglishWords = englishWords
+      .map(word => word.toLowerCase())
+      .filter(word => word.length > 2) // Only keep words longer than 2 characters
+      .slice(0, 3) // Take only first 3 words to keep it short
+    
+    if (cleanEnglishWords.length > 0) {
+      return cleanEnglishWords.join('-')
+    }
+  }
+
   // If no English content, create a generic slug
   if (!englishTitle || englishTitle === '-') {
     return 'chinese-article'
+  }
+
+  // Limit length to keep URLs short
+  const maxLength = 30
+  if (englishTitle.length > maxLength) {
+    englishTitle = englishTitle.substring(0, maxLength).replace(/-+$/, '') // Remove trailing hyphens
   }
 
   return englishTitle
@@ -380,6 +504,36 @@ function createNumericSlug(originalSlug: string): string {
     hash = hash & hash // Convert to 32-bit integer
   }
   return `post-${Math.abs(hash).toString(36)}` // Convert to base36 for shorter string
+}
+
+// Function to create an ultra-short slug for very long URLs
+function createUltraShortSlug(originalSlug: string): string {
+  // Extract key English words if any
+  const englishWords = originalSlug.match(/[a-zA-Z]+/g) || []
+  if (englishWords.length > 0) {
+    // Use first 2 English words, max 4 characters each
+    const shortWords = englishWords
+      .map(word => word.toLowerCase().substring(0, 4))
+      .slice(0, 2)
+    return shortWords.join('-')
+  }
+  
+  // Extract first few Chinese characters and convert to pinyin-like format
+  const chineseChars = originalSlug.match(/[\u4e00-\u9fff]/g) || []
+  if (chineseChars.length > 0) {
+    // Use first 2-3 Chinese characters
+    const shortChars = chineseChars.slice(0, 2).join('')
+    // Convert to a short identifier
+    let hash = 0
+    for (let i = 0; i < shortChars.length; i++) {
+      hash = ((hash << 5) - hash) + shortChars.charCodeAt(i)
+      hash = hash & hash
+    }
+    return `cn-${Math.abs(hash).toString(36).substring(0, 6)}`
+  }
+  
+  // Fallback to numeric
+  return createNumericSlug(originalSlug)
 }
 
 // Helper function to find posts by partial title match
@@ -612,7 +766,7 @@ export function organizeCategories(categories: TranslatedCategory[]): {
 
 // Utility function to generate better URLs from Chinese titles
 export function generateBetterSlug(originalSlug: string, options: {
-  type?: 'english' | 'numeric' | 'short' | 'auto'
+  type?: 'english' | 'numeric' | 'short' | 'ultra-short' | 'auto'
   maxLength?: number
 } = {}): string {
   const { type = 'auto', maxLength = 50 } = options
@@ -630,14 +784,22 @@ export function generateBetterSlug(originalSlug: string, options: {
         ? englishSlug.substring(0, maxLength).replace(/-+$/, '') // Remove trailing hyphens
         : englishSlug
     
+    case 'ultra-short':
+      return createUltraShortSlug(originalSlug)
+    
     case 'auto':
     default:
-      // Try English first, fallback to numeric if too long
+      // For very long URLs, use ultra-short
+      if (originalSlug.length > 100) {
+        return createUltraShortSlug(originalSlug)
+      }
+      
+      // Try English first, fallback to ultra-short if too long
       const autoEnglishSlug = createEnglishSlug(originalSlug)
       if (autoEnglishSlug.length <= maxLength && autoEnglishSlug !== 'chinese-article') {
         return autoEnglishSlug
       }
-      return createNumericSlug(originalSlug)
+      return createUltraShortSlug(originalSlug)
   }
 }
 
@@ -647,6 +809,7 @@ export function getSlugOptions(originalSlug: string): {
   english: string
   numeric: string
   short: string
+  ultraShort: string
   auto: string
 } {
   return {
@@ -654,6 +817,7 @@ export function getSlugOptions(originalSlug: string): {
     english: createEnglishSlug(originalSlug),
     numeric: createNumericSlug(originalSlug),
     short: generateBetterSlug(originalSlug, { type: 'short', maxLength: 30 }),
+    ultraShort: createUltraShortSlug(originalSlug),
     auto: generateBetterSlug(originalSlug, { type: 'auto' })
   }
 } 
