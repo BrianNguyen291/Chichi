@@ -263,16 +263,74 @@ export async function getTags(params: {
   }
 }
 
+// Function to sanitize slug by removing invisible characters and normalizing
+function sanitizeSlug(slug: string): string {
+  // Remove invisible characters and zero-width spaces, including specific problematic chars
+  return slug
+    .replace(/[\u200B-\u200D\uFEFF\u2060\u200E\u200F\u202A-\u202E\u2069]/g, '') // Remove invisible characters including ⁩
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim()
+}
+
 export async function getPost(slug: string, locale: string = 'en'): Promise<WPPost | null> {
   try {
-    const data = await fetchFromWordPress('posts', {
+    // First try with the original slug
+    let data = await fetchFromWordPress('posts', {
       slug,
       lang: locale,
       _embed: true
     })
 
+    // If no post found, try with sanitized slug
     if (!Array.isArray(data) || data.length === 0) {
-      console.error('❌ Post not found:', slug)
+      const sanitizedSlug = sanitizeSlug(slug)
+      if (sanitizedSlug !== slug) {
+        console.log('🔄 Trying with sanitized slug:', sanitizedSlug)
+        data = await fetchFromWordPress('posts', {
+          slug: sanitizedSlug,
+          lang: locale,
+          _embed: true
+        })
+      }
+    }
+
+    // If still no post found, try URL-decoding the slug (in case it's double-encoded)
+    if (!Array.isArray(data) || data.length === 0) {
+      try {
+        const decodedSlug = decodeURIComponent(slug)
+        if (decodedSlug !== slug) {
+          console.log('🔄 Trying with URL-decoded slug:', decodedSlug)
+          data = await fetchFromWordPress('posts', {
+            slug: decodedSlug,
+            lang: locale,
+            _embed: true
+          })
+        }
+      } catch (decodeError) {
+        // Ignore decode errors
+      }
+    }
+
+    // If still no post found, try with both sanitization and decoding
+    if (!Array.isArray(data) || data.length === 0) {
+      try {
+        const decodedSlug = decodeURIComponent(slug)
+        const sanitizedDecodedSlug = sanitizeSlug(decodedSlug)
+        if (sanitizedDecodedSlug !== slug && sanitizedDecodedSlug !== decodeURIComponent(slug)) {
+          console.log('🔄 Trying with sanitized and decoded slug:', sanitizedDecodedSlug)
+          data = await fetchFromWordPress('posts', {
+            slug: sanitizedDecodedSlug,
+            lang: locale,
+            _embed: true
+          })
+        }
+      } catch (decodeError) {
+        // Ignore decode errors
+      }
+    }
+
+    if (!Array.isArray(data) || data.length === 0) {
+      console.error('❌ Post not found after all attempts:', slug)
       return null
     }
 
