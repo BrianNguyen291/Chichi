@@ -31,16 +31,16 @@ export const metadata: Metadata = {
     siteName: '芝芝越南語',
     images: [
       {
-        url: '/images/Cover dọc phần khoá học .png',
-        width: 1080,
-        height: 1920,
-        alt: '越南語課程 - 為各級別提供全面的學習路徑',
+        url: '/images/Thumbail.png',
+        width: 1200,
+        height: 630,
+        alt: '芝芝越南語 - 專業越南語教學中心',
       }
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    images: ['/images/Cover dọc phần khoá học .png'],
+    images: ['/images/Thumbail.png'],
   },
   robots: {
     index: true,
