@@ -749,7 +749,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
       <div className="relative text-white py-12 md:py-24 min-h-[900vh] md:min-h-[90vh]">
         <Image
           // src="/images/Course_2.jpg"
-          src="/images/Cover dọc phần khoá học .png"
+          src="/images/CoverImage_Desktop.png"
           // src="/images/Cover ngang phần khoá học.png"
           alt="Courses banner"
           fill
