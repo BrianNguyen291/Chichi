@@ -63,7 +63,7 @@ const translations = {
         ]
       },
       {
-        name: 'Teacher Vo Thuy Anh',
+        name: 'Teacher Vu Thuy Anh',
         image: '/images/teacher_team/武垂英老師.jpeg',
         experience: '5 Years Teaching Experience',
         credentials: [
@@ -307,7 +307,7 @@ export const TeacherTeam = ({ locale, showAllTeachers = false }: TeacherTeamProp
   // Auto slide functionality
   useEffect(() => {
     if (isPaused || showAllTeachers) return;
-    
+
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % totalSlides);
     }, 5000); // Change slide every 5 seconds
@@ -389,18 +389,18 @@ export const TeacherTeam = ({ locale, showAllTeachers = false }: TeacherTeamProp
         </div>
 
         {/* Carousel Container */}
-        <div 
+        <div
           className="relative w-full max-w-4xl mx-auto overflow-hidden"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
           {/* Slides */}
-          <div 
+          <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentSlide * 100}%)` }}
           >
             {Array.from({ length: totalSlides }).map((_, slideIndex) => (
-              <div 
+              <div
                 key={slideIndex}
                 className="w-full flex-shrink-0 px-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
               >
