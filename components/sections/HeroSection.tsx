@@ -70,7 +70,7 @@ export const HeroSection = ({ locale }: HeroSectionProps) => {
           </div>
         ) : (
           <Image
-            src="/images/hero pictuture right handside.png"
+            src="/images/CoverHomePageImage.png"
             alt="A person learning Vietnamese"
             fill
             loading="eager"

@@ -742,19 +742,58 @@ export default function CoursesPage({ params }: CoursePageProps) {
   const locale = params.locale || "zh-Hant";
   const t = (translations[locale as keyof typeof translations] || translations["zh-Hant"]) as unknown as TranslationBase;
   const [activeTab, setActiveTab] = useState("beginner")
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    // Check if window is defined (client-side)
+    if (typeof window !== 'undefined') {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768)
+      }
+
+      // Set initial value
+      handleResize()
+
+      // Add event listener
+      window.addEventListener('resize', handleResize)
+
+      // Clean up
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   return (
     <main className="min-h-screen bg-[#f8f6f0]">
       {/* Page Header */}
-      <div className="relative text-white py-12 md:py-24 min-h-[900vh] md:min-h-[90vh]">
-        <Image
-          // src="/images/Course_2.jpg"
-          src="/images/Cover dọc phần khoá học .png"
-          // src="/images/Cover ngang phần khoá học.png"
-          alt="Courses banner"
-          fill
-          className="object-contain md:object-cover scale-100 md:scale-70"
-        />
+      <div className="relative text-white py-12 md:py-24 min-h-[90vh] md:min-h-[90vh]">
+        {isMobile ? (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <Image
+              src="/images/CoverImage_Mobile.png"
+              alt="Courses banner"
+              priority
+              quality={100}
+              className="w-full h-auto max-h-full object-contain"
+              width={400}
+              height={1000}
+              style={{
+                maxWidth: '100%',
+                maxHeight: '95vh'
+              }}
+            />
+          </div>
+        ) : (
+          <Image
+            src="/images/CoverImage_Desktop.png"
+            alt="Courses banner"
+            fill
+            loading="eager"
+            className="object-cover object-center"
+            priority
+            quality={100}
+            sizes="100vw"
+          />
+        )}
       </div>
 
       {/* Course Tabs */}
