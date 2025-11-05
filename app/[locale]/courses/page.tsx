@@ -743,6 +743,33 @@ export default function CoursesPage({ params }: CoursePageProps) {
   const t = (translations[locale as keyof typeof translations] || translations["zh-Hant"]) as unknown as TranslationBase;
   const [activeTab, setActiveTab] = useState("beginner")
   const [isMobile, setIsMobile] = useState(false)
+  const [lightboxImages, setLightboxImages] = useState<string[] | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0)
+
+  const openLightbox = (images: string[], index: number) => {
+    setLightboxImages(images)
+    setLightboxIndex(index)
+  }
+  const closeLightbox = () => {
+    setLightboxImages(null)
+    setLightboxIndex(0)
+  }
+  const showPrev = () => {
+    if (!lightboxImages) return
+    setLightboxIndex((i) => {
+      const nextIndex = i - 1
+      if (nextIndex < 0) return lightboxImages.length - 1
+      return nextIndex
+    })
+  }
+  const showNext = () => {
+    if (!lightboxImages) return
+    setLightboxIndex((i) => {
+      const nextIndex = i + 1
+      if (nextIndex > (lightboxImages.length - 1)) return 0
+      return nextIndex
+    })
+  }
 
   useEffect(() => {
     // Check if window is defined (client-side)
@@ -750,15 +777,24 @@ export default function CoursesPage({ params }: CoursePageProps) {
       const handleResize = () => {
         setIsMobile(window.innerWidth < 768)
       }
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') closeLightbox()
+        if (e.key === 'ArrowLeft') showPrev()
+        if (e.key === 'ArrowRight') showNext()
+      }
 
       // Set initial value
       handleResize()
 
       // Add event listener
       window.addEventListener('resize', handleResize)
+      window.addEventListener('keydown', handleKeyDown)
 
       // Clean up
-      return () => window.removeEventListener('resize', handleResize)
+      return () => {
+        window.removeEventListener('resize', handleResize)
+        window.removeEventListener('keydown', handleKeyDown)
+      }
     }
   }, [])
 
@@ -830,6 +866,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="24"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 objectives={t.courseDetails.A0?.objectives || [
                   "Establish Vietnamese pronunciation system foundation",
                   "Master basic daily conversation skills (self-introduction, personal interests, daily scenarios)",
@@ -849,6 +886,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="24"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 objectives={t.courseDetails.A1?.objectives || [
                   "Understand short daily conversations (e.g., asking for directions, transportation, bargaining)",
                   "Learn techniques for 'active questioning' and 'key information capturing'"
@@ -866,6 +904,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="24"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 objectives={t.courseDetails.A2?.objectives || [
                   "Handle routine social interactions and simple transactions",
                   "Describe in simple terms aspects of background and immediate environment"
@@ -880,7 +919,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
 
           {/* Intermediate Level Content */}
           <TabsContent value="intermediate" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* B1 Course */}
               <CourseCard
                 level="B1"
@@ -888,6 +927,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="30"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 objectives={t.courseDetails.B1?.objectives || [
                   "Develop the ability to understand the main points of clear standard input on familiar matters",
                   "Deal with most situations likely to arise while traveling in an area where the language is spoken"
@@ -909,6 +949,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="30"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 objectives={t.courseDetails.B2?.objectives || [
                   "Understand the main ideas of complex text on both concrete and abstract topics",
                   "Interact with a degree of fluency and spontaneity that makes regular interaction with native speakers quite possible"
@@ -947,7 +988,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
 
           {/* Advanced Level Content */}
           <TabsContent value="advanced" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* C1 Course */}
               <CourseCard
                 level="C1"
@@ -955,6 +996,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="30"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 subtitle={t.courseDetails.C1?.subtitle || "For Professionals"}
                 objectives={t.courseDetails.C1?.objectives || [
                   "Participate in professional seminars and deliver technical presentations",
@@ -969,6 +1011,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="30"
                 classSize="3-6"
                 locale={locale}
+                onImageClick={openLightbox}
                 subtitle={t.courseDetails.C2?.subtitle || "Native-like Proficiency"}
                 objectives={t.courseDetails.C2?.objectives || [
                   "Master dialectal/idiomatic differences",
@@ -1016,6 +1059,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="24"
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 subtitle={"Small Group"}
                 objectives={t.corporateCourses?.A0?.objectives || [
                   "Establish Vietnamese pronunciation system foundation (tones/vowels/consonants)",
@@ -1035,6 +1079,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="24"
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 achievements={t.corporateCourses?.A1?.achievements || [
                   "Understand slow-paced daily conversations (100 words/minute)",
                   "Complete basic transactional communication (negotiation margin ≤15%)"
@@ -1052,6 +1097,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="24"
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 content={t.corporateCourses?.A2?.content || [
                   "Travel scenario simulation: hotel booking/ticketing/emergency response",
                   "Digital communication: social media phrases, online shopping dialogues"
@@ -1071,6 +1117,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="30"
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 subtitle={"Standard Vietnamese B1 Units 1-8"}
                 specialization={t.corporateCourses?.B1?.specialization || [
                   "Workplace applications: meeting minutes, work email composition",
@@ -1089,6 +1136,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="30"
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 content={t.corporateCourses?.B2?.content || [
                   "Media analysis: identifying news report perspectives",
                   "Discursive writing: presenting pros and cons (within 500 characters)",
@@ -1108,6 +1156,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours="36"
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 subtitle={"Expert Level Training"}
                 objectives={t.corporateCourses?.C1?.objectives || [
                   "Intensive reading of academic papers (85%+ comprehension)",
@@ -1123,6 +1172,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 hours={t.corporateCourses?.C2C3?.hours || "36"}
                 classSize="4-8"
                 locale={locale}
+                onImageClick={openLightbox}
                 subtitle={t.corporateCourses?.C2C3?.subtitle || "Native Speaker Certification Standard"}
                 objectives={t.corporateCourses?.C2C3?.objectives || [
                   "Dialect recognition: Hanoi/Ho Chi Minh City accent differences",
@@ -1155,6 +1205,50 @@ export default function CoursesPage({ params }: CoursePageProps) {
         </Tabs>
       </section>
 
+      {lightboxImages && (
+        <div
+          className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/80"
+          onClick={closeLightbox}
+        >
+          <div className="relative max-w-[95vw] max-h-[95vh]" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              aria-label="Close"
+              className="absolute -top-10 right-0 text-white text-2xl z-20"
+              onClick={closeLightbox}
+            >
+              ×
+            </button>
+            <button
+              type="button"
+              aria-label="Previous"
+              className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 text-white bg-black/40 hover:bg-black/60 rounded-full w-10 h-10 items-center justify-center z-20"
+              onClick={showPrev}
+              role="button"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              aria-label="Next"
+              className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 text-white bg-black/40 hover:bg-black/60 rounded-full w-10 h-10 items-center justify-center z-20"
+              onClick={showNext}
+              role="button"
+            >
+              ›
+            </button>
+            <div className="relative w-[90vw] md:w-[80vw] h-[70vh]">
+              <Image src={lightboxImages[lightboxIndex]} alt="Course image" fill className="object-contain" sizes="100vw" />
+            </div>
+            {lightboxImages.length > 1 && (
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-white text-sm">
+                {lightboxIndex + 1} / {lightboxImages.length}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
     </main>
   )
 }
@@ -1175,6 +1269,7 @@ interface CourseCardProps {
   achievements?: string[]
   specialization?: string[]
   customization?: string[]
+  onImageClick?: (images: string[], index: number) => void
 }
 
 function CourseCard({
@@ -1192,7 +1287,8 @@ function CourseCard({
   achievements,
   specialization,
   customization,
-  locale
+  locale,
+  onImageClick
 }: CourseCardProps & { locale: string }) {
   // Use the locale passed from parent component
   const t = translations[locale as keyof typeof translations] || translations['en'];
@@ -1236,7 +1332,11 @@ function CourseCard({
             style={{ scrollBehavior: 'smooth', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
           >
             {imageList.map((src, idx) => (
-              <div key={idx} className="relative flex-none w-full h-full snap-center">
+              <div
+                key={idx}
+                className="relative flex-none w-full h-full snap-center cursor-zoom-in"
+                onClick={() => onImageClick && onImageClick(imageList, idx)}
+              >
                 <Image
                   src={src}
                   alt={`${title} image ${idx + 1}`}
