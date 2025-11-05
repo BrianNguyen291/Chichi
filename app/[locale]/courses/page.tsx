@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -136,7 +136,7 @@ const translations: Translations = {
         ]
       },
       C2C3: {
-        title: "Corporate Mastery C2-C3",
+        title: "Corporate Mastery C2",
         subtitle: "Native Speaker Certification Standard",
         hours: "36",
         objectives: [
@@ -359,7 +359,7 @@ const translations: Translations = {
         ]
       },
       C2C3: {
-        title: "企業精通級 C2-C3",
+        title: "企業精通級 C2",
         subtitle: "母語者認證標準",
         hours: "36 小時",
         objectives: [
@@ -582,7 +582,7 @@ const translations: Translations = {
         ]
       },
       C2C3: {
-        title: "企业精通级 C2-C3",
+        title: "企业精通级 C2",
         subtitle: "母语者认证标准",
         hours: "36 小时",
         objectives: [
@@ -824,8 +824,8 @@ export default function CoursesPage({ params }: CoursePageProps) {
           <TabsContent value="beginner" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* A0 Course */}
-              <CourseCard 
-                level="A0" 
+              <CourseCard
+                level="A0"
                 title={t.courseDetails.A0?.title || "Starter Level"}
                 hours="24"
                 classSize="3-6"
@@ -841,10 +841,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Listening & speaking enhancement + basic reading/writing introduction"
                 ]}
               />
-              
+
               {/* A1 Course */}
-              <CourseCard 
-                level="A1" 
+              <CourseCard
+                level="A1"
                 title={t.courseDetails.A1?.title || "Beginner Foundation"}
                 hours="24"
                 classSize="3-6"
@@ -858,10 +858,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Basic business terms (inquiries, appointments, simple negotiations)"
                 ]}
               />
-              
+
               {/* A2 Course */}
-              <CourseCard 
-                level="A2" 
+              <CourseCard
+                level="A2"
                 title={t.courseDetails.A2?.title || "Elementary Level"}
                 hours="24"
                 classSize="3-6"
@@ -877,13 +877,13 @@ export default function CoursesPage({ params }: CoursePageProps) {
               />
             </div>
           </TabsContent>
-          
+
           {/* Intermediate Level Content */}
           <TabsContent value="intermediate" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* B1 Course */}
-              <CourseCard 
-                level="B1" 
+              <CourseCard
+                level="B1"
                 title={t.courseDetails.B1?.title || "Intermediate Level"}
                 hours="30"
                 classSize="3-6"
@@ -901,10 +901,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "发展段落表达能力（如描述经验、解释工作流程）"
                 ]}
               />
-              
+
               {/* B2 Course */}
-              <CourseCard 
-                level="B2" 
+              <CourseCard
+                level="B2"
                 title={t.courseDetails.B2?.title || "Upper Intermediate"}
                 hours="30"
                 classSize="3-6"
@@ -922,10 +922,11 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Advanced grammar: relative clauses, subjunctive mood, formal letter structure"
                 ]}
               />
-              
+
               {/* B3 Course */}
-              <CourseCard 
-                level="B3" 
+              {/**
+              <CourseCard
+                level="B3"
                 title={t.courseDetails.B3?.title || "Advanced Intermediate"}
                 hours="30"
                 classSize="3-6"
@@ -940,18 +941,19 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 ]}
                 specialization={t.courseDetails.B3?.specialization}
               />
+              */}
             </div>
           </TabsContent>
-          
+
           {/* Advanced Level Content */}
           <TabsContent value="advanced" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* C1 Course */}
-              <CourseCard 
-                level="C1" 
+              <CourseCard
+                level="C1"
                 title={t.courseDetails.C1?.title || "Advanced Level"}
                 hours="30"
-                 classSize="3-6"
+                classSize="3-6"
                 locale={locale}
                 subtitle={t.courseDetails.C1?.subtitle || "For Professionals"}
                 objectives={t.courseDetails.C1?.objectives || [
@@ -959,13 +961,13 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Analyze specialized literature (e.g., legal, medical, engineering)"
                 ]}
               />
-              
+
               {/* C2 Course */}
-              <CourseCard 
-                level="C2" 
+              <CourseCard
+                level="C2"
                 title={t.courseDetails.C2?.title || "Mastery Level"}
                 hours="30"
-                 classSize="3-6"
+                classSize="3-6"
                 locale={locale}
                 subtitle={t.courseDetails.C2?.subtitle || "Native-like Proficiency"}
                 objectives={t.courseDetails.C2?.objectives || [
@@ -973,13 +975,14 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Impromptu speeches, literary analysis, cross-cultural negotiations"
                 ]}
               />
-              
+
               {/* C3 Course */}
-              <CourseCard 
-                level="C3" 
+              {/**
+              <CourseCard
+                level="C3"
                 title={t.courseDetails.C3?.title || "Expert Level"}
                 hours="30"
-                 classSize="3-6"
+                classSize="3-6"
                 locale={locale}
                 objectives={t.courseDetails.C3?.objectives || ["Specialized mastery and advanced professional application"]}
                 content={t.courseDetails.C3?.content || [
@@ -987,9 +990,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Thesis writing guidance and interpretation techniques"
                 ]}
               />
+              */}
             </div>
           </TabsContent>
-          
+
           {/* Certification Courses */}
           {/* <TabsContent value="certification" className="space-y-8">
             <div className="p-8 bg-white rounded-lg shadow-md">
@@ -1001,13 +1005,13 @@ export default function CoursesPage({ params }: CoursePageProps) {
               </button>
             </div>
           </TabsContent> */}
-          
+
           {/* Corporate Courses */}
           <TabsContent value="corporate" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Corporate A0 */}
-              <CourseCard 
-                level="A0" 
+              <CourseCard
+                level="A0"
                 title={t.corporateCourses?.A0?.title || t.tabCorporate + " A0"}
                 hours="24"
                 classSize="4-8"
@@ -1023,10 +1027,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Skill ratio: 70% listening/speaking | 30% reading/writing"
                 ]}
               />
-              
+
               {/* Corporate A1 */}
-              <CourseCard 
-                level="A1" 
+              <CourseCard
+                level="A1"
                 title={t.corporateCourses?.A1?.title || t.tabCorporate + " A1"}
                 hours="24"
                 classSize="4-8"
@@ -1040,10 +1044,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Business scenarios: market purchases, understanding simple contract terms"
                 ]}
               />
-              
+
               {/* Corporate A2 */}
-              <CourseCard 
-                level="A2" 
+              <CourseCard
+                level="A2"
                 title={t.corporateCourses?.A2?.title || t.tabCorporate + " A2"}
                 hours="24"
                 classSize="4-8"
@@ -1058,11 +1062,11 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 ]}
               />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
               {/* Corporate B1 */}
-              <CourseCard 
-                level="B1" 
+              <CourseCard
+                level="B1"
                 title={t.corporateCourses?.B1?.title || t.tabCorporate + " B1"}
                 hours="30"
                 classSize="4-8"
@@ -1077,10 +1081,10 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Understand main messages in broadcast news (70%+ comprehension)"
                 ]}
               />
-              
+
               {/* Corporate B2 */}
-              <CourseCard 
-                level="B2" 
+              <CourseCard
+                level="B2"
                 title={t.corporateCourses?.B2?.title || t.tabCorporate + " B2"}
                 hours="30"
                 classSize="4-8"
@@ -1095,11 +1099,11 @@ export default function CoursesPage({ params }: CoursePageProps) {
                 ]}
               />
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
               {/* Corporate C1 */}
-              <CourseCard 
-                level="C1" 
+              <CourseCard
+                level="C1"
                 title={t.corporateCourses?.C1?.title || t.tabCorporate + " C1"}
                 hours="36"
                 classSize="4-8"
@@ -1111,11 +1115,11 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Cross-cultural communication case studies"
                 ]}
               />
-              
+
               {/* Corporate C2-C3 */}
-              <CourseCard 
-                level="C2-C3" 
-                title={t.corporateCourses?.C2C3?.title || t.tabCorporate + " Mastery C2-C3"}
+              <CourseCard
+                level="C2"
+                title={t.corporateCourses?.C2C3?.title || t.tabCorporate + " Mastery C2"}
                 hours={t.corporateCourses?.C2C3?.hours || "36"}
                 classSize="4-8"
                 locale={locale}
@@ -1132,16 +1136,16 @@ export default function CoursesPage({ params }: CoursePageProps) {
               />
             </div>
           </TabsContent>
-          
+
           {/* Private Lessons */}
           <TabsContent value="private" className="space-y-8">
             <div className="p-8 bg-white rounded-lg shadow-md text-center">
               <h3 className="text-2xl font-bold mb-4" style={{ color: colors.darkOlive }}>{t.tabPrivate}</h3>
               <p className="text-lg mb-6">{t.privateMessage}</p>
               <p className="text-lg mb-8">{t.privateContact}</p>
-              <button 
+              <button
                 onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true', '_blank')}
-                className="px-6 py-3 rounded-lg font-medium transition-all duration-300" 
+                className="px-6 py-3 rounded-lg font-medium transition-all duration-300"
                 style={{ backgroundColor: colors.secondary, color: colors.lightCream }}
               >
                 {t.contactButton}
@@ -1162,6 +1166,7 @@ interface CourseCardProps {
   hours: string
   classSize?: string
   subtitle?: string
+  images?: string[]
   objectives?: string[]
   content?: string[]
   highlights?: string[]
@@ -1178,6 +1183,7 @@ function CourseCard({
   hours,
   classSize,
   subtitle,
+  images,
   objectives,
   content,
   highlights,
@@ -1190,24 +1196,104 @@ function CourseCard({
 }: CourseCardProps & { locale: string }) {
   // Use the locale passed from parent component
   const t = translations[locale as keyof typeof translations] || translations['en'];
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  // Build dynamic images based on folder naming: e.g., A0G (Giản thể), A0P (Phồn thể)
+  const variant = locale === 'zh-Hans' ? 'G' : locale === 'zh-Hant' ? 'P' : 'G';
+  const folderBase = `/images/courses/${level}${variant}`;
+  const generatedCandidates = [
+    `${folderBase}/1.jpg`, `${folderBase}/2.jpg`, `${folderBase}/3.jpg`, `${folderBase}/4.jpg`, `${folderBase}/5.jpg`, `${folderBase}/6.jpg`,
+    `${folderBase}/1.png`, `${folderBase}/2.png`, `${folderBase}/3.png`, `${folderBase}/4.png`, `${folderBase}/5.png`, `${folderBase}/6.png`,
+  ];
+  const [imageList, setImageList] = useState<string[]>(() =>
+    images && images.length > 0 ? images : generatedCandidates
+  );
+  const scrollByWidth = (direction: 'left' | 'right') => {
+    const container = carouselRef.current;
+    if (!container) return;
+    const delta = direction === 'left' ? -container.clientWidth : container.clientWidth;
+    container.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+  const handleScroll = () => {
+    const container = carouselRef.current;
+    if (!container) return;
+    const index = Math.round(container.scrollLeft / container.clientWidth);
+    setCurrentIndex(index);
+  };
   return (
-    <motion.div 
-      whileHover={{ y: -5 }} 
+    <motion.div
+      whileHover={{ y: -5 }}
       transition={{ type: "spring", stiffness: 300 }}
       className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col"
     >
+      {/* Image Carousel */}
+      {imageList && imageList.length > 0 && (
+        <div className="relative w-full h-52 md:h-56">
+          <div
+            ref={carouselRef}
+            onScroll={handleScroll}
+            className="w-full h-full flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+            style={{ scrollBehavior: 'smooth', msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+          >
+            {imageList.map((src, idx) => (
+              <div key={idx} className="relative flex-none w-full h-full snap-center">
+                <Image
+                  src={src}
+                  alt={`${title} image ${idx + 1}`}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  onError={() => setImageList(prev => prev.filter((_, j) => j !== idx))}
+                />
+              </div>
+            ))}
+          </div>
+          {imageList.length > 1 && (
+            <>
+              {/* Desktop-only navigation arrows */}
+              <button
+                type="button"
+                onClick={() => scrollByWidth('left')}
+                className="hidden md:block absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white rounded-full p-2 hover:bg-black/60"
+                aria-label="Previous image"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollByWidth('right')}
+                className="hidden md:block absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white rounded-full p-2 hover:bg-black/60"
+                aria-label="Next image"
+              >
+                ›
+              </button>
+
+              {/* Pagination dots */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
+                {imageList.map((_, i) => (
+                  <span
+                    key={i}
+                    className={`${i === currentIndex ? 'bg-white' : 'bg-white/50'} w-2 h-2 rounded-full`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
       <div className="p-6 flex-grow">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h3 className="text-2xl font-bold" style={{ color: colors.darkOlive }}>{title}</h3>
             {subtitle && <p className="text-sm mt-1" style={{ color: colors.grayGreen }}>{subtitle}</p>}
           </div>
-          <span className="px-3 py-1 rounded-full text-sm font-semibold" 
+          <span className="px-3 py-1 rounded-full text-sm font-semibold"
             style={{ backgroundColor: `${colors.secondary}30`, color: colors.secondary }}>
             {level}
           </span>
         </div>
-        
+
         <div className="space-y-4">
           <div className="flex space-x-4">
             <div className="flex items-center">
@@ -1216,7 +1302,7 @@ function CourseCard({
               </svg>
               <span>{hours} {locale === 'en' ? 'Hours' : locale === 'zh-Hans' ? '小时' : '小時'}</span>
             </div>
-            
+
             {classSize && (
               <div className="flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: colors.secondary }}>
@@ -1226,7 +1312,7 @@ function CourseCard({
               </div>
             )}
           </div>
-          
+
           {objectives && objectives.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.objectives}</h4>
@@ -1240,7 +1326,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {content && content.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.coreContent}</h4>
@@ -1254,7 +1340,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {highlights && highlights.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.highlights}</h4>
@@ -1268,7 +1354,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {focus && focus.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.focus}</h4>
@@ -1282,7 +1368,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {materials && materials.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.materials}</h4>
@@ -1296,7 +1382,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {achievements && achievements.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.achievements}</h4>
@@ -1310,7 +1396,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {specialization && specialization.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.specialization}</h4>
@@ -1324,7 +1410,7 @@ function CourseCard({
               </ul>
             </div>
           )}
-          
+
           {customization && customization.length > 0 && (
             <div>
               <h4 className="font-semibold mb-2" style={{ color: colors.darkOlive }}>{t.customization}</h4>
@@ -1340,11 +1426,11 @@ function CourseCard({
           )}
         </div>
       </div>
-      
+
       <div className="p-6 mt-auto border-t border-gray-100">
-        <button 
+        <button
           onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true', '_blank')}
-          className="w-full py-2 rounded-lg font-medium transition-all duration-300" 
+          className="w-full py-2 rounded-lg font-medium transition-all duration-300"
           style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}
         >
           {t.moreButton}
