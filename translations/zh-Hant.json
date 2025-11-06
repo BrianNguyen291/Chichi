@@ -49,7 +49,18 @@
     "advanced": "高級",
     "certification": "考證班",
     "corporate": "企業班",
-    "private": "個人班"
+    "private": "個人班",
+    "A0": "A0",
+    "A1": "A1",
+    "A2": "A2",
+    "B1": "B1",
+    "B2": "B2",
+    "C1": "C1",
+    "C2": "C2"
+  },
+  "variants": {
+    "traditional": "繁體",
+    "simplified": "簡體"
   },
   "blog": {
     "featured": "精選文章",

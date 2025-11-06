@@ -7,7 +7,7 @@ import { getCategories, organizeCategories, TranslatedCategory } from '@/lib/wor
 import type { Locale } from '@/lib/i18n'
 import { useTranslations } from '@/lib/i18n'
 import { colors } from '@/lib/colors'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronRight } from 'lucide-react'
 import React from 'react'
 interface WordPressNavProps {
   locale: Locale
@@ -23,8 +23,11 @@ export function WordPressNav({ locale }: WordPressNavProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<number | string | null>(null)
+  const [activeSubCategory, setActiveSubCategory] = useState<string | null>(null)
   const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const subOpenTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const subCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   function scheduleOpen(categoryKey: number | string, delayMs: number = 120) {
     if (closeTimerRef.current) {
@@ -49,7 +52,51 @@ export function WordPressNav({ locale }: WordPressNavProps) {
     }
     closeTimerRef.current = setTimeout(() => {
       setActiveCategory(null)
+      setActiveSubCategory(null)
     }, delayMs)
+  }
+
+  function scheduleSubOpen(subCategoryKey: string, delayMs: number = 100) {
+    if (subCloseTimerRef.current) {
+      clearTimeout(subCloseTimerRef.current)
+      subCloseTimerRef.current = null
+    }
+    if (subOpenTimerRef.current) {
+      clearTimeout(subOpenTimerRef.current)
+    }
+    subOpenTimerRef.current = setTimeout(() => {
+      setActiveSubCategory(subCategoryKey)
+    }, delayMs)
+  }
+
+  function scheduleSubClose(delayMs: number = 200) {
+    if (subOpenTimerRef.current) {
+      clearTimeout(subOpenTimerRef.current)
+      subOpenTimerRef.current = null
+    }
+    if (subCloseTimerRef.current) {
+      clearTimeout(subCloseTimerRef.current)
+    }
+    subCloseTimerRef.current = setTimeout(() => {
+      setActiveSubCategory(null)
+    }, delayMs)
+  }
+
+  // Define course sub-menu structure
+  const courseSubMenus = {
+    beginner: [
+      { level: 'A0', label: 'A0' },
+      { level: 'A1', label: 'A1' },
+      { level: 'A2', label: 'A2' }
+    ],
+    intermediate: [
+      { level: 'B1', label: 'B1' },
+      { level: 'B2', label: 'B2' }
+    ],
+    advanced: [
+      { level: 'C1', label: 'C1' },
+      { level: 'C2', label: 'C2' }
+    ]
   }
 
   // Get translated static items
@@ -174,12 +221,65 @@ export function WordPressNav({ locale }: WordPressNavProps) {
 
         {activeCategory === 'courses' && (
           <div
-            className="absolute top-full left-0 pt-2 bg-white rounded-md shadow-lg min-w-[160px] z-50"
+            className="absolute top-full left-0 pt-2 bg-white rounded-md shadow-lg min-w-[200px] z-50"
             style={{ borderColor: colors.secondary }}
             onMouseEnter={() => scheduleOpen('courses')}
             onMouseLeave={() => scheduleClose()}
           >
-            {['beginner', 'intermediate', 'advanced', 'certification', 'corporate', 'private'].map((levelKey) => (
+            {/* Beginner, Intermediate, Advanced with sub-menus */}
+            {['beginner', 'intermediate', 'advanced'].map((levelKey) => {
+              const subLevels = courseSubMenus[levelKey as keyof typeof courseSubMenus]
+              const isSubMenuOpen = activeSubCategory === levelKey
+              
+              return (
+                <div
+                  key={levelKey}
+                  className="relative"
+                  onMouseEnter={() => scheduleSubOpen(levelKey)}
+                  onMouseLeave={() => scheduleSubClose()}
+                >
+                  <div className="flex items-center justify-between px-4 py-2 text-sm hover:bg-gray-100 transition-colors whitespace-nowrap group/submenu"
+                    style={{ color: colors.darkOlive }}
+                  >
+                    <Link
+                      href={`/${locale}${staticItems.course.href}?level=${encodeURIComponent(levelKey)}`}
+                      className="flex-1"
+                    >
+                      {translate(levelKey, 'courseLevels')}
+                    </Link>
+                    {subLevels && (
+                      <ChevronRight
+                        className={`h-4 w-4 transition-transform ${isSubMenuOpen ? "rotate-90" : ""}`}
+                      />
+                    )}
+                  </div>
+                  
+                  {/* Sub-menu for level variants */}
+                  {isSubMenuOpen && subLevels && (
+                    <div
+                      className="absolute left-full top-0 ml-1 pt-2 bg-white rounded-md shadow-lg min-w-[220px] z-[60]"
+                      style={{ borderColor: colors.secondary }}
+                      onMouseEnter={() => scheduleSubOpen(levelKey)}
+                      onMouseLeave={() => scheduleSubClose()}
+                    >
+                      {subLevels.map((subLevel) => (
+                        <Link
+                          key={subLevel.level}
+                          href={`/${locale}${staticItems.course.href}/${subLevel.level}`}
+                          className="block px-4 py-2 text-sm hover:bg-gray-100 transition-colors whitespace-nowrap"
+                          style={{ color: colors.darkOlive }}
+                        >
+                          {subLevel.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+            
+            {/* Other course types without sub-menus */}
+            {['certification', 'corporate', 'private'].map((levelKey) => (
               <Link
                 key={levelKey}
                 href={`/${locale}${staticItems.course.href}?level=${encodeURIComponent(levelKey)}`}

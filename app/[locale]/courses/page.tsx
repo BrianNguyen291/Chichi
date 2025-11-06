@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { colors } from "@/lib/colors"
@@ -740,11 +740,31 @@ const translations: Translations = {
 
 export default function CoursesPage({ params }: CoursePageProps) {
   const locale = params.locale || "zh-Hant";
+  const searchParams = useSearchParams()
   const t = (translations[locale as keyof typeof translations] || translations["zh-Hant"]) as unknown as TranslationBase;
-  const [activeTab, setActiveTab] = useState("beginner")
+  
+  // Get level from URL params (variant is now determined by locale)
+  const urlLevel = searchParams.get('level')
+  
+  // Map specific levels (A0, A1, etc.) to their parent tabs
+  const getTabFromLevel = (level: string | null): string => {
+    if (!level) return "beginner"
+    if (['A0', 'A1', 'A2'].includes(level)) return "beginner"
+    if (['B1', 'B2'].includes(level)) return "intermediate"
+    if (['C1', 'C2'].includes(level)) return "advanced"
+    return level
+  }
+  
+  const [activeTab, setActiveTab] = useState(() => getTabFromLevel(urlLevel))
   const [isMobile, setIsMobile] = useState(false)
   const [lightboxImages, setLightboxImages] = useState<string[] | null>(null)
   const [lightboxIndex, setLightboxIndex] = useState<number>(0)
+  
+  // Update tab when URL params change
+  useEffect(() => {
+    const newTab = getTabFromLevel(urlLevel)
+    setActiveTab(newTab)
+  }, [urlLevel])
 
   const openLightbox = (images: string[], index: number) => {
     setLightboxImages(images)
@@ -860,33 +880,36 @@ export default function CoursesPage({ params }: CoursePageProps) {
           <TabsContent value="beginner" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* A0 Course */}
-              <CourseCard
-                level="A0"
-                title={t.courseDetails.A0?.title || "Starter Level"}
-                hours="24"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
-                objectives={t.courseDetails.A0?.objectives || [
-                  "Establish Vietnamese pronunciation system foundation",
-                  "Master basic daily conversation skills (self-introduction, personal interests, daily scenarios)",
-                  "Understand and use high-frequency practical phrases"
-                ]}
-                content={t.courseDetails.A0?.content || [
-                  "Vowel/consonant pronunciation rules, tone recognition training",
-                  "Themed conversations: name, nationality, occupation, shopping, time expression",
-                  "Listening & speaking enhancement + basic reading/writing introduction"
-                ]}
-              />
+              {(!urlLevel || urlLevel === 'A0' || urlLevel === 'beginner') && (
+                <CourseCard
+                  level="A0"
+                  title={t.courseDetails.A0?.title || "Starter Level"}
+                  hours="24"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
+                  objectives={t.courseDetails.A0?.objectives || [
+                    "Establish Vietnamese pronunciation system foundation",
+                    "Master basic daily conversation skills (self-introduction, personal interests, daily scenarios)",
+                    "Understand and use high-frequency practical phrases"
+                  ]}
+                  content={t.courseDetails.A0?.content || [
+                    "Vowel/consonant pronunciation rules, tone recognition training",
+                    "Themed conversations: name, nationality, occupation, shopping, time expression",
+                    "Listening & speaking enhancement + basic reading/writing introduction"
+                  ]}
+                />
+              )}
 
               {/* A1 Course */}
-              <CourseCard
-                level="A1"
-                title={t.courseDetails.A1?.title || "Beginner Foundation"}
-                hours="24"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
+              {(!urlLevel || urlLevel === 'A1' || urlLevel === 'beginner') && (
+                <CourseCard
+                  level="A1"
+                  title={t.courseDetails.A1?.title || "Beginner Foundation"}
+                  hours="24"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
                 objectives={t.courseDetails.A1?.objectives || [
                   "Understand short daily conversations (e.g., asking for directions, transportation, bargaining)",
                   "Learn techniques for 'active questioning' and 'key information capturing'"
@@ -895,16 +918,18 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Scenario simulation: market shopping, ordering at restaurants, taking public transport",
                   "Basic business terms (inquiries, appointments, simple negotiations)"
                 ]}
-              />
+                />
+              )}
 
               {/* A2 Course */}
-              <CourseCard
-                level="A2"
-                title={t.courseDetails.A2?.title || "Elementary Level"}
-                hours="24"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
+              {(!urlLevel || urlLevel === 'A2' || urlLevel === 'beginner') && (
+                <CourseCard
+                  level="A2"
+                  title={t.courseDetails.A2?.title || "Elementary Level"}
+                  hours="24"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
                 objectives={t.courseDetails.A2?.objectives || [
                   "Handle routine social interactions and simple transactions",
                   "Describe in simple terms aspects of background and immediate environment"
@@ -913,7 +938,8 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Expressing opinions, making comparisons, describing experiences",
                   "Handling travel arrangements, dealing with emergencies, basic workplace communication"
                 ]}
-              />
+                />
+              )}
             </div>
           </TabsContent>
 
@@ -921,13 +947,14 @@ export default function CoursesPage({ params }: CoursePageProps) {
           <TabsContent value="intermediate" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* B1 Course */}
-              <CourseCard
-                level="B1"
-                title={t.courseDetails.B1?.title || "Intermediate Level"}
-                hours="30"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
+              {(!urlLevel || urlLevel === 'B1' || urlLevel === 'intermediate') && (
+                <CourseCard
+                  level="B1"
+                  title={t.courseDetails.B1?.title || "Intermediate Level"}
+                  hours="30"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
                 objectives={t.courseDetails.B1?.objectives || [
                   "Develop the ability to understand the main points of clear standard input on familiar matters",
                   "Deal with most situations likely to arise while traveling in an area where the language is spoken"
@@ -940,16 +967,18 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "使用《标准越南语B1》教材第1-8单元",
                   "发展段落表达能力（如描述经验、解释工作流程）"
                 ]}
-              />
+                />
+              )}
 
               {/* B2 Course */}
-              <CourseCard
-                level="B2"
-                title={t.courseDetails.B2?.title || "Upper Intermediate"}
-                hours="30"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
+              {(!urlLevel || urlLevel === 'B2' || urlLevel === 'intermediate') && (
+                <CourseCard
+                  level="B2"
+                  title={t.courseDetails.B2?.title || "Upper Intermediate"}
+                  hours="30"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
                 objectives={t.courseDetails.B2?.objectives || [
                   "Understand the main ideas of complex text on both concrete and abstract topics",
                   "Interact with a degree of fluency and spontaneity that makes regular interaction with native speakers quite possible"
@@ -962,7 +991,8 @@ export default function CoursesPage({ params }: CoursePageProps) {
                   "Academic/workplace scenarios: meeting discussions, data interpretation, cultural difference analysis",
                   "Advanced grammar: relative clauses, subjunctive mood, formal letter structure"
                 ]}
-              />
+                />
+              )}
 
               {/* B3 Course */}
               {/**
@@ -990,34 +1020,38 @@ export default function CoursesPage({ params }: CoursePageProps) {
           <TabsContent value="advanced" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* C1 Course */}
-              <CourseCard
-                level="C1"
-                title={t.courseDetails.C1?.title || "Advanced Level"}
-                hours="30"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
+              {(!urlLevel || urlLevel === 'C1' || urlLevel === 'advanced') && (
+                <CourseCard
+                  level="C1"
+                  title={t.courseDetails.C1?.title || "Advanced Level"}
+                  hours="30"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
                 subtitle={t.courseDetails.C1?.subtitle || "For Professionals"}
                 objectives={t.courseDetails.C1?.objectives || [
                   "Participate in professional seminars and deliver technical presentations",
                   "Analyze specialized literature (e.g., legal, medical, engineering)"
                 ]}
-              />
+                />
+              )}
 
               {/* C2 Course */}
-              <CourseCard
-                level="C2"
-                title={t.courseDetails.C2?.title || "Mastery Level"}
-                hours="30"
-                classSize="3-6"
-                locale={locale}
-                onImageClick={openLightbox}
+              {(!urlLevel || urlLevel === 'C2' || urlLevel === 'advanced') && (
+                <CourseCard
+                  level="C2"
+                  title={t.courseDetails.C2?.title || "Mastery Level"}
+                  hours="30"
+                  classSize="3-6"
+                  locale={locale}
+                  onImageClick={openLightbox}
                 subtitle={t.courseDetails.C2?.subtitle || "Native-like Proficiency"}
                 objectives={t.courseDetails.C2?.objectives || [
                   "Master dialectal/idiomatic differences",
                   "Impromptu speeches, literary analysis, cross-cultural negotiations"
                 ]}
-              />
+                />
+              )}
 
               {/* C3 Course */}
               {/**
@@ -1269,6 +1303,7 @@ interface CourseCardProps {
   achievements?: string[]
   specialization?: string[]
   customization?: string[]
+  variant?: 'P' | 'G' | null
   onImageClick?: (images: string[], index: number) => void
 }
 
@@ -1288,6 +1323,7 @@ function CourseCard({
   specialization,
   customization,
   locale,
+  variant: propVariant,
   onImageClick
 }: CourseCardProps & { locale: string }) {
   // Use the locale passed from parent component
@@ -1295,7 +1331,8 @@ function CourseCard({
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   // Build dynamic images based on folder naming: e.g., A0G (Giản thể), A0P (Phồn thể)
-  const variant = locale === 'zh-Hans' ? 'G' : locale === 'zh-Hant' ? 'P' : 'G';
+  // Use variant from props (URL) if provided, otherwise fallback to locale-based logic
+  const variant = propVariant || (locale === 'zh-Hans' ? 'G' : locale === 'zh-Hant' ? 'P' : 'G');
   const folderBase = `/images/courses/${level}${variant}`;
   const generatedCandidates = [
     `${folderBase}/1.jpg`, `${folderBase}/2.jpg`, `${folderBase}/3.jpg`, `${folderBase}/4.jpg`, `${folderBase}/5.jpg`, `${folderBase}/6.jpg`,
