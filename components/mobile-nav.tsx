@@ -136,16 +136,55 @@ export function MobileNav({ locale }: MobileNavProps) {
           return acc;
         }, {} as { [key: number]: TranslatedCategory[] });
 
+        // Define course sub-menu structure with nested levels
+        const courseSubMenus = {
+          beginner: [
+            { level: 'A0', label: 'A0' },
+            { level: 'A1', label: 'A1' },
+            { level: 'A2', label: 'A2' }
+          ],
+          intermediate: [
+            { level: 'B1', label: 'B1' },
+            { level: 'B2', label: 'B2' }
+          ],
+          advanced: [
+            { level: 'C1', label: 'C1' },
+            { level: 'C2', label: 'C2' }
+          ]
+        }
+
         const courseSubItems = [
-          { slug: 'beginner', key: 'beginner' },
-          { slug: 'intermediate', key: 'intermediate' },
-          { slug: 'advanced', key: 'advanced' },
+          { 
+            slug: 'beginner', 
+            key: 'beginner',
+            children: courseSubMenus.beginner.map(subLevel => ({
+              label: subLevel.label,
+              href: `/${locale}/courses/${subLevel.level}`
+            }))
+          },
+          { 
+            slug: 'intermediate', 
+            key: 'intermediate',
+            children: courseSubMenus.intermediate.map(subLevel => ({
+              label: subLevel.label,
+              href: `/${locale}/courses/${subLevel.level}`
+            }))
+          },
+          { 
+            slug: 'advanced', 
+            key: 'advanced',
+            children: courseSubMenus.advanced.map(subLevel => ({
+              label: subLevel.label,
+              href: `/${locale}/courses/${subLevel.level}`
+            }))
+          },
           { slug: 'certification', key: 'certification' },
           { slug: 'corporate', key: 'corporate' },
           { slug: 'individual', key: 'private' },
         ].map(item => ({
           label: translate(item.key, 'courseLevels') || translate(item.key, 'common') || item.slug,
-          href: `/${locale}/courses?level=${item.slug}`
+          href: item.children ? `/${locale}/courses?level=${item.slug}` : `/${locale}/courses?level=${item.slug}`,
+          children: item.children
         }));
 
         const wpMenuItems = topLevelSlugs.map(slug => {
@@ -361,7 +400,8 @@ export function MobileNav({ locale }: MobileNavProps) {
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = safePath.startsWith(item.href);
-          const isSubmenuOpen = activeSubmenu === item.label;
+          // Check if submenu is open - either directly or through grandchild
+          const isSubmenuOpen = activeSubmenu === item.label || (activeSubmenu && activeSubmenu.startsWith(item.label + '-'));
           const hasChildren = item.children && item.children.length > 0;
 
           return (
@@ -398,18 +438,75 @@ export function MobileNav({ locale }: MobileNavProps) {
                   className={`bg-gray-50 transition-all duration-300 ease-in-out ${isSubmenuOpen ? 'max-h-screen py-2' : 'max-h-0'
                     } overflow-hidden`}
                 >
-                  {item.children?.map((child) => (
-                    <Link
-                      key={child.label}
-                      href={child.href}
-                      onClick={() => setIsMenuOpen(false)}
-                      className={`block w-full px-8 py-2 text-base hover:bg-gray-100 ${safePath.startsWith(child.href) ? 'text-[#b17f4a]' : ''
-                        }`}
-                      style={{ color: safePath.startsWith(child.href) ? colors.primary : colors.darkOlive }}
-                    >
-                      {child.label}
-                    </Link>
-                  ))}
+                  {item.children?.map((child) => {
+                    const hasGrandChildren = child.children && child.children.length > 0
+                    const grandSubmenuKey = `${item.label}-${child.label}`
+                    const isGrandSubmenuOpen = activeSubmenu === grandSubmenuKey || activeSubmenu?.startsWith(grandSubmenuKey + '-')
+                    
+                    return (
+                      <div key={child.label}>
+                        {/* Second level item */}
+                        <div className="flex items-center">
+                          {hasGrandChildren ? (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                // Toggle grand submenu
+                                setActiveSubmenu(prev => {
+                                  if (prev === grandSubmenuKey || (prev && prev.startsWith(grandSubmenuKey))) {
+                                    // Close grand submenu but keep parent open if it was open
+                                    return prev === item.label ? item.label : null
+                                  } else {
+                                    // Open grand submenu
+                                    return grandSubmenuKey
+                                  }
+                                })
+                              }}
+                              className={`flex-1 flex items-center justify-between w-full px-8 py-2 text-base hover:bg-gray-100 ${safePath.startsWith(child.href) ? 'text-[#b17f4a]' : ''
+                                }`}
+                              style={{ color: safePath.startsWith(child.href) ? colors.primary : colors.darkOlive }}
+                            >
+                              <span>{child.label}</span>
+                              <ChevronRight
+                                className={`h-4 w-4 transition-transform duration-200 ${isGrandSubmenuOpen ? 'rotate-90' : ''}`}
+                              />
+                            </button>
+                          ) : (
+                            <Link
+                              href={child.href}
+                              onClick={() => setIsMenuOpen(false)}
+                              className={`block w-full px-8 py-2 text-base hover:bg-gray-100 ${safePath.startsWith(child.href) ? 'text-[#b17f4a]' : ''
+                                }`}
+                              style={{ color: safePath.startsWith(child.href) ? colors.primary : colors.darkOlive }}
+                            >
+                              {child.label}
+                            </Link>
+                          )}
+                        </div>
+                        
+                        {/* Third level (grandchildren) - for A0, A1, A2, etc. */}
+                        {hasGrandChildren && (
+                          <div
+                            className={`bg-gray-100 transition-all duration-300 ease-in-out ${isGrandSubmenuOpen ? 'max-h-screen py-1' : 'max-h-0'
+                              } overflow-hidden`}
+                          >
+                            {child.children?.map((grandchild) => (
+                              <Link
+                                key={grandchild.label}
+                                href={grandchild.href}
+                                onClick={() => setIsMenuOpen(false)}
+                                className={`block w-full px-12 py-2 text-sm hover:bg-gray-200 ${safePath.startsWith(grandchild.href) ? 'text-[#b17f4a]' : ''
+                                  }`}
+                                style={{ color: safePath.startsWith(grandchild.href) ? colors.primary : colors.darkOlive }}
+                              >
+                                {grandchild.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               )}
 
