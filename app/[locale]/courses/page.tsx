@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import type { MouseEvent } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import { motion } from "framer-motion"
@@ -744,7 +745,7 @@ export default function CoursesPage({ params }: CoursePageProps) {
   const t = (translations[locale as keyof typeof translations] || translations["zh-Hant"]) as unknown as TranslationBase;
   
   // Get level from URL params (variant is now determined by locale)
-  const urlLevel = searchParams.get('level')
+  const urlLevel = searchParams?.get('level') ?? null
   
   // Map specific levels (A0, A1, etc.) to their parent tabs
   const getTabFromLevel = (level: string | null): string => {
@@ -1353,11 +1354,18 @@ function CourseCard({
     const index = Math.round(container.scrollLeft / container.clientWidth);
     setCurrentIndex(index);
   };
+  const handleCardClick = () => {
+    if (onImageClick && imageList && imageList.length > 0) {
+      onImageClick(imageList, currentIndex)
+    }
+  }
+
   return (
     <motion.div
       whileHover={{ y: -5 }}
       transition={{ type: "spring", stiffness: 300 }}
-      className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col"
+      className="bg-white rounded-lg shadow-md overflow-hidden h-full flex flex-col cursor-pointer"
+      onClick={handleCardClick}
     >
       {/* Image Carousel */}
       {imageList && imageList.length > 0 && (
@@ -1372,7 +1380,10 @@ function CourseCard({
               <div
                 key={idx}
                 className="relative flex-none w-full h-full snap-center cursor-zoom-in"
-                onClick={() => onImageClick && onImageClick(imageList, idx)}
+                onClick={(event: MouseEvent<HTMLDivElement>) => {
+                  event.stopPropagation()
+                  onImageClick && onImageClick(imageList, idx)
+                }}
               >
                 <Image
                   src={src}
@@ -1566,7 +1577,10 @@ function CourseCard({
 
       <div className="p-6 mt-auto border-t border-gray-100">
         <button
-          onClick={() => window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true', '_blank')}
+          onClick={(event) => {
+            event.stopPropagation()
+            window.open('https://docs.google.com/forms/d/1NFCWSWVlWv1x-Hgsy2tuKmGpqXbFgNFDDzLZfoyLHEM/viewform?edit_requested=true', '_blank')
+          }}
           className="w-full py-2 rounded-lg font-medium transition-all duration-300"
           style={{ backgroundColor: `${colors.secondary}20`, color: colors.secondary }}
         >
